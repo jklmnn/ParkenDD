@@ -1,10 +1,14 @@
 package de.jkliemann.parkendd;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,6 +107,17 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
             ParkingSpot[] spotArray = spots.toArray(new ParkingSpot[spots.size()]);
             SlotListAdapter adapter = new SlotListAdapter(context, spotArray);
             spotView.setAdapter(adapter);
+            spotView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    TextView current = (TextView)view.findViewById(R.id.nameView);
+                    String location = "Dresden " + current.getText();
+                    String geoUriString = "geo:0,0?q="  + location;
+                    Uri geoUri = Uri.parse(geoUriString);
+                    Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
+                    context.startActivity(mapCall);
+                }
+            });
         }
         popup.setVisibility(View.GONE);
     }

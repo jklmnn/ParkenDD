@@ -22,16 +22,6 @@ public class MainActivity extends ActionBarActivity {
         refresh();
     }
 
-    public void openMap(View view){
-        TextView current = (TextView)view.findViewById(R.id.nameView);
-        String location = "Dresden " + current.getText();
-        System.out.println(location);
-        String geoUriString = "geo:0,0?q="  + location;
-        Uri geoUri = Uri.parse(geoUriString);
-        Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
-        startActivity(mapCall);
-    }
-
     private void refresh(){
         try{
             Fetch f = new Fetch();

@@ -4,8 +4,7 @@
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-    android:clickable="true"
-    android:onClick="openMap"
+    android:clickable="false"
     android:nestedScrollingEnabled="false">
 
     <TextView
