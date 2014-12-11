@@ -4,5 +4,7 @@
     <string name="app_name">ParkenDD</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="fetch_url">http://jkliemann.de/offenesdresden.de/json.php</string>
 
 </resources>

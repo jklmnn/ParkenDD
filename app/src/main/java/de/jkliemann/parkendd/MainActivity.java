@@ -17,15 +17,20 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ArrayList<ParkingSpot> parkingSpots = null;
-        try {
-            parkingSpots = new Fetch().execute("http://jkliemann.de/offenesdresden.de/json.php").get();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        ArrayList<ParkingSpot> parkingSpots = this.fetch(getString(R.string.fetch_url));
         refresh(parkingSpots);
     }
 
+
+    private ArrayList<ParkingSpot> fetch(String url){
+        ArrayList<ParkingSpot> parkingSpots = null;
+        try{
+            parkingSpots = new Fetch().execute(url).get();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return parkingSpots;
+    }
 
     private void refresh(ArrayList<ParkingSpot> spots){
         ParkingSpot[] spotarray = spots.toArray(new ParkingSpot[spots.size()]);
@@ -52,6 +57,10 @@ public class MainActivity extends ActionBarActivity {
 //        if (id == R.id.action_settings) {
 //            return true;
 //       }
+        if(id == R.id.action_refresh){
+            ArrayList<ParkingSpot> parkingSpots = this.fetch(getString(R.string.fetch_url));
+            this.refresh(parkingSpots);
+        }
 
         return super.onOptionsItemSelected(item);
     }
