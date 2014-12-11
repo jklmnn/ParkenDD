@@ -1,6 +1,7 @@
 package de.jkliemann.parkendd;
 
-import android.os.AsyncTask;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,9 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -20,6 +20,16 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         refresh();
+    }
+
+    public void openMap(View view){
+        TextView current = (TextView)view.findViewById(R.id.nameView);
+        String location = "Dresden " + current.getText();
+        System.out.println(location);
+        String geoUriString = "geo:0,0?q="  + location;
+        Uri geoUri = Uri.parse(geoUriString);
+        Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
+        startActivity(mapCall);
     }
 
     private void refresh(){

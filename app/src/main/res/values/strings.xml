@@ -5,6 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Aktualisieren</string>
+    <string name="mapString">Karte</string>
     <string name="fetch_url">http://jkliemann.de/offenesdresden.de/json.php</string>
 
 </resources>

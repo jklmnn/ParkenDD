@@ -27,10 +27,10 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
     public View getView(int position, View convertView, ViewGroup parent){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View slotView = inflater.inflate(R.layout.slot_list_adapter, parent, false);
-        TextView nameView = (TextView)slotView.findViewById(R.id.nameView);
         TextView countView = (TextView)slotView.findViewById(R.id.countView);
+        TextView nameView = (TextView)slotView.findViewById(R.id.nameView);
         ParkingSpot spot = spots[position];
-        nameView.setText(spot.name() + ": ");
+        nameView.setText(spot.name());
         countView.setText(Integer.toString(spot.free()) + "/" + Integer.toString(spot.count()));
         return slotView;
     }
