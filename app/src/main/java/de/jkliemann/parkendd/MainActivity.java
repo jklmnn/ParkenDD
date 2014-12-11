@@ -17,26 +17,17 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ArrayList<ParkingSpot> parkingSpots = this.fetch(getString(R.string.fetch_url));
-        refresh(parkingSpots);
+        refresh();
     }
 
-
-    private ArrayList<ParkingSpot> fetch(String url){
-        ArrayList<ParkingSpot> parkingSpots = null;
+    private void refresh(){
         try{
-            parkingSpots = new Fetch().execute(url).get();
+            Fetch f = new Fetch();
+            f.setUi((ListView)findViewById(R.id.spotListView), this);
+            f.execute(getString(R.string.fetch_url));
         }catch(Exception e){
             e.printStackTrace();
         }
-        return parkingSpots;
-    }
-
-    private void refresh(ArrayList<ParkingSpot> spots){
-        ParkingSpot[] spotarray = spots.toArray(new ParkingSpot[spots.size()]);
-        SlotListAdapter adapter = new SlotListAdapter(this, spotarray);
-        ListView spotView = (ListView)findViewById(R.id.spotListView);
-        spotView.setAdapter(adapter);
     }
 
     @Override
@@ -58,8 +49,7 @@ public class MainActivity extends ActionBarActivity {
 //            return true;
 //       }
         if(id == R.id.action_refresh){
-            ArrayList<ParkingSpot> parkingSpots = this.fetch(getString(R.string.fetch_url));
-            this.refresh(parkingSpots);
+            this.refresh();
         }
 
         return super.onOptionsItemSelected(item);

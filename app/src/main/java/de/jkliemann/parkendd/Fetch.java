@@ -1,6 +1,8 @@
 package de.jkliemann.parkendd;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +25,13 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     private static final String LOTS = "lots";
     private static final String COUNT = "count";
     private static final String FREE = "free";
+    private ListView spotView = null;
+    private Context context = null;
+
+    public void setUi(ListView spotView, Context context){
+        this.spotView = spotView;
+        this.context = context;
+    }
 
     private ArrayList<ParkingSpot> parseJSon(String json){
         ArrayList<ParkingSpot> spots = new ArrayList<ParkingSpot>();
@@ -82,7 +91,11 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
        return parseJSon(json);
    }
 
-    protected void onPostExecute(){
-
+    protected void onPostExecute(ArrayList<ParkingSpot> spots){
+        if(context != null && spotView != null) {
+            ParkingSpot[] spotarray = spots.toArray(new ParkingSpot[spots.size()]);
+            SlotListAdapter adapter = new SlotListAdapter(context, spotarray);
+            spotView.setAdapter(adapter);
+        }
     }
 }
