@@ -2,7 +2,9 @@ package de.jkliemann.parkendd;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,11 +29,16 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     private static final String FREE = "free";
     private ListView spotView = null;
     private Context context = null;
+    private RelativeLayout popup = null;
 
-    public void setUi(ListView spotView, Context context){
+    public void setUi(ListView spotView, Context context, RelativeLayout popup){
         this.spotView = spotView;
         this.context = context;
+        this.popup = popup;
+        popup.setVisibility(View.VISIBLE);
     }
+
+
 
     private ArrayList<ParkingSpot> parseJSon(String json){
         ArrayList<ParkingSpot> spots = new ArrayList<ParkingSpot>();
@@ -39,8 +46,8 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
             JSONArray global = new JSONArray(json);
             for(int i = 0; i < global.length(); i++){
                 JSONObject catg = global.getJSONObject(i);
-                String category = catg.getString("name");
-                JSONArray lots = catg.getJSONArray("lots");
+                String category = catg.getString(NAME);
+                JSONArray lots = catg.getJSONArray(LOTS);
                 for(int j = 0; j < lots.length(); j++){
                     JSONObject lot = lots.getJSONObject(j);
                     String name = lot.getString(NAME);
@@ -93,9 +100,10 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
 
     protected void onPostExecute(ArrayList<ParkingSpot> spots){
         if(context != null && spotView != null) {
-            ParkingSpot[] spotarray = spots.toArray(new ParkingSpot[spots.size()]);
-            SlotListAdapter adapter = new SlotListAdapter(context, spotarray);
+            ParkingSpot[] spotArray = spots.toArray(new ParkingSpot[spots.size()]);
+            SlotListAdapter adapter = new SlotListAdapter(context, spotArray);
             spotView.setAdapter(adapter);
         }
+        popup.setVisibility(View.GONE);
     }
 }

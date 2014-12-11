@@ -5,7 +5,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,7 +25,8 @@ public class MainActivity extends ActionBarActivity {
     private void refresh(){
         try{
             Fetch f = new Fetch();
-            f.setUi((ListView)findViewById(R.id.spotListView), this);
+            RelativeLayout popup = (RelativeLayout)findViewById(R.id.main_layoutPageLoading);
+            f.setUi((ListView)findViewById(R.id.spotListView), this, popup);
             f.execute(getString(R.string.fetch_url));
         }catch(Exception e){
             e.printStackTrace();
