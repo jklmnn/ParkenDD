@@ -13,5 +13,6 @@
     <string name="about">Über die App</string>
     <string name="version">0.1.0</string>
     <string name="title_activity_about">Über die App</string>
-
+    <string name="network_error">Fehler beim holen der Daten.</string>
+    <string name="intent_error">Keine passende Anwendung gefunden.</string>
 </resources>

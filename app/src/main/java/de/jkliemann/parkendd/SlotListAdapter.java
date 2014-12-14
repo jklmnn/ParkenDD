@@ -2,6 +2,7 @@ package de.jkliemann.parkendd;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,10 +50,13 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
         }else{
             freeView.setText(Integer.toString(spot.free()));
             if(spot.state().equals("many")){
+                freeView.setTypeface(null, Typeface.BOLD);
                 freeView.setTextColor(this.green);
             }else if(spot.state().equals("few")){
+                freeView.setTypeface(null, Typeface.BOLD);
                 freeView.setTextColor(this.yellow);
             }else if(spot.state().equals("full")){
+                freeView.setTypeface(null, Typeface.BOLD);
                 freeView.setTextColor(this.red);
             }
         }

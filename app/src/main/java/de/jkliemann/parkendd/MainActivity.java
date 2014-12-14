@@ -26,6 +26,7 @@ public class MainActivity extends ActionBarActivity {
             f.execute(getString(R.string.fetch_url));
         }catch(Exception e){
             e.printStackTrace();
+            Error.showLongErrorToast(this, e.getMessage());
         }
     }
 

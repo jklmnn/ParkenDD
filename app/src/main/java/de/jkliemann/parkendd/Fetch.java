@@ -36,6 +36,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     private ListView spotView = null;
     private Context context = null;
     private RelativeLayout popup = null;
+    private Boolean error = false;
 
     public void setUi(ListView spotView, Context context, RelativeLayout popup){
         this.spotView = spotView;
@@ -71,6 +72,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
             }
         }catch(JSONException e){
             e.printStackTrace();
+            error = true;
         }
         return spots;
     }
@@ -90,17 +92,20 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                }
            }catch(IOException e){
                e.printStackTrace();
+               error = true;
            }finally {
                if(br != null){
                    try {
                        br.close();
                    }catch(IOException e){
                        e.printStackTrace();
+                       error = true;
                    }
                }
            }
        }catch(Exception e){
            e.printStackTrace();
+           error = true;
        }
        return parseJSon(json);
    }
@@ -122,10 +127,14 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                         context.startActivity(mapCall);
                     }catch(ActivityNotFoundException e){
                         e.printStackTrace();
+                        Error.showLongErrorToast(context, context.getString(R.string.intent_error));
                     }
                 }
             });
         }
         popup.setVisibility(View.GONE);
+        if(error) {
+            Error.showLongErrorToast(context, context.getString(R.string.network_error));
+        }
     }
 }
