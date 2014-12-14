@@ -31,6 +31,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     private static final String LOTS = "lots";
     private static final String COUNT = "count";
     private static final String FREE = "free";
+    private static final String STATE = "state";
     private ListView spotView = null;
     private Context context = null;
     private RelativeLayout popup = null;
@@ -57,13 +58,14 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     String name = lot.getString(NAME);
                     String count = lot.getString(COUNT);
                     String free = lot.getString(FREE);
+                    String state = lot.getString(STATE);
                     if(count.length() < 1){
                         count = "0";
                     }
                     if(free.length() < 1){
                         free = "0";
                     }
-                    spots.add(new ParkingSpot(name, category, Integer.parseInt(count), Integer.parseInt(free)));
+                    spots.add(new ParkingSpot(name, category, state, Integer.parseInt(count), Integer.parseInt(free)));
                 }
             }
         }catch(JSONException e){

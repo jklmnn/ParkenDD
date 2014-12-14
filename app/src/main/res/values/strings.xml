@@ -7,5 +7,6 @@
     <string name="action_refresh">Aktualisieren</string>
     <string name="mapString">Karte</string>
     <string name="fetch_url">http://jkliemann.de/offenesdresden.de/json.php</string>
-
+    <string name="closed">geschlossen</string>
+    <string name="nodata">Keine Daten</string>
 </resources>

@@ -4,16 +4,18 @@ package de.jkliemann.parkendd;
  * Created by jkliemann on 10.12.14.
  */
 public class ParkingSpot {
-    private String name;
-    private String category;
-    private int count;
-    private int free;
+    private final String name;
+    private final String category;
+    private final String state;
+    private final int count;
+    private final int free;
 
-    public ParkingSpot(String n, String c, int cn, int fr){
-        name = n;
-        category = c;
-        count = cn;
-        free = fr;
+    public ParkingSpot(String name, String category, String state, int count, int free){
+        this.name = name;
+        this.category = category;
+        this.state = state;
+        this.count = count;
+        this.free = free;
     }
 
     public String name(){
@@ -22,6 +24,10 @@ public class ParkingSpot {
 
     public String category(){
         return category;
+    }
+
+    public String state(){
+        return state;
     }
 
     public int count(){
