@@ -7,6 +7,11 @@
     <string name="action_refresh">Aktualisieren</string>
     <string name="mapString">Karte</string>
     <string name="fetch_url">http://jkliemann.de/offenesdresden.de/json.php</string>
+    <string name="app_url">http://jkliemann.de/parkendd/</string>
     <string name="closed">geschlossen</string>
     <string name="nodata">Keine Daten</string>
+    <string name="about">Über die App</string>
+    <string name="version">0.1.0</string>
+    <string name="title_activity_about">Über die App</string>
+
 </resources>

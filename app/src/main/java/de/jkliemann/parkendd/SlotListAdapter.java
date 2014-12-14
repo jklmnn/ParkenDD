@@ -19,8 +19,8 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
     private final Context context;
     private final ParkingSpot[] spots;
     private final int red = Color.argb(255, 255, 0, 0);
-    private final int green = Color.argb(255, 0, 255, 0);
-    private final int yellow = Color.argb(255, 255, 255, 0);
+    private final int green = Color.argb(255, 0, 155, 0);
+    private final int yellow = Color.argb(255, 185, 185, 0);
     private final int blue = Color.argb(255, 0, 0, 255);
 
 
