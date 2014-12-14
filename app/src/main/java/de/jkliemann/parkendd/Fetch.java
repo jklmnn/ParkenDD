@@ -1,5 +1,6 @@
 package de.jkliemann.parkendd;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -116,8 +117,12 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     String location = "Dresden " + current.getText();
                     String geoUriString = "geo:0,0?q="  + location;
                     Uri geoUri = Uri.parse(geoUriString);
-                    Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
-                    context.startActivity(mapCall);
+                    try {
+                        Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
+                        context.startActivity(mapCall);
+                    }catch(ActivityNotFoundException e){
+                        e.printStackTrace();
+                    }
                 }
             });
         }

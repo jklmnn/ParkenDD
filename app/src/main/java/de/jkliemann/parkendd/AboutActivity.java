@@ -17,7 +17,6 @@ public class AboutActivity extends ActionBarActivity {
         TextView aboutView = (TextView)findViewById(R.id.aboutView);
         aboutView.setText(getString(R.string.app_name) + " " + getString(R.string.version) + "\n" + getString(R.string.app_url));
         ImageView iconView = (ImageView)findViewById(R.id.iconView);
-        iconView.setImageDrawable(getDrawable(R.drawable.ic_launcher));
     }
 
 

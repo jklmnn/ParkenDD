@@ -35,23 +35,25 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View slotView = inflater.inflate(R.layout.slot_list_adapter, parent, false);
         TextView countView = (TextView)slotView.findViewById(R.id.countView);
+        TextView freeView = (TextView)slotView.findViewById(R.id.freeView);
         TextView nameView = (TextView)slotView.findViewById(R.id.nameView);
         ParkingSpot spot = spots[position];
-        nameView.setText(spot.name() + " (" + Integer.toString(spot.count()) + ")");
+        nameView.setText(spot.name());
+        countView.setText(" (" + Integer.toString(spot.count()) + ")");
         if(spot.state().equals("closed")) {
-            countView.setText(context.getString(R.string.closed));
-            countView.setTextColor(this.red);
+            freeView.setText(context.getString(R.string.closed));
+            freeView.setTextColor(this.red);
         }else if(spot.state().equals("nodata")){
-            countView.setText(context.getString(R.string.nodata));
-            countView.setTextColor(this.blue);
+            freeView.setText(context.getString(R.string.nodata));
+            freeView.setTextColor(this.blue);
         }else{
-            countView.setText(Integer.toString(spot.free()));
+            freeView.setText(Integer.toString(spot.free()));
             if(spot.state().equals("many")){
-                countView.setTextColor(this.green);
+                freeView.setTextColor(this.green);
             }else if(spot.state().equals("few")){
-                countView.setTextColor(this.yellow);
+                freeView.setTextColor(this.yellow);
             }else if(spot.state().equals("full")){
-                countView.setTextColor(this.red);
+                freeView.setTextColor(this.red);
             }
         }
         return slotView;
