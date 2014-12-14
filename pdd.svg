@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.2"
+   width="200"
+   height="200"
+   id="svg2">
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-852.36218)"
+     id="layer1">
+    <g
+       transform="matrix(0.40175311,0,0,0.40175311,4.6629522,856.18126)"
+       id="g3037">
+      <path
+         d="m 30.856274,5.7720243 420.004816,0 c 10.81582,0.7906802 23.07189,11.8437647 23.66646,24.8647647 l 0,418.806511 c 0.0497,10.31854 -11.79351,24.19224 -25.16434,24.86477 l -419.405663,0 C 20.433732,473.72489 5.5262338,458.92955 5.0927831,449.14373 L 5.691934,30.936364 C 4.6103723,24.633922 19.978002,5.6381226 30.856274,5.7720243 z"
+         id="path3669"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         d="m 35.1875,16.78125 c -11.760613,-0.514916 -18.473169,7.51921 -18.03125,20.375 l 0,406.40625 c 0.04655,8.6672 3.728171,19.07043 15.6875,19.28125 l 414.4375,-0.0312 c 11.95933,-0.21085 15.6722,-10.6141 15.71875,-19.2813 l 0,-406.4375 c 0.44191,-12.855791 -6.27063,-20.88992 -18.03125,-20.375 L 35.1875,16.78125 z"
+         id="path3661"
+         style="fill:#154889;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+      <path
+         d="m 175.94451,123.64749 0,105.26598 73.46222,0 c 18.36538,1.7e-4 32.06487,-5.52442 41.09853,-16.5738 9.03325,-11.04899 13.54998,-23.06871 13.55019,-36.05919 -2.1e-4,-19.70913 -7.09259,-34.19252 -21.27716,-43.45022 -9.10831,-6.12157 -20.8294,-9.1825 -35.16332,-9.18277 l -71.67046,0 z m -49.49741,279.51477 0,-326.324541 118.48023,0 c 12.69147,3.26e-4 24.89784,1.344146 36.61912,4.031463 11.72091,2.687962 23.92727,8.95912 36.61912,18.813495 9.85446,7.615283 18.216,18.104543 25.08466,31.467813 6.86816,13.36381 10.30237,28.85506 10.30263,46.47381 -2.6e-4,23.2931 -8.69776,45.46612 -26.09252,66.51914 -17.39524,21.05333 -42.81583,31.57992 -76.26185,31.57979 l -75.25398,0 0,127.43903 -49.49741,0 z"
+         id="text5426"
+         style="font-size:458.69091797px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:DIN 1451 Mittelschrift" />
+    </g>
+    <flowRoot
+       transform="matrix(1.5922469,0,0,1.5922469,-69.713214,773.22758)"
+       id="flowRoot3042"
+       xml:space="preserve"
+       style="font-size:36px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"><flowRegion
+         id="flowRegion3044"><rect
+           width="70.710678"
+           height="42.426407"
+           x="93.944183"
+           y="117.16749"
+           id="rect3046"
+           style="font-size:36px;font-weight:bold;fill:#ffffff;-inkscape-font-specification:Sans Bold" /></flowRegion><flowPara
+         id="flowPara3048">DD</flowPara></flowRoot>  </g>
+</svg>

@@ -4,6 +4,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -15,6 +16,8 @@ public class AboutActivity extends ActionBarActivity {
         setContentView(R.layout.activity_about);
         TextView aboutView = (TextView)findViewById(R.id.aboutView);
         aboutView.setText(getString(R.string.app_name) + " " + getString(R.string.version) + "\n" + getString(R.string.app_url));
+        ImageView iconView = (ImageView)findViewById(R.id.iconView);
+        iconView.setImageDrawable(getDrawable(R.drawable.ic_launcher));
     }
 
 
