@@ -2,16 +2,16 @@
 <resources>
 
     <string name="app_name">ParkenDD</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Einstellungen</string>
     <string name="action_refresh">Aktualisieren</string>
     <string name="mapString">Karte</string>
     <string name="fetch_url">http://jkliemann.de/offenesdresden.de/json.php</string>
+    <string name="setting_server">Server</string>
     <string name="app_url">http://jkliemann.de/parkendd/</string>
     <string name="closed">geschlossen</string>
     <string name="nodata">Keine Daten</string>
     <string name="about">Über die App</string>
-    <string name="version">0.1.1</string>
+    <string name="version">0.2.0-alpha</string>
     <string name="title_activity_about">Über die App</string>
     <string name="network_error">Fehler beim holen der Daten.</string>
     <string name="intent_error">Keine passende Anwendung gefunden.</string>

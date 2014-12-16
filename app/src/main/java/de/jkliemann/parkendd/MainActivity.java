@@ -1,6 +1,8 @@
 package de.jkliemann.parkendd;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,10 +12,11 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity extends ActionBarActivity {
-
+    SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_main);
         refresh();
     }
@@ -23,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
             Fetch f = new Fetch();
             RelativeLayout popup = (RelativeLayout)findViewById(R.id.main_layoutPageLoading);
             f.setUi((ListView)findViewById(R.id.spotListView), this, popup);
-            f.execute(getString(R.string.fetch_url));
+            f.execute(preferences.getString("fetch_url", null));//getString(R.string.fetch_url));
         }catch(Exception e){
             e.printStackTrace();
             Error.showLongErrorToast(this, e.getMessage());
@@ -45,9 +48,10 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//       }
+        if (id == R.id.action_settings) {
+            Intent settings = new Intent(this, SettingsActivity.class);
+            startActivity(settings);
+       }
         if(id == R.id.action_about){
             Intent about = new Intent(this, AboutActivity.class);
             startActivity(about);
