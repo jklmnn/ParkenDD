@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +53,6 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         }else{
             location = "geo:0,0?q=Dresden " + label;
         }
-        System.out.println(location);
         return Uri.parse(location);
     }
 
