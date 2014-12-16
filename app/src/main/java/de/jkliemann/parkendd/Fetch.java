@@ -48,7 +48,14 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     }
 
     private static Uri geoUriFromCoord(String lat, String lon, String label){
-        return Uri.parse("geo:"+lat+","+lon+"?q="+lat+","+lon+"("+label+")");
+        String location;
+        if(!lat.equals("null") && !lon.equals("null")){
+            location = "geo:0,0?q="+lat+","+lon+"("+label+")";
+        }else{
+            location = "geo:0,0?q=Dresden " + label;
+        }
+        System.out.println(location);
+        return Uri.parse(location);
     }
 
     private ArrayList<ParkingSpot> parseJSon(String json){
@@ -67,10 +74,10 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     String state = lot.getString(STATE);
                     String lat = lot.getString(LAT);
                     String lon = lot.getString(LON);
-                    if(count.length() < 1){
+                    if(count.length() < 1 || count.equals("null")){
                         count = "0";
                     }
-                    if(free.length() < 1){
+                    if(free.length() < 1 || free.equals("null")){
                         free = "0";
                     }
                     spots.add(new ParkingSpot(name, category, state, Integer.parseInt(count), Integer.parseInt(free), geoUriFromCoord(lat, lon, name)));
