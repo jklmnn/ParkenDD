@@ -33,6 +33,8 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     private static final String COUNT = "count";
     private static final String FREE = "free";
     private static final String STATE = "state";
+    private static final String LAT = "lat";
+    private static final String LON = "lon";
     private ListView spotView = null;
     private Context context = null;
     private RelativeLayout popup = null;
@@ -45,7 +47,9 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         popup.setVisibility(View.VISIBLE);
     }
 
-
+    private static Uri geoUriFromCoord(String lat, String lon, String label){
+        return Uri.parse("geo:"+lat+","+lon+"?q="+lat+","+lon+"("+label+")");
+    }
 
     private ArrayList<ParkingSpot> parseJSon(String json){
         ArrayList<ParkingSpot> spots = new ArrayList<ParkingSpot>();
@@ -61,13 +65,15 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     String count = lot.getString(COUNT);
                     String free = lot.getString(FREE);
                     String state = lot.getString(STATE);
+                    String lat = lot.getString(LAT);
+                    String lon = lot.getString(LON);
                     if(count.length() < 1){
                         count = "0";
                     }
                     if(free.length() < 1){
                         free = "0";
                     }
-                    spots.add(new ParkingSpot(name, category, state, Integer.parseInt(count), Integer.parseInt(free)));
+                    spots.add(new ParkingSpot(name, category, state, Integer.parseInt(count), Integer.parseInt(free), geoUriFromCoord(lat, lon, name)));
                 }
             }
         }catch(JSONException e){
@@ -112,16 +118,13 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
 
     protected void onPostExecute(ArrayList<ParkingSpot> spots){
         if(context != null && spotView != null) {
-            ParkingSpot[] spotArray = spots.toArray(new ParkingSpot[spots.size()]);
+            final ParkingSpot[] spotArray = spots.toArray(new ParkingSpot[spots.size()]);
             SlotListAdapter adapter = new SlotListAdapter(context, spotArray);
             spotView.setAdapter(adapter);
             spotView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    TextView current = (TextView)view.findViewById(R.id.nameView);
-                    String location = "Dresden " + current.getText();
-                    String geoUriString = "geo:0,0?q="  + location;
-                    Uri geoUri = Uri.parse(geoUriString);
+                    Uri geoUri = spotArray[position].geoUri();
                     try {
                         Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
                         context.startActivity(mapCall);
