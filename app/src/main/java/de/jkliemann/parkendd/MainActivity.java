@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
             Fetch f = new Fetch();
             RelativeLayout popup = (RelativeLayout)findViewById(R.id.main_layoutPageLoading);
             f.setUi((ListView)findViewById(R.id.spotListView), this, popup);
-            f.execute(preferences.getString("fetch_url", null));//getString(R.string.fetch_url));
+            f.execute(preferences.getString("fetch_url", null));
         }catch(Exception e){
             e.printStackTrace();
             Error.showLongErrorToast(this, e.getMessage());

@@ -3,7 +3,7 @@
     <EditTextPreference
         android:key="fetch_url"
         android:title="@string/setting_server"
-        android:defaultValue="@string/fetch_url"
+        android:defaultValue="@string/default_fetch_url"
         android:inputType="textUri"
         android:singleLine="true"
         android:maxLines="1" />
