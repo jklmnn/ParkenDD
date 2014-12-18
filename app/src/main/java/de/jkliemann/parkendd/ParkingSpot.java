@@ -9,14 +9,16 @@ public class ParkingSpot {
     private final String name;
     private final String category;
     private final String state;
+    private final String city;
     private final Uri geoUri;
     private final int count;
     private final int free;
 
-    public ParkingSpot(String name, String category, String state, int count, int free, Uri geoUri){
+    public ParkingSpot(String name, String category, String state, String city, int count, int free, Uri geoUri){
         this.name = name;
         this.category = category;
         this.state = state;
+        this.city = city;
         this.count = count;
         this.free = free;
         this.geoUri = geoUri;
@@ -32,6 +34,10 @@ public class ParkingSpot {
 
     public String state(){
         return state;
+    }
+
+    public String city(){
+        return city;
     }
 
     public int count(){

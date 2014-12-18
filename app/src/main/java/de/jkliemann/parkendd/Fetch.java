@@ -34,6 +34,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     private static final String STATE = "state";
     private static final String LAT = "lat";
     private static final String LON = "lon";
+    private static final String CITY = "Dresden";
     private ListView spotView = null;
     private Context context = null;
     private RelativeLayout popup = null;
@@ -46,12 +47,12 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         popup.setVisibility(View.VISIBLE);
     }
 
-    private static Uri geoUriFromCoord(String lat, String lon, String label){
+    private static Uri geoUriFromCoord(String lat, String lon, String city, String label){
         String location;
         if(!lat.equals("null") && !lon.equals("null")){
             location = "geo:0,0?q="+lat+","+lon+"("+label+")";
         }else{
-            location = "geo:0,0?q=Dresden " + label;
+            location = "geo:0,0?q="+city+" " + label;
         }
         return Uri.parse(location);
     }
@@ -72,13 +73,14 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     String state = lot.getString(STATE);
                     String lat = lot.getString(LAT);
                     String lon = lot.getString(LON);
+                    String city = CITY;
                     if(count.length() < 1 || count.equals("null")){
                         count = "0";
                     }
                     if(free.length() < 1 || free.equals("null")){
                         free = "0";
                     }
-                    spots.add(new ParkingSpot(name, category, state, Integer.parseInt(count), Integer.parseInt(free), geoUriFromCoord(lat, lon, name)));
+                    spots.add(new ParkingSpot(name, category, state, city, Integer.parseInt(count), Integer.parseInt(free), geoUriFromCoord(lat, lon, city, name)));
                 }
             }
         }catch(JSONException e){
