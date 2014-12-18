@@ -7,11 +7,15 @@
     <string name="mapString">Karte</string>
     <string name="fetch_url">http://jkliemann.de/offenesdresden.de/json.php</string>
     <string name="setting_server">Server</string>
+    <string name="setting_city">Stadt</string>
+    <string name="setting_reset">Zurücksetzen</string>
+    <string name="default_city">Dresden</string>
     <string name="app_url">http://jkliemann.de/parkendd/</string>
+    <string name="disclaimer">Alle Angaben ohne Gewähr!</string>
     <string name="closed">geschlossen</string>
     <string name="nodata">Keine Daten</string>
     <string name="about">Über die App</string>
-    <string name="version">0.2.0-alpha</string>
+    <string name="version">0.2.0-beta</string>
     <string name="title_activity_about">Über die App</string>
     <string name="network_error">Fehler beim holen der Daten.</string>
     <string name="intent_error">Keine passende Anwendung gefunden.</string>

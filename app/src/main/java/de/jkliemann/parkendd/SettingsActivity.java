@@ -64,6 +64,7 @@ public class SettingsActivity extends PreferenceActivity {
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_general);
         bindPreferenceSummaryToValue(findPreference("fetch_url"));
+        bindPreferenceSummaryToValue(findPreference("city"));
     }
 
     /**

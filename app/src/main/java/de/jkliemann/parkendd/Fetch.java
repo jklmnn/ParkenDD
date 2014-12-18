@@ -3,8 +3,10 @@ package de.jkliemann.parkendd;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -34,7 +36,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     private static final String STATE = "state";
     private static final String LAT = "lat";
     private static final String LON = "lon";
-    private static final String CITY = "Dresden";
+    private static String CITY = "";
     private ListView spotView = null;
     private Context context = null;
     private RelativeLayout popup = null;
@@ -44,6 +46,8 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         this.spotView = spotView;
         this.context = context;
         this.popup = popup;
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        CITY = pref.getString("city", null);
         popup.setVisibility(View.VISIBLE);
     }
 
