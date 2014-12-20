@@ -46,8 +46,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         this.spotView = spotView;
         this.context = context;
         this.popup = popup;
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        CITY = pref.getString("city", null);
+        CITY = PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city));
         popup.setVisibility(View.VISIBLE);
     }
 
@@ -94,10 +93,11 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         return spots;
     }
 
-   protected ArrayList<ParkingSpot> doInBackground(String... address){
+   protected ArrayList<ParkingSpot> doInBackground(String... ct){
        String json = "";
+       String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
        try {
-           URL url = new URL(address[0]);
+           URL url = new URL(address);
            HttpURLConnection cn = (HttpURLConnection) url.openConnection();
            BufferedReader br = null;
            InputStream in = cn.getInputStream();

@@ -2,7 +2,7 @@
 <resources>
     <!--Meta-->
     <string name="app_name">ParkenDD</string>
-    <string name="version">0.2.0</string>
+    <string name="version">0.2.1</string>
     <!--actions-->
     <string name="action_settings">Einstellungen</string>
     <string name="action_refresh">Aktualisieren</string>
