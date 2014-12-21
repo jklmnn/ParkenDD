@@ -1,6 +1,7 @@
 package de.jkliemann.parkendd;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,7 +34,6 @@ public class SettingsActivity extends PreferenceActivity {
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -58,6 +58,7 @@ public class SettingsActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.pref_general);
         bindPreferenceSummaryToValue(findPreference("fetch_url"));
         bindPreferenceSummaryToValue(findPreference("city"));
+        bindResetToDefault(findPreference("reset"));
     }
 
     /**
@@ -103,6 +104,14 @@ public class SettingsActivity extends PreferenceActivity {
         }
     };
 
+    private static Preference.OnPreferenceClickListener setDefault = new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+            prefs.edit().clear().commit();
+            return true;
+        }
+    };
     /**
      * Binds a preference's summary to its value. More specifically, when the
      * preference's value is changed, its summary (line of text below the
@@ -110,8 +119,13 @@ public class SettingsActivity extends PreferenceActivity {
      * immediately updated upon calling this method. The exact display format is
      * dependent on the type of preference.
      *
-     * @see #sBindPreferenceSummaryToValueListener
+     * @see #sBindPreferenceSummaryToValueListene
      */
+
+    private static void bindResetToDefault(Preference preference){
+        preference.setOnPreferenceClickListener(setDefault);
+    }
+
     private static void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);

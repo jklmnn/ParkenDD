@@ -2,7 +2,7 @@
 <resources>
     <!--Meta-->
     <string name="app_name">ParkenDD</string>
-    <string name="version">0.2.1</string>
+    <string name="version">0.2.2-beta</string>
     <!--actions-->
     <string name="action_settings">Einstellungen</string>
     <string name="action_refresh">Aktualisieren</string>
@@ -10,6 +10,7 @@
     <!--settings-->
     <string name="setting_server">Server</string>
     <string name="setting_city">Stadt (nur für Suche ohne Koordinaten)</string>
+    <string name="setting_reset">Zurücksetzen</string>
     <!--defaults-->
     <string name="default_fetch_url">http://jkliemann.de/offenesdresden.de/json.php</string>
     <string name="default_city">Dresden</string>

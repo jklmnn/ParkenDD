@@ -15,4 +15,9 @@
         android:singleLine="true"
         android:maxLines="1" />
 
+    <Preference
+        android:key="reset"
+        android:title="@string/setting_reset"
+    />
+
 </PreferenceScreen>
