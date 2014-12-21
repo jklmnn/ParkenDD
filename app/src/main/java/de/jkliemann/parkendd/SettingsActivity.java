@@ -1,6 +1,8 @@
 package de.jkliemann.parkendd;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -25,7 +27,7 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity{
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
@@ -105,11 +107,31 @@ public class SettingsActivity extends PreferenceActivity {
     };
 
     private static Preference.OnPreferenceClickListener setDefault = new Preference.OnPreferenceClickListener() {
+
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
-            prefs.edit().clear().commit();
+            Context context = preference.getContext();
+            resetDialog(context);
             return true;
+        }
+
+        private void resetDialog(final Context context){
+            AlertDialog.Builder resetDialog = new AlertDialog.Builder(context);
+            resetDialog.setMessage(context.getString(R.string.alert_reset));
+            resetDialog.setPositiveButton(context.getString(R.string.positive), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+                    editor.putString("fetch_url", context.getString(R.string.default_fetch_url));
+                    editor.putString("city", context.getString(R.string.default_city));
+                }
+            });
+            resetDialog.setNegativeButton(context.getString(R.string.negative), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            resetDialog.create().show();
         }
     };
     /**
@@ -119,7 +141,7 @@ public class SettingsActivity extends PreferenceActivity {
      * immediately updated upon calling this method. The exact display format is
      * dependent on the type of preference.
      *
-     * @see #sBindPreferenceSummaryToValueListene
+     * @see #sBindPreferenceSummaryToValueListener
      */
 
     private static void bindResetToDefault(Preference preference){

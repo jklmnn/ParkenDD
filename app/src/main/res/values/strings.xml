@@ -20,6 +20,11 @@
     <!--slotstates-->
     <string name="closed">geschlossen</string>
     <string name="nodata">Keine Daten</string>
+    <!--alerts-->
+    <string name="alert_reset">Einstellungen zurücksetzen?</string>
+    <!--pos/neg button-->
+    <string name="positive">Ok</string>
+    <string name="negative">Abbrechen</string>
     <!--errors-->
     <string name="network_error">Fehler beim holen der Daten.</string>
     <string name="intent_error">Keine passende Anwendung gefunden.</string>
