@@ -96,6 +96,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
    protected ArrayList<ParkingSpot> doInBackground(String... ct){
        String json = "";
        String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
+       address = address + "?city=" + PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city));
        try {
            URL url = new URL(address);
            HttpURLConnection cn = (HttpURLConnection) url.openConnection();
