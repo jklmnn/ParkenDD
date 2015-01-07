@@ -1,23 +1,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:key="fetch_url"
-        android:title="@string/setting_server"
-        android:defaultValue="@string/default_fetch_url"
-        android:inputType="textUri"
-        android:singleLine="true"
-        android:maxLines="1" />
-    <EditTextPreference
+    <ListPreference
         android:key="city"
-        android:title="@string/setting_city"
-        android:defaultValue="@string/default_city"
-        android:inputType="text"
-        android:singleLine="true"
-        android:maxLines="1" />
-    <!--<ListPreference
-        android:key="_city"
         android:title="Stadt"
-        android:defaultValue="Dresden"/>-->
+        android:defaultValue="Dresden"/>
     <Preference
         android:key="reset"
         android:title="@string/setting_reset"

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
@@ -15,6 +16,7 @@ import android.preference.PreferenceManager;
 
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -55,11 +57,13 @@ public class SettingsActivity extends PreferenceActivity{
 
         addPreferencesFromResource(R.xml.pref_container);
         PreferenceCategory fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.action_settings);
+        fakeHeader.setTitle(R.string.header_general);
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_general);
-        bindPreferenceSummaryToValue(findPreference("fetch_url"));
-        bindPreferenceSummaryToValue(findPreference("city"));
+        ListPreference citylist = (ListPreference)findPreference("city");
+        citylist.setEntries(GlobalSettings.getGlobalSettings().getCitylist());
+        citylist.setEntryValues(GlobalSettings.getGlobalSettings().getCitylist());
+        bindPreferenceSummaryToValue(citylist);
         bindResetToDefault(findPreference("reset"));
     }
 

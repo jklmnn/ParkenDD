@@ -24,13 +24,15 @@ public class Server extends AsyncTask<Context, Void, String[]> {
 
     private static final String MAIL = "mail";
     private static final String CITIES = "cities";
+    private String mail;
+    private String[] citylist;
     private Context context;
 
     private String[] parseJSon(String data){
         ArrayList<String> cities = new ArrayList<String>();
         try{
             JSONObject global = new JSONObject(data);
-            String mail = global.getString(MAIL);
+            mail = global.getString(MAIL);
             JSONArray citystrings = global.getJSONArray(CITIES);
             for(int i = 0; i < citystrings.length(); i++){
                 cities.add(citystrings.getString(i));
@@ -62,12 +64,12 @@ public class Server extends AsyncTask<Context, Void, String[]> {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return parseJSon(meta);
+        citylist = parseJSon(meta);
+        return citylist;
     }
 
     protected void onPostExecute(String[] cities){
-        if(context != null){
-
-        }
+        GlobalSettings.getGlobalSettings().setMail(mail);
+        GlobalSettings.getGlobalSettings().setCitylist(citylist);
     }
 }

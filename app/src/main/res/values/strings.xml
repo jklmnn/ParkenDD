@@ -8,8 +8,10 @@
     <string name="action_refresh">Aktualisieren</string>
     <string name="action_about">Über die App</string>
     <!--settings-->
+    <string name="header_general">Allgemein</string>
+    <string name="header_network">Netzwerk</string>
     <string name="setting_server">Server</string>
-    <string name="setting_city">Stadt (nur für Suche ohne Koordinaten)</string>
+    <string name="setting_city">Stadt</string>
     <string name="setting_reset">Zurücksetzen</string>
     <!--defaults-->
     <string name="default_fetch_url">http://jkliemann.de/parkenndd/app/</string>
