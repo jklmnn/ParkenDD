@@ -2,7 +2,7 @@
 <resources>
     <!--Meta-->
     <string name="app_name">ParkenDD</string>
-    <string name="version">0.2.2-beta</string>
+    <string name="version">0.3.0</string>
     <!--actions-->
     <string name="action_settings">Einstellungen</string>
     <string name="action_refresh">Aktualisieren</string>
@@ -19,6 +19,7 @@
     <!--about-->
     <string name="app_url">http://jkliemann.de/parkendd/</string>
     <string name="disclaimer">Alle Angaben ohne Gewähr!</string>
+    <string name="server">Serverkontakt:</string>
     <!--slotstates-->
     <string name="closed">geschlossen</string>
     <string name="nodata">Keine Daten</string>

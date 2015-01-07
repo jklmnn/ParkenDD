@@ -15,6 +15,10 @@ public class AboutActivity extends ActionBarActivity {
         setContentView(R.layout.activity_about);
         TextView aboutView = (TextView)findViewById(R.id.aboutView);
         aboutView.setText(getString(R.string.app_name) + " " + getString(R.string.version) + "\n" + getString(R.string.app_url) + "\n" + getString(R.string.disclaimer));
+        if(!GlobalSettings.getGlobalSettings().getMail().equals("")){
+            TextView serverView = (TextView)findViewById(R.id.serverView);
+            serverView.setText(getString(R.string.server) + "\n" + GlobalSettings.getGlobalSettings().getMail());
+        }
     }
 
 
