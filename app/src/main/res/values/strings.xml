@@ -2,7 +2,7 @@
 <resources>
     <!--Meta-->
     <string name="app_name">ParkenDD</string>
-    <string name="version">0.3.0</string>
+    <string name="version">0.3.1</string>
     <!--actions-->
     <string name="action_settings">Einstellungen</string>
     <string name="action_refresh">Aktualisieren</string>
@@ -15,6 +15,7 @@
     <string name="setting_reset">Zurücksetzen</string>
     <!--defaults-->
     <string name="default_fetch_url">http://jkliemann.de/parkendd/app/</string>
+    <string name="old_fetch_url">http://jkliemann.de/offenesdresden.de/json.php</string>
     <string name="default_city">Dresden</string>
     <!--about-->
     <string name="app_url">http://jkliemann.de/parkendd/</string>

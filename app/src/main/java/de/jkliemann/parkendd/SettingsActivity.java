@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -41,7 +42,8 @@ public class SettingsActivity extends PreferenceActivity{
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
+        Server s = new Server();
+        s.execute(this);
         setupSimplePreferencesScreen();
     }
 
@@ -76,7 +78,11 @@ public class SettingsActivity extends PreferenceActivity{
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_network);
         bindResetToDefault(findPreference("reset"));
-        bindPreferenceSummaryToValue(findPreference("fetch_url"));
+        EditTextPreference url = (EditTextPreference)findPreference("fetch_url");
+        if(url.getText().equals(getString(R.string.old_fetch_url))){
+            url.setText(getString(R.string.default_fetch_url));
+        }
+        bindPreferenceSummaryToValue(url);
     }
 
     /**
@@ -126,20 +132,22 @@ public class SettingsActivity extends PreferenceActivity{
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            Context context = preference.getContext();
-            resetDialog(context);
+            resetDialog(preference.getContext(), preference.getPreferenceManager());
             return true;
         }
 
-        private void resetDialog(final Context context){
+        private void resetDialog(final Context context, final PreferenceManager preferenceManager){
             AlertDialog.Builder resetDialog = new AlertDialog.Builder(context);
             resetDialog.setMessage(context.getString(R.string.alert_reset));
             resetDialog.setPositiveButton(context.getString(R.string.positive), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-                    editor.putString("fetch_url", context.getString(R.string.default_fetch_url));
-                    editor.putString("city", context.getString(R.string.default_city));
+                    ListPreference city = (ListPreference)preferenceManager.findPreference("city");
+                    city.setValue(context.getString(R.string.default_city));
+                    city.setSummary(context.getString(R.string.default_city));
+                    EditTextPreference url = (EditTextPreference)preferenceManager.findPreference("fetch_url");
+                    url.setText(context.getString(R.string.default_fetch_url));
+                    url.setSummary(context.getString(R.string.default_fetch_url));
                 }
             });
             resetDialog.setNegativeButton(context.getString(R.string.negative), new DialogInterface.OnClickListener() {
