@@ -61,7 +61,7 @@ public class SettingsActivity extends PreferenceActivity{
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_general);
         ListPreference citylist = (ListPreference)findPreference("city");
-        if(GlobalSettings.getGlobalSettings().getCitylist() != null) {
+        if(GlobalSettings.getGlobalSettings().getCitylist().length > 0) {
             citylist.setEntries(GlobalSettings.getGlobalSettings().getCitylist());
             citylist.setEntryValues(GlobalSettings.getGlobalSettings().getCitylist());
         }else{
@@ -71,11 +71,11 @@ public class SettingsActivity extends PreferenceActivity{
             citylist.setEntries(def);
         }
         bindPreferenceSummaryToValue(citylist);
-        bindResetToDefault(findPreference("reset"));
         fakeHeader = new PreferenceCategory(this);
         fakeHeader.setTitle(R.string.header_network);
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_network);
+        bindResetToDefault(findPreference("reset"));
         bindPreferenceSummaryToValue(findPreference("fetch_url"));
     }
 

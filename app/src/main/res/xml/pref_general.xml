@@ -4,9 +4,5 @@
         android:key="city"
         android:title="Stadt"
         android:defaultValue="Dresden"/>
-    <Preference
-        android:key="reset"
-        android:title="@string/setting_reset"
-    />
 
 </PreferenceScreen>
