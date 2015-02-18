@@ -31,5 +31,8 @@
     <string name="negative">Abbrechen</string>
     <!--errors-->
     <string name="network_error">Fehler beim holen der Daten.</string>
+    <string name="invalid_error">Ungültige Daten erhalten.</string>
+    <string name="url_error">Ungültige Adresse</string>
+    <string name="connection_error">Verbindungsfehler</string>
     <string name="intent_error">Keine passende Anwendung gefunden.</string>
 </resources>

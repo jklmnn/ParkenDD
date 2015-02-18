@@ -3,7 +3,6 @@ package de.jkliemann.parkendd;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -21,8 +20,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+
 
 /**
  * Created by jkliemann on 10.12.14.
@@ -40,7 +41,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     private ListView spotView = null;
     private Context context = null;
     private RelativeLayout popup = null;
-    private Boolean error = false;
+    private int error = 0;
 
     public void setUi(ListView spotView, Context context, RelativeLayout popup){
         this.spotView = spotView;
@@ -88,48 +89,59 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
             }
         }catch(JSONException e){
             e.printStackTrace();
-            error = true;
+            error = 2;
         }
         return spots;
     }
 
    protected ArrayList<ParkingSpot> doInBackground(String... ct){
        String json = "";
+       ArrayList<ParkingSpot> spots = null;
        String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
        address = address + "?city=" + PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city));
        try {
            URL url = new URL(address);
-           HttpURLConnection cn = (HttpURLConnection) url.openConnection();
-           BufferedReader br = null;
-           InputStream in = cn.getInputStream();
-           try{
-               br = new BufferedReader(new InputStreamReader(in));
-               String line = "";
-               while((line = br.readLine()) != null){
-                   json = json + line + "\n";
-               }
-           }catch(IOException e){
+           HttpURLConnection cn = null;
+           try {
+               cn = (HttpURLConnection) url.openConnection();
+           }catch (IOException e){
                e.printStackTrace();
-               error = true;
-           }finally {
-               if(br != null){
-                   try {
-                       br.close();
-                   }catch(IOException e){
-                       e.printStackTrace();
-                       error = true;
+               error = 3;
+               cn = null;
+           }
+           if(cn != null) {
+               BufferedReader br = null;
+               try{
+                   InputStream in = cn.getInputStream();
+                   br = new BufferedReader(new InputStreamReader(in));
+                   String line = "";
+                   while ((line = br.readLine()) != null) {
+                       json = json + line + "\n";
+                   }
+                   spots = parseJSon(json);
+               } catch (IOException e) {
+                   e.printStackTrace();
+                   error = 2;
+               } finally {
+                   if (br != null) {
+                       try {
+                           br.close();
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                           error = 2;
+                       }
                    }
                }
            }
-       }catch(Exception e){
+       }catch(MalformedURLException e){
            e.printStackTrace();
-           error = true;
+           error = 4;
        }
-       return parseJSon(json);
+       return spots;
    }
 
     protected void onPostExecute(ArrayList<ParkingSpot> spots){
-        if(context != null && spotView != null) {
+        if(context != null && spotView != null && spots != null) {
             final ParkingSpot[] spotArray = spots.toArray(new ParkingSpot[spots.size()]);
             SlotListAdapter adapter = new SlotListAdapter(context, spotArray);
             spotView.setAdapter(adapter);
@@ -148,8 +160,21 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
             });
         }
         popup.setVisibility(View.GONE);
-        if(error) {
-            Error.showLongErrorToast(context, context.getString(R.string.network_error));
+        switch (error){
+            case 2:
+                Error.showLongErrorToast(context, context.getString(R.string.invalid_error));
+                break;
+            case 1:
+                Error.showLongErrorToast(context, context.getString(R.string.network_error));
+                break;
+            case 3:
+                Error.showLongErrorToast(context, context.getString(R.string.connection_error));
+                break;
+            case 4:
+                Error.showLongErrorToast(context, context.getString(R.string.url_error));
+                break;
+            default:
+                break;
         }
     }
 }
