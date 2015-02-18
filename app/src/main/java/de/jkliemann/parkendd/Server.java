@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -27,6 +29,7 @@ public class Server extends AsyncTask<Context, Void, String[]> {
     private String mail;
     private String[] citylist;
     private Context context;
+    private int error = 0;
 
     private String[] parseJSon(String data){
         ArrayList<String> cities = new ArrayList<String>();
@@ -37,8 +40,9 @@ public class Server extends AsyncTask<Context, Void, String[]> {
             for(int i = 0; i < citystrings.length(); i++){
                 cities.add(citystrings.getString(i));
             }
-        }catch (Exception e){
+        }catch (JSONException e){
             e.printStackTrace();
+            error = 1;
         }
         return cities.toArray(new String[cities.size()]);
     }
@@ -49,20 +53,30 @@ public class Server extends AsyncTask<Context, Void, String[]> {
         String meta = "";
         try {
             URL url = new URL(urlstring);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            BufferedReader br = null;
-            InputStream in = connection.getInputStream();
-            try{
-                br = new BufferedReader(new InputStreamReader(in));
-                String line = "";
-                while((line = br.readLine()) != null){
-                    meta = meta + line;
-                }
-            }catch (IOException e){
+            HttpURLConnection connection = null;
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+            }catch (IOException e) {
                 e.printStackTrace();
+                error = 2;
             }
-        }catch (Exception e){
+            if(connection != null){
+                try {
+                    BufferedReader br = null;
+                    InputStream in = connection.getInputStream();
+                    br = new BufferedReader(new InputStreamReader(in));
+                    String line = "";
+                    while ((line = br.readLine()) != null) {
+                        meta = meta + line;
+                    }
+                }catch (IOException e) {
+                    e.printStackTrace();
+                    error = 2;
+                }
+            }
+        }catch (MalformedURLException e){
             e.printStackTrace();
+            error = 3;
         }
         citylist = parseJSon(meta);
         return citylist;
@@ -71,5 +85,18 @@ public class Server extends AsyncTask<Context, Void, String[]> {
     protected void onPostExecute(String[] cities){
         GlobalSettings.getGlobalSettings().setMail(mail);
         GlobalSettings.getGlobalSettings().setCitylist(citylist);
+        switch (error){
+            case 1:
+                Error.showLongErrorToast(context, context.getString(R.string.invalid_error));
+                break;
+            case 2:
+                Error.showLongErrorToast(context, context.getString(R.string.invalid_error));
+                break;
+            case 3:
+                Error.showLongErrorToast(context, context.getString(R.string.url_error));
+                break;
+            default:
+                break;
+        }
     }
 }
