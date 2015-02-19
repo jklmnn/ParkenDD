@@ -1,7 +1,6 @@
 package de.jkliemann.parkendd;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
@@ -55,7 +54,11 @@ public class Server extends AsyncTask<Context, Void, String[]> {
             URL url = new URL(urlstring);
             HttpURLConnection connection = null;
             try {
-                connection = (HttpURLConnection) url.openConnection();
+                if(PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("ignore_cert", false)){
+                    connection = Error.getUnsecureConnection(url);
+                }else {
+                    connection = (HttpURLConnection) url.openConnection();
+                }
             }catch (IOException e) {
                 e.printStackTrace();
                 error = 2;

@@ -3,10 +3,10 @@ package de.jkliemann.parkendd;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -15,9 +15,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -79,6 +76,7 @@ public class SettingsActivity extends PreferenceActivity{
         addPreferencesFromResource(R.xml.pref_network);
         bindResetToDefault(findPreference("reset"));
         EditTextPreference url = (EditTextPreference)findPreference("fetch_url");
+        CheckBoxPreference ignorecert = (CheckBoxPreference)findPreference("ignore_cert");
         if(url.getText().equals(getString(R.string.old_fetch_url))){
             url.setText(getString(R.string.default_fetch_url));
         }
@@ -148,6 +146,8 @@ public class SettingsActivity extends PreferenceActivity{
                     EditTextPreference url = (EditTextPreference)preferenceManager.findPreference("fetch_url");
                     url.setText(context.getString(R.string.default_fetch_url));
                     url.setSummary(context.getString(R.string.default_fetch_url));
+                    CheckBoxPreference ignorecert = (CheckBoxPreference)preferenceManager.findPreference("ignore_cert");
+                    ignorecert.setChecked(false);
                 }
             });
             resetDialog.setNegativeButton(context.getString(R.string.negative), new DialogInterface.OnClickListener() {

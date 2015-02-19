@@ -7,6 +7,10 @@
         android:inputType="textUri"
         android:singleLine="true"
         android:maxLines="1" />
+    <CheckBoxPreference
+        android:key="ignore_cert"
+        android:title="@string/setting_ignore_cert"
+        android:defaultValue="false" />
     <Preference
         android:key="reset"
         android:title="@string/setting_reset"

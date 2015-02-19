@@ -103,7 +103,11 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
            URL url = new URL(address);
            HttpURLConnection cn = null;
            try {
-               cn = (HttpURLConnection) url.openConnection();
+               if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("ignore_cert", false)) {
+                   cn = Error.getUnsecureConnection(url);
+               }else {
+                   cn = (HttpURLConnection) url.openConnection();
+               }
            }catch (IOException e){
                e.printStackTrace();
                error = 3;
