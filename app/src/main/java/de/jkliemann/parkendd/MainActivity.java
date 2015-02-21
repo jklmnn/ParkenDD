@@ -18,6 +18,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_main);
+        GlobalSettings gs = GlobalSettings.getGlobalSettings();
+        gs.initLocation(this);
         Server s = new Server();
         s.execute(this);
         refresh();

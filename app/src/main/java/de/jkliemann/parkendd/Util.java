@@ -1,5 +1,7 @@
 package de.jkliemann.parkendd;
 
+import android.location.Location;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -59,6 +61,20 @@ public class Util {
         HttpsURLConnection.setDefaultHostnameVerifier(allValid);
 
         return (HttpURLConnection) url.openConnection();
+    }
+
+    public static double getDistance(Location src, Location dst){
+        return src.distanceTo(dst);
+    }
+
+    public static String getViewDistance(double dist){
+        String vdist = "";
+        if(dist < 10000){
+            vdist = "ca. " + Integer.toString((int)dist) + "m";
+        }else {
+            vdist = "ca. " + Integer.toString((int)dist / 1000) + "km";
+        }
+        return vdist;
     }
 
 }

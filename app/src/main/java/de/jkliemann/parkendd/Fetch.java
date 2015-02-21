@@ -51,16 +51,6 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         popup.setVisibility(View.VISIBLE);
     }
 
-    private static Uri geoUriFromCoord(String lat, String lon, String city, String label){
-        String location;
-        if(!lat.equals("null") && !lon.equals("null")){
-            location = "geo:0,0?q="+lat+","+lon+"("+label+")";
-        }else{
-            location = "geo:0,0?q="+city+" " + label;
-        }
-        return Uri.parse(location);
-    }
-
     private ArrayList<ParkingSpot> parseJSon(String json){
         ArrayList<ParkingSpot> spots = new ArrayList<ParkingSpot>();
         try{
@@ -75,8 +65,14 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     String count = lot.getString(COUNT);
                     String free = lot.getString(FREE);
                     String state = lot.getString(STATE);
-                    String lat = lot.getString(LAT);
-                    String lon = lot.getString(LON);
+                    double lat, lon;
+                    try {
+                        lat = lot.getDouble(LAT);
+                        lon = lot.getDouble(LON);
+                    }catch (JSONException e){
+                        lat = 0;
+                        lon = 0;
+                    }
                     String city = CITY;
                     if(count.length() < 1 || count.equals("null")){
                         count = "0";
@@ -84,7 +80,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     if(free.length() < 1 || free.equals("null")){
                         free = "0";
                     }
-                    spots.add(new ParkingSpot(name, category, state, city, Integer.parseInt(count), Integer.parseInt(free), geoUriFromCoord(lat, lon, city, name)));
+                    spots.add(new ParkingSpot(name, category, state, city, Integer.parseInt(count), Integer.parseInt(free), lat, lon));
                 }
             }
         }catch(JSONException e){

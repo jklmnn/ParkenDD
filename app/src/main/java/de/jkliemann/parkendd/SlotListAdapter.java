@@ -3,12 +3,12 @@ package de.jkliemann.parkendd;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 
 
 /**
@@ -17,6 +17,8 @@ import android.widget.TextView;
 public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
     private final Context context;
     private final ParkingSpot[] spots;
+    private final GlobalSettings gs;
+    private final Location currentLocation;
     private final int red = Color.argb(255, 255, 0, 0);
     private final int green = Color.argb(255, 0, 155, 0);
     private final int yellow = Color.argb(255, 185, 185, 0);
@@ -32,6 +34,8 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
         super(context, R.layout.slot_list_adapter, spots);
         this.context = context;
         this.spots = spots;
+        this.gs = GlobalSettings.getGlobalSettings();
+        currentLocation = gs.getLastKnownLocation();
     }
 
     @Override
@@ -41,6 +45,7 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
         TextView countView = (TextView)slotView.findViewById(R.id.countView);
         TextView freeView = (TextView)slotView.findViewById(R.id.freeView);
         TextView nameView = (TextView)slotView.findViewById(R.id.nameView);
+        TextView distanceView = (TextView)slotView.findViewById(R.id.distanceView);
         ParkingSpot spot = spots[position];
         nameView.setText(spot.name());
         nameView.setTypeface(null, Typeface.BOLD);
@@ -60,6 +65,11 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
             }else if(spot.state().equals(FULL)){
                 freeView.setTextColor(this.red);
             }
+        }
+        if(currentLocation != null && spot.location() != null){
+            distanceView.setText(Util.getViewDistance(Util.getDistance(currentLocation, spot.location())));
+        }else {
+            distanceView.setText("");
         }
         return slotView;
     }
