@@ -55,7 +55,7 @@ public class Server extends AsyncTask<Context, Void, String[]> {
             HttpURLConnection connection = null;
             try {
                 if(PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("ignore_cert", false)){
-                    connection = Error.getUnsecureConnection(url);
+                    connection = Util.getUnsecureConnection(url);
                 }else {
                     connection = (HttpURLConnection) url.openConnection();
                 }
