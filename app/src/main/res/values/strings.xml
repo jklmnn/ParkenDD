@@ -36,4 +36,7 @@
     <string name="url_error">Ungültige Adresse</string>
     <string name="connection_error">Verbindungsfehler</string>
     <string name="intent_error">Keine passende Anwendung gefunden.</string>
+    <!--view-->
+    <string name="view_free">Frei: </string>
+    <string name="view_available">Verfügbar: </string>
 </resources>
