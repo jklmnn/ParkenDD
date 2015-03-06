@@ -39,10 +39,6 @@ public class ParkingSpot {
         return state;
     }
 
-    public String city(){
-        return city;
-    }
-
     public int count(){
         return count;
     }

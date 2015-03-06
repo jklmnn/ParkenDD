@@ -48,8 +48,7 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
         TextView distanceView = (TextView)slotView.findViewById(R.id.distanceView);
         ParkingSpot spot = spots[position];
         nameView.setText(spot.name());
-        nameView.setTypeface(null, Typeface.BOLD);
-        countView.setText(context.getString(R.string.view_available) + Integer.toString(spot.count()));
+        countView.setText(Integer.toString(spot.count()));
         if(spot.state().equals(CLOSED)) {
             freeView.setText(context.getString(R.string.closed));
             freeView.setTextColor(this.red);
@@ -57,7 +56,8 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
             freeView.setText(context.getString(R.string.nodata));
             freeView.setTextColor(this.blue);
         }else{
-            freeView.setText(context.getString(R.string.view_free) + Integer.toString(spot.free()));
+            freeView.setTypeface(null, Typeface.BOLD);
+            freeView.setText(Integer.toString(spot.free()));
             if(spot.state().equals(MANY)){
                 freeView.setTextColor(this.green);
             }else if(spot.state().equals(FEW)){

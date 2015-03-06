@@ -10,13 +10,25 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Medium Text"
         android:id="@+id/nameView"
         android:layout_row="0"
         android:layout_column="2"
         android:layout_gravity="left"
-        android:gravity="center_vertical|left" />
+        android:gravity="center_vertical|start|left" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Medium Text"
+        android:id="@+id/freeView"
+        android:layout_row="0"
+        android:layout_column="4"
+        android:layout_rowSpan="1"
+        android:gravity="center_vertical|end"
+        android:layout_gravity="right" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,9 +36,10 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/distanceView"
-        android:layout_row="0"
-        android:layout_column="4"
-        android:layout_gravity="right" />
+        android:layout_row="1"
+        android:layout_column="2"
+        android:layout_gravity="left"
+        android:gravity="start" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,17 +48,7 @@
         android:text="Medium Text"
         android:id="@+id/countView"
         android:layout_row="1"
-        android:layout_column="2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/freeView"
-        android:gravity="center_vertical|right"
-        android:layout_gravity="right"
-        android:layout_row="1"
-        android:layout_column="4" />
+        android:layout_column="4"
+        android:layout_gravity="right" />
 
 </GridLayout>

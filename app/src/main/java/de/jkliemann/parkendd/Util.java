@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Formatter;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -69,10 +70,14 @@ public class Util {
 
     public static String getViewDistance(double dist){
         String vdist = "";
-        if(dist < 10000){
-            vdist = "ca. " + Integer.toString((int)dist) + "m";
-        }else {
-            vdist = "ca. " + Integer.toString((int)dist / 1000) + "km";
+        if(dist < 1000){
+            vdist = "ca. " + Integer.toString((int)Math.round(dist / 10) * 10) + "m";
+        }else if( dist < 10000){
+            Formatter fmt = new Formatter();
+            fmt.format("%.1f", dist/1000);
+            vdist = "ca. " + fmt.toString() + "km";
+        }else{
+            vdist = "ca. " + Integer.toString((int)Math.round(dist) / 1000) + "km";
         }
         return vdist;
     }
