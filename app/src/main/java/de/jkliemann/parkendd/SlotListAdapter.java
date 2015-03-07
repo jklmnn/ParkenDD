@@ -48,7 +48,7 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
         TextView distanceView = (TextView)slotView.findViewById(R.id.distanceView);
         ParkingSpot spot = spots[position];
         nameView.setText(spot.name());
-        countView.setText(Integer.toString(spot.count()));
+        countView.setText(context.getString(R.string.available) + " " + Integer.toString(spot.count()));
         if(spot.state().equals(CLOSED)) {
             freeView.setText(context.getString(R.string.closed));
             freeView.setTextColor(this.red);

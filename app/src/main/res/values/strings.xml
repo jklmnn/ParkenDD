@@ -37,4 +37,5 @@
     <string name="connection_error">Verbindungsfehler</string>
     <string name="intent_error">Keine passende Anwendung gefunden.</string>
     <!--view-->
+    <string name="available">von</string>
 </resources>
