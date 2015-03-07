@@ -12,6 +12,7 @@
     <string name="header_network">Netzwerk</string>
     <string name="setting_server">Server</string>
     <string name="setting_city">Stadt</string>
+    <string name="setting_location">Standort nutzen</string>
     <string name="setting_reset">Zurücksetzen</string>
     <string name="setting_ignore_cert">SSL-Zertifikat ignorieren (unsicher!)</string>
     <!--defaults-->

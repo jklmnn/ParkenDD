@@ -1,13 +1,12 @@
 package de.jkliemann.parkendd;
 
 import android.content.Context;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 
 /**
  * Created by jkliemann on 07.01.15.
@@ -67,8 +66,12 @@ public class GlobalSettings {
         locationManager.requestLocationUpdates(locationProvider, (long) 60000, (float) 50, locationListener, Looper.getMainLooper());
     }
 
-    public Location getLastKnownLocation(){
-        return locationManager.getLastKnownLocation(locationProvider);
+    public Location getLastKnownLocation() {
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("use_location", true)){
+            return locationManager.getLastKnownLocation(locationProvider);
+        }else {
+            return null;
+        }
     }
 
 

@@ -2,7 +2,11 @@
 
     <ListPreference
         android:key="city"
-        android:title="Stadt"
+        android:title="@string/setting_city"
         android:defaultValue="Dresden"/>
+    <CheckBoxPreference
+        android:key="use_location"
+        android:title="@string/setting_location"
+        android:defaultValue="true"/>
 
 </PreferenceScreen>
