@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_about"></string>
+    <string name="action_refresh"></string>
+    <string name="action_settings"></string>
+    <string name="alert_reset"></string>
+    <string name="available"></string>
+    <string name="closed"></string>
+    <string name="connection_error"></string>
+    <string name="disclaimer"></string>
+    <string name="header_general"></string>
+    <string name="header_network"></string>
+    <string name="intent_error"></string>
+    <string name="invalid_error"></string>
+    <string name="negative"></string>
+    <string name="network_error"></string>
+    <string name="nodata"></string>
+    <string name="positive"></string>
+    <string name="server"></string>
+    <string name="setting_city"></string>
+    <string name="setting_ignore_cert"></string>
+    <string name="setting_location"></string>
+    <string name="setting_reset"></string>
+    <string name="setting_server"></string>
+    <string name="title_activity_settings"></string>
+    <string name="url_error"></string>
+</resources>
