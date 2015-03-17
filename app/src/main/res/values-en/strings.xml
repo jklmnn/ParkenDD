@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_about">About the app</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_settings">Settings</string>
+    <string name="alert_reset">Reset to default?</string>
+    <string name="available">of</string>
+    <string name="closed">closed</string>
+    <string name="connection_error">Connection error</string>
+    <string name="disclaimer">No responsiblity is taken for the correctness of this information!</string>
+    <string name="header_general">General</string>
+    <string name="header_network">Network</string>
+    <string name="intent_error">No suitable application found.</string>
+    <string name="invalid_error">Received invalid data.</string>
+    <string name="negative">Cancel</string>
+    <string name="network_error">Error on receiving data.</string>
+    <string name="nodata">n/a</string>
+    <string name="positive">Ok</string>
+    <string name="server">Contact to server:</string>
+    <string name="setting_city">City</string>
+    <string name="setting_ignore_cert">Ignore SSL certificate (unsafe!)</string>
+    <string name="setting_location">Use location</string>
+    <string name="setting_reset">Reset</string>
+    <string name="setting_server">Server</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="url_error">Invalid URL</string>
+</resources>

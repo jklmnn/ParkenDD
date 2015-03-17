@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Meta-->
-    <string name="app_name">ParkenDD</string>
-    <string name="version">0.4.0</string>
+    <string name="app_name" translatable="false">ParkenDD</string>
+    <string name="version" translatable="false">0.4.1</string>
     <!--actions-->
     <string name="action_settings">Einstellungen</string>
     <string name="action_refresh">Aktualisieren</string>
@@ -16,11 +16,11 @@
     <string name="setting_reset">Zurücksetzen</string>
     <string name="setting_ignore_cert">SSL-Zertifikat ignorieren (unsicher!)</string>
     <!--defaults-->
-    <string name="default_fetch_url">http://jkliemann.de/parkendd/app/</string>
-    <string name="old_fetch_url">http://jkliemann.de/offenesdresden.de/json.php</string>
-    <string name="default_city">Dresden</string>
+    <string name="default_fetch_url" translatable="false">http://jkliemann.de/parkendd/app/</string>
+    <string name="old_fetch_url" translatable="false">http://jkliemann.de/offenesdresden.de/json.php</string>
+    <string name="default_city" translatable="false">Dresden</string>
     <!--about-->
-    <string name="app_url">http://jkliemann.de/parkendd/</string>
+    <string name="app_url" translatable="false">http://jkliemann.de/parkendd/</string>
     <string name="disclaimer">Alle Angaben ohne Gewähr!</string>
     <string name="server">Serverkontakt:</string>
     <!--slotstates-->

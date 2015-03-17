@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_about">Über die App</string>
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="alert_reset">Einstellungen zurücksetzen?</string>
+    <string name="available">von</string>
+    <string name="closed">geschlossen</string>
+    <string name="connection_error">Verbindungsfehler</string>
+    <string name="disclaimer">Alle Angaben ohne Gewähr!</string>
+    <string name="header_general">Allgemein</string>
+    <string name="header_network">Netzwerk</string>
+    <string name="intent_error">Keine passende Anwendung gefunden.</string>
+    <string name="invalid_error">Ungültige Daten erhalten.</string>
+    <string name="negative">Abbrechen</string>
+    <string name="network_error">Fehler beim holen der Daten.</string>
+    <string name="nodata">Keine Daten</string>
+    <string name="positive">Ok</string>
+    <string name="server">Serverkontakt:</string>
+    <string name="setting_city">Stadt</string>
+    <string name="setting_ignore_cert">SSL-Zertifikat ignorieren (unsicher!)</string>
+    <string name="setting_location">Standort nutzen</string>
+    <string name="setting_reset">Zurücksetzen</string>
+    <string name="setting_server">Server</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="url_error">Ungültige Adresse</string>
+</resources>
