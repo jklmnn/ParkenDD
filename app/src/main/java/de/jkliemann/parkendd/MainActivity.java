@@ -60,6 +60,10 @@ public class MainActivity extends ActionBarActivity {
             Intent about = new Intent(this, AboutActivity.class);
             startActivity(about);
         }
+        if(id == R.id.action_forecast){
+            Intent forecast = new Intent(this, ForecastActivity.class);
+            startActivity(forecast);
+        }
         if(id == R.id.action_refresh){
             this.refresh();
         }

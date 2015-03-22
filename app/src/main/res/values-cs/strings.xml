@@ -24,4 +24,5 @@
     <string name="setting_server">Server</string>
     <string name="title_activity_settings">Nastavení</string>
     <string name="url_error">Neplatná adresa</string>
+    <string name="action_forecast">Prognóza</string>
 </resources>
