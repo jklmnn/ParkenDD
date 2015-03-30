@@ -6,7 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -23,8 +26,12 @@ public class ForecastActivity extends ActionBarActivity {
 
     private HashMap<Date, Integer> forecast_data;
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private DatePicker datePicker;
+    private TimePicker timePicker;
+    private TextView tv;
 
     private void parseForecast(){
+        forecast_data = new HashMap<Date, Integer>();
         InputStream inputStream = getResources().openRawResource(R.raw.forecast);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         try{
@@ -45,11 +52,42 @@ public class ForecastActivity extends ActionBarActivity {
         }
     }
 
+    public int getForecastByDate(Date d){
+        try {
+            //tv.setText(forecast_data.get(d).toString());
+            tv.setText("");
+            return 100 - forecast_data.get(d).intValue();
+        }catch(Exception e){
+            e.printStackTrace();
+            tv.setText(getString(R.string.nodata));
+        }
+        return 0;
+    }
+
+    private void setStars(int percentage){
+        float rating = (float)percentage / 20;
+        RatingBar ratingBar = (RatingBar)findViewById(R.id.ratingBar);
+        ratingBar.setRating(rating);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
         this.setTitle(R.string.action_forecast);
+        tv = (TextView)findViewById(R.id.textView);
+        tv.setText(getString(R.string.nodata));
+        datePicker = (DatePicker)findViewById(R.id.datePicker);
+        timePicker = (TimePicker)findViewById(R.id.timePicker);
+        datePicker.setCalendarViewShown(false);
+        timePicker.setIs24HourView(true);
+        Calendar c = Calendar.getInstance();
+        datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                setStars(getForecastByDate(new Date(year - 1900, monthOfYear, dayOfMonth)));
+            }
+        });
         parseForecast();
     }
 
