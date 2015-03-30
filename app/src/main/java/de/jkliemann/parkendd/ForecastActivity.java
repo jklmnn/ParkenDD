@@ -4,7 +4,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -29,6 +28,7 @@ public class ForecastActivity extends ActionBarActivity {
     private DatePicker datePicker;
     private TimePicker timePicker;
     private TextView tv;
+    private static final int dateOffset = 1900;
 
     private void parseForecast(){
         forecast_data = new HashMap<Date, Integer>();
@@ -74,10 +74,10 @@ public class ForecastActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
-        this.setTitle(R.string.action_forecast);
+        this.setTitle(getString(R.string.action_forecast) + " - Centrum-Galerie");
         tv = (TextView)findViewById(R.id.textView);
         tv.setText(getString(R.string.nodata));
-        datePicker = (DatePicker)findViewById(R.id.datePicker);
+        datePicker = (DatePicker)findViewById(R.id.c);
         timePicker = (TimePicker)findViewById(R.id.timePicker);
         datePicker.setCalendarViewShown(false);
         timePicker.setIs24HourView(true);
@@ -85,7 +85,21 @@ public class ForecastActivity extends ActionBarActivity {
         datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                setStars(getForecastByDate(new Date(year - 1900, monthOfYear, dayOfMonth)));
+                setStars(getForecastByDate(new Date(year - dateOffset, monthOfYear, dayOfMonth)));
+            }
+        });
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                minute = minute + 15 - minute % 15;
+                if(minute == 60){
+                    hourOfDay = hourOfDay + 1;
+                    minute = 0;
+                }
+                Date date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
+                date.setHours(hourOfDay);
+                date.setMinutes(minute);
+                setStars(getForecastByDate(date));
             }
         });
         parseForecast();
