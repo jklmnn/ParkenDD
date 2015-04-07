@@ -85,20 +85,18 @@ public class ForecastActivity extends ActionBarActivity {
         datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                setStars(getForecastByDate(new Date(year - dateOffset, monthOfYear, dayOfMonth)));
+                Date date = new Date(year - dateOffset, monthOfYear, dayOfMonth);
+                date.setHours(timePicker.getCurrentHour());
+                date.setMinutes(0);
+                setStars(getForecastByDate(date));
             }
         });
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                minute = minute + 15 - minute % 15;
-                if(minute == 60){
-                    hourOfDay = hourOfDay + 1;
-                    minute = 0;
-                }
                 Date date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
                 date.setHours(hourOfDay);
-                date.setMinutes(minute);
+                date.setMinutes(0);
                 setStars(getForecastByDate(date));
             }
         });
