@@ -2,7 +2,7 @@
 <resources>
     <!--Meta-->
     <string name="app_name" translatable="false">ParkenDD</string>
-    <string name="version" translatable="false">0.6.0-test</string>
+    <string name="version" translatable="false">0.6.1-test</string>
     <!--actions-->
     <string name="action_settings">Settings</string>
     <string name="action_forecast">Forecast</string>
