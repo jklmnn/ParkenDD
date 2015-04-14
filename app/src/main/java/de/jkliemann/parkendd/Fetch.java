@@ -142,7 +142,8 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
 
     protected void onPostExecute(ArrayList<ParkingSpot> spots){
         if(context != null && spotView != null && spots != null) {
-            final ParkingSpot[] spotArray = spots.toArray(new ParkingSpot[spots.size()]);
+            //final ParkingSpot[] spotArray = spots.toArray(new ParkingSpot[spots.size()]);
+            final ParkingSpot[] spotArray = ParkingSpot.getSortedArray(spots);
             SlotListAdapter adapter = new SlotListAdapter(context, spotArray);
             spotView.setAdapter(adapter);
             spotView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

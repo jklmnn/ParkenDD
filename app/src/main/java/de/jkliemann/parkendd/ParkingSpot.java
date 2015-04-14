@@ -3,6 +3,10 @@ package de.jkliemann.parkendd;
 import android.location.Location;
 import android.net.Uri;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
 /**
  * Created by jkliemann on 10.12.14.
  */
@@ -66,5 +70,20 @@ public class ParkingSpot {
         }else{
             return null;
         }
+    }
+
+    static public ParkingSpot[] getSortedArray(ArrayList<ParkingSpot> list){
+        HashMap<String, ParkingSpot> vkmap = new HashMap<String, ParkingSpot>();
+        String[] sortArray = new String[list.size()];
+        for(ParkingSpot spot : list){
+            vkmap.put(spot.name(), spot);
+            sortArray[list.indexOf(spot)] = spot.name();
+        }
+        Arrays.sort(sortArray);
+        ParkingSpot[] sortedArray = new ParkingSpot[sortArray.length];
+        for(int i = 0; i < sortArray.length; i++){
+            sortedArray[i] = vkmap.get(sortArray[i]);
+        }
+        return sortedArray;
     }
 }
