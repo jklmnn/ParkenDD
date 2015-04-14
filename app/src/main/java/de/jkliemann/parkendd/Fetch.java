@@ -3,8 +3,11 @@ package de.jkliemann.parkendd;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
@@ -142,8 +145,29 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
 
     protected void onPostExecute(ArrayList<ParkingSpot> spots){
         if(context != null && spotView != null && spots != null) {
-            //final ParkingSpot[] spotArray = spots.toArray(new ParkingSpot[spots.size()]);
-            final ParkingSpot[] spotArray = ParkingSpot.getSortedArray(spots);
+            String sortOptions[] = this.context.getResources().getStringArray(R.array.setting_sort_options);
+            String sortPreference = PreferenceManager.getDefaultSharedPreferences(this.context).getString("sorting", sortOptions[0]);
+            final ParkingSpot[] spotArray;
+            ParkingSpot[] preArray;
+            if(sortPreference.equals(sortOptions[1])) {
+                try {
+                    preArray = ParkingSpot.getSortedArray(spots, ParkingSpot.type.NAME);
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                    preArray = spots.toArray(new ParkingSpot[spots.size()]);
+                }
+            }else if(sortPreference.equals(sortOptions[2])){
+                try {
+                    preArray = ParkingSpot.getSortedArray(spots, ParkingSpot.type.LOCATION);
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                    Error.showLongErrorToast(this.context, this.context.getString(R.string.location_error));
+                    preArray = spots.toArray(new ParkingSpot[spots.size()]);
+                }
+            }else{
+                preArray = spots.toArray(new ParkingSpot[spots.size()]);
+            }
+            spotArray = preArray;
             SlotListAdapter adapter = new SlotListAdapter(context, spotArray);
             spotView.setAdapter(adapter);
             spotView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

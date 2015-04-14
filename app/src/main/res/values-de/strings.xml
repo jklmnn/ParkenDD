@@ -25,4 +25,11 @@
     <string name="title_activity_settings">Einstellungen</string>
     <string name="url_error">Ungültige Adresse</string>
     <string name="action_forecast">Vorhersage</string>
+    <string name="location_error">Kein Standortzugriff.</string>
+    <string name="setting_sorting">Sortieren nach</string>
+    <string-array name="setting_sort_options">
+        <item>Nichts</item>
+        <item>Name</item>
+        <item>Standort</item>
+    </string-array>
 </resources>

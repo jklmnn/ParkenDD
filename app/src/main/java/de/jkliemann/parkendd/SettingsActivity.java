@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -70,6 +71,11 @@ public class SettingsActivity extends PreferenceActivity{
             citylist.setEntries(def);
         }
         bindPreferenceSummaryToValue(citylist);
+        ListPreference sortList = (ListPreference)findPreference("sorting");
+        Resources res = getResources();
+        sortList.setEntryValues(res.getStringArray(R.array.setting_sort_options));
+        sortList.setEntries(res.getStringArray(R.array.setting_sort_options));
+        bindPreferenceSummaryToValue(sortList);
         fakeHeader = new PreferenceCategory(this);
         fakeHeader.setTitle(R.string.header_network);
         getPreferenceScreen().addPreference(fakeHeader);
