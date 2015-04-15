@@ -25,11 +25,11 @@
     <string name="title_activity_settings">Nastavení</string>
     <string name="url_error">Neplatná adresa</string>
     <string name="action_forecast">Prognóza</string>
-    <string name="location_error"></string><!--no location found-->
-    <string name="setting_sorting"></string><!--sort by-->
+    <string name="location_error">žádné umístění nalezeno</string><!--no location found-->
+    <string name="setting_sorting">seřazeno podle</string><!--sort by-->
     <string-array name="setting_sort_options">
-        <item></item><!--nothing-->
-        <item></item><!--name-->
-        <item></item><!--location-->
+        <item>nic</item><!--nothing-->
+        <item>název</item><!--name-->
+        <item>místo</item><!--location-->
     </string-array>
 </resources>
