@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -20,7 +21,13 @@ public class ParkingSpot {
     private final int count;
     private final int free;
 
-    public static enum type {NAME, LOCATION};
+    public static enum byNAME implements Comparator<ParkingSpot>{
+        INSTANCE;
+        @Override
+        public int compare(ParkingSpot p1, ParkingSpot p2){
+            return p1.name().compareTo(p2.name());
+        }
+    }
 
     public ParkingSpot(String name, String category, String state, String city, int count, int free, double lat, double lon){
         this.name = name;
@@ -74,24 +81,11 @@ public class ParkingSpot {
         }
     }
 
-    static public ParkingSpot[] getSortedArray(ArrayList<ParkingSpot> list, type t) throws NullPointerException{
-        HashMap<Object, ParkingSpot> vkmap = new HashMap<Object, ParkingSpot>();
-        Object[] sortArray = new Object[list.size()];
-        Object value = null;
-        for(ParkingSpot spot : list){
-            if(t == type.LOCATION){
-                value = (double)Util.getDistance(spot.location(),GlobalSettings.getGlobalSettings().getLastKnownLocation());
-            }else if(t == type.NAME){
-                value = spot.name();
-            }
-            vkmap.put(value, spot);
-            sortArray[list.indexOf(spot)] = value;
-        }
-        Arrays.sort(sortArray);
-        ParkingSpot[] sortedArray = new ParkingSpot[sortArray.length];
-        for(int i = 0; i < sortArray.length; i++){
-            sortedArray[i] = vkmap.get(sortArray[i]);
-        }
-        return sortedArray;
+
+    static public ParkingSpot[] getSortedArray(ParkingSpot[] slotList, Comparator<ParkingSpot> comparator) {
+        ParkingSpot[] sorted = slotList.clone();
+        Arrays.sort(sorted, comparator);
+        return sorted;
+
     }
 }

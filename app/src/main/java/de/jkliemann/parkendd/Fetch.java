@@ -3,11 +3,8 @@ package de.jkliemann.parkendd;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,6 +23,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 
 /**
@@ -149,16 +148,18 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
             String sortPreference = PreferenceManager.getDefaultSharedPreferences(this.context).getString("sorting", sortOptions[0]);
             final ParkingSpot[] spotArray;
             ParkingSpot[] preArray;
+            Comparator<ParkingSpot> c;
             if(sortPreference.equals(sortOptions[1])) {
                 try {
-                    preArray = ParkingSpot.getSortedArray(spots, ParkingSpot.type.NAME);
+                    preArray = ParkingSpot.getSortedArray(spots.toArray(new ParkingSpot[spots.size()]), ParkingSpot.byNAME.INSTANCE);
                 }catch (NullPointerException e){
                     e.printStackTrace();
                     preArray = spots.toArray(new ParkingSpot[spots.size()]);
                 }
             }else if(sortPreference.equals(sortOptions[2])){
                 try {
-                    preArray = ParkingSpot.getSortedArray(spots, ParkingSpot.type.LOCATION);
+                    preArray = null; //placeholder!!!
+                    //preArray = ParkingSpot.getSortedArray(spots.toArray(), Comparator<ParkingSpot::location>);
                 }catch (NullPointerException e){
                     e.printStackTrace();
                     Error.showLongErrorToast(this.context, this.context.getString(R.string.location_error));
