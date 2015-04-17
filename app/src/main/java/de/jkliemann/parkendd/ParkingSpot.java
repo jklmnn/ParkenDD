@@ -39,6 +39,16 @@ public class ParkingSpot {
         }
     }
 
+   public static enum byFREE implements Comparator<ParkingSpot>{
+       INSTANCE;
+       @Override
+       public int compare(ParkingSpot p1, ParkingSpot p2){
+           Float f1 = 1 - ((float)p1.free()) / ((float)p1.count());
+           Float f2 = 1 - ((float)p2.free()) / ((float)p2.count());
+           return f1.compareTo(f2);
+       }
+   }
+
     public ParkingSpot(String name, String category, String state, String city, int count, int free, double lat, double lon){
         this.name = name;
         this.category = category;

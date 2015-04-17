@@ -27,9 +27,8 @@
     <string name="action_forecast">Forecast</string>
     <string name="location_error">Could not access location.</string>
     <string name="setting_sorting">Sort by</string>
-    <string-array name="setting_sort_options">
-        <item>Nothing</item>
-        <item>Name</item>
-        <item>Location</item>
-    </string-array>
+    <string name="setting_sorting_nothing">Nothing</string>
+    <string name="setting_sorting_name">Name</string>
+    <string name="setting_sorting_location">Location</string>
+    <string name="setting_sorting_available">Available lots</string>
 </resources>

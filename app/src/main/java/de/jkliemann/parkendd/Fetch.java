@@ -155,12 +155,19 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     e.printStackTrace();
                     preArray = spots.toArray(new ParkingSpot[spots.size()]);
                 }
-            }else if(sortPreference.equals(sortOptions[2])){
+            }else if(sortPreference.equals(sortOptions[2])) {
                 try {
                     preArray = ParkingSpot.getSortedArray(spots.toArray(new ParkingSpot[spots.size()]), ParkingSpot.byDISTANCE.INSTANCE);
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     e.printStackTrace();
                     Error.showLongErrorToast(this.context, this.context.getString(R.string.location_error));
+                    preArray = spots.toArray(new ParkingSpot[spots.size()]);
+                }
+            }else if(sortPreference.equals(sortOptions[3])){
+                try{
+                    preArray = ParkingSpot.getSortedArray(spots.toArray(new ParkingSpot[spots.size()]), ParkingSpot.byFREE.INSTANCE);
+                }catch (NullPointerException e) {
+                    e.printStackTrace();
                     preArray = spots.toArray(new ParkingSpot[spots.size()]);
                 }
             }else{
