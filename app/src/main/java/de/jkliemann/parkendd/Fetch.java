@@ -23,7 +23,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 
 
@@ -158,8 +157,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                 }
             }else if(sortPreference.equals(sortOptions[2])){
                 try {
-                    preArray = null; //placeholder!!!
-                    //preArray = ParkingSpot.getSortedArray(spots.toArray(), Comparator<ParkingSpot::location>);
+                    preArray = ParkingSpot.getSortedArray(spots.toArray(new ParkingSpot[spots.size()]), ParkingSpot.byDISTANCE.INSTANCE);
                 }catch (NullPointerException e){
                     e.printStackTrace();
                     Error.showLongErrorToast(this.context, this.context.getString(R.string.location_error));

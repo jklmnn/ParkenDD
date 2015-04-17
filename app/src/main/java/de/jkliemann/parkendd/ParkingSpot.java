@@ -3,10 +3,8 @@ package de.jkliemann.parkendd;
 import android.location.Location;
 import android.net.Uri;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 
 /**
  * Created by jkliemann on 10.12.14.
@@ -26,6 +24,18 @@ public class ParkingSpot {
         @Override
         public int compare(ParkingSpot p1, ParkingSpot p2){
             return p1.name().compareTo(p2.name());
+        }
+    }
+
+    public static enum byDISTANCE implements Comparator<ParkingSpot>{
+        INSTANCE;
+        @Override
+        public int compare(ParkingSpot p1, ParkingSpot p2){
+            GlobalSettings gs = GlobalSettings.getGlobalSettings();
+            Location currentLocation = gs.getLastKnownLocation();
+            Double d1 = new Double(Util.getDistance(p1.location(), currentLocation));
+            Double d2 = new Double(Util.getDistance(p2.location(), currentLocation));
+            return d1.compareTo(d2);
         }
     }
 
