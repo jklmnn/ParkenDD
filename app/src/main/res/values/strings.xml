@@ -52,7 +52,4 @@
     <string name="intent_error">No suitable application found.</string>
     <!--view-->
     <string name="available">of</string>
-    <string name="title_activity_forecast">ForecastActivity</string>
-
-    <string name="hello_world">Hello world!</string>
 </resources>
