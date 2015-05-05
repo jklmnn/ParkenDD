@@ -101,6 +101,7 @@ public class ForecastActivity extends ActionBarActivity {
             }
         });
         parseForecast();
+        timePicker.setCurrentMinute(0);
     }
 
 
