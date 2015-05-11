@@ -24,26 +24,13 @@
         android:layout_gravity="left"
         android:gravity="center_vertical|start|left"
         android:layout_rowSpan="1"
-        android:layout_columnSpan="1" />
+        android:layout_columnSpan="2" />
 
     <Space
         android:layout_width="20px"
         android:layout_height="20px"
         android:layout_row="0"
         android:layout_column="0" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Medium Text"
-        android:id="@+id/freeView"
-        android:layout_row="1"
-        android:layout_column="1"
-        android:layout_rowSpan="1"
-        android:gravity="center_vertical|end"
-        android:layout_columnSpan="1"
-        android:layout_gravity="right" />
 
     <TextView
         android:layout_width="wrap_content"
