@@ -53,7 +53,7 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
             countView.setText(context.getString(R.string.nodata) + " (" + Integer.toString(spot.count()) + ")");
             nameView.setTextColor(this.blue);
         }else{
-            countView.setText(Integer.toString(spot.free()) + " " + context.getString(R.string.available) + " " + Integer.toString(spot.count()));
+            countView.setText(Integer.toString(spot.free()) + " " + context.getString(R.string.of) + " " + Integer.toString(spot.count()));
             if(spot.state().equals(MANY)){
                 nameView.setTextColor(this.green);
             }else if(spot.state().equals(FEW)){

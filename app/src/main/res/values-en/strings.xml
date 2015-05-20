@@ -4,7 +4,7 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
     <string name="alert_reset">Reset to default?</string>
-    <string name="available">of</string>
+    <string name="of">of</string>
     <string name="closed">closed</string>
     <string name="connection_error">Connection error</string>
     <string name="disclaimer">No responsiblity is taken for the correctness of this information!</string>

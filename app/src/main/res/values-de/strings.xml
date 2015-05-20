@@ -4,7 +4,7 @@
     <string name="action_refresh">Aktualisieren</string>
     <string name="action_settings">Einstellungen</string>
     <string name="alert_reset">Einstellungen zurücksetzen?</string>
-    <string name="available">von</string>
+    <string name="of">von</string>
     <string name="closed">geschlossen</string>
     <string name="connection_error">Verbindungsfehler</string>
     <string name="disclaimer">Alle Angaben ohne Gewähr!</string>

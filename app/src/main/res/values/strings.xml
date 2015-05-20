@@ -51,6 +51,11 @@
     <string name="connection_error">Connection error</string>
     <string name="intent_error">No suitable application found.</string>
     <!--view-->
-    <string name="available">of</string>
+    <string name="of">of</string>
     <string name="title_activity_forecast">@string/action_forecast</string>
+    <string name="title_activity_details">Details</string>
+    <string name="available">Available</string>
+    <string name="count">Count</string>
+    <string name="distance">Distance</string>
+    <string name="map">Map</string>
 </resources>

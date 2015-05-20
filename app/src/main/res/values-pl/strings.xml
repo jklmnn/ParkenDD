@@ -34,7 +34,7 @@
 <string name="intent_error">"Nieznaleźono odpowiedniej aplikacji."</string>
 
 <!-- view -->
-<string name="available">"od"</string>
+<string name="of">"od"</string>
 <string name="setting_sorting">"Sortowanie"</string>
 <string name="setting_sorting_nothing">"nic"</string>
 <string name="setting_sorting_name">"Imie"</string>

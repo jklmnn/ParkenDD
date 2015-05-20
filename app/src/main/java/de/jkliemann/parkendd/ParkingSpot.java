@@ -2,6 +2,8 @@ package de.jkliemann.parkendd;
 
 import android.location.Location;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -9,15 +11,15 @@ import java.util.Comparator;
 /**
  * Created by jkliemann on 10.12.14.
  */
-public class ParkingSpot {
-    private final String name;
-    private final String category;
-    private final String state;
-    private final String city;
-    private final double lat;
-    private final double lon;
-    private final int count;
-    private final int free;
+public class ParkingSpot implements Parcelable{
+    private String name;
+    private String category;
+    private String state;
+    private String city;
+    private double lat;
+    private double lon;
+    private int count;
+    private int free;
 
     public static enum byNAME implements Comparator<ParkingSpot>{
         INSTANCE;
@@ -107,5 +109,43 @@ public class ParkingSpot {
         Arrays.sort(sorted, comparator);
         return sorted;
 
+    }
+
+    //parcelable implementation
+
+    public int describeContents(){
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags){
+        out.writeString(name);
+        out.writeString(category);
+        out.writeString(state);
+        out.writeString(city);
+        out.writeDouble(lat);
+        out.writeDouble(lon);
+        out.writeInt(count);
+        out.writeInt(free);
+    }
+
+    public static final Parcelable.Creator<ParkingSpot> CREATOR = new Parcelable.Creator<ParkingSpot>() {
+        public ParkingSpot createFromParcel(Parcel in) {
+            return new ParkingSpot(in);
+        }
+
+        public ParkingSpot[] newArray(int size) {
+            return new ParkingSpot[size];
+        }
+    };
+
+    private ParkingSpot(Parcel in){
+        name = in.readString();
+        category = in.readString();
+        state = in.readString();
+        city = in.readString();
+        lat = in.readDouble();
+        lon = in.readDouble();
+        count = in.readInt();
+        free = in.readInt();
     }
 }

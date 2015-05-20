@@ -4,7 +4,7 @@
     <string name="action_refresh">Aktualizovat</string>
     <string name="action_settings">Nastavení</string>
     <string name="alert_reset">Výchozí nastavení</string>
-    <string name="available">z</string>
+    <string name="of">z</string>
     <string name="closed">Uzavřeno</string>
     <string name="connection_error">Chyba spojení</string>
     <string name="disclaimer">Uvedené informace bez záruky!</string>
