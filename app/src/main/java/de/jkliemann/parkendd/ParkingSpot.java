@@ -20,6 +20,7 @@ public class ParkingSpot implements Parcelable{
     private double lon;
     private int count;
     private int free;
+    private Boolean forecast;
 
     public static enum byNAME implements Comparator<ParkingSpot>{
         INSTANCE;
@@ -51,7 +52,7 @@ public class ParkingSpot implements Parcelable{
        }
    }
 
-    public ParkingSpot(String name, String category, String state, String city, int count, int free, double lat, double lon){
+    public ParkingSpot(String name, String category, String state, String city, int count, int free, double lat, double lon, Boolean forecast){
         this.name = name;
         this.category = category;
         this.state = state;
@@ -60,6 +61,7 @@ public class ParkingSpot implements Parcelable{
         this.free = free;
         this.lat = lat;
         this.lon = lon;
+        this.forecast = forecast;
     }
 
     public String name(){
@@ -103,6 +105,10 @@ public class ParkingSpot implements Parcelable{
         }
     }
 
+    public Boolean forecast(){
+        return forecast;
+    }
+
 
     static public ParkingSpot[] getSortedArray(ParkingSpot[] slotList, Comparator<ParkingSpot> comparator) {
         ParkingSpot[] sorted = slotList.clone();
@@ -126,6 +132,7 @@ public class ParkingSpot implements Parcelable{
         out.writeDouble(lon);
         out.writeInt(count);
         out.writeInt(free);
+        out.writeByte((byte) (forecast ? 1:0));
     }
 
     public static final Parcelable.Creator<ParkingSpot> CREATOR = new Parcelable.Creator<ParkingSpot>() {
@@ -147,5 +154,6 @@ public class ParkingSpot implements Parcelable{
         lon = in.readDouble();
         count = in.readInt();
         free = in.readInt();
+        forecast = in.readByte() != 0;
     }
 }

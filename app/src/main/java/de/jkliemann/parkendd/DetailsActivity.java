@@ -34,6 +34,7 @@ public class DetailsActivity extends ActionBarActivity {
         mapbutton.setText(getString(R.string.map));
         Button forecastbutton = (Button)findViewById(R.id.forecast_button);
         forecastbutton.setText(getString(R.string.action_forecast));
+        forecastbutton.setEnabled(spot.forecast());
         available.setText(getString(R.string.available) + ":");
         count.setText(getString(R.string.count) + ":");
         distance.setText(getString(R.string.distance) + ":");
@@ -41,7 +42,7 @@ public class DetailsActivity extends ActionBarActivity {
         countval.setText(Integer.toString(spot.count()));
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         Location currentLocation = gs.getLastKnownLocation();
-        distanceval.setText(Double.toString(Util.getDistance(currentLocation, spot.location())));
+        distanceval.setText(Util.getViewDistance(Util.getDistance(currentLocation, spot.location())));
     }
 
     @Override
@@ -59,9 +60,9 @@ public class DetailsActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -39,6 +39,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     private static final String STATE = "state";
     private static final String LAT = "lat";
     private static final String LON = "lon";
+    private static final String FORECAST = "forecast";
     private static String CITY = "";
     private ListView spotView = null;
     private Context context = null;
@@ -68,6 +69,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     String free = lot.getString(FREE);
                     String state = lot.getString(STATE);
                     double lat, lon;
+                    Boolean forecast = lot.getBoolean(FORECAST);
                     try {
                         lat = lot.getDouble(LAT);
                         lon = lot.getDouble(LON);
@@ -82,7 +84,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     if(free.length() < 1 || free.equals("null")){
                         free = "0";
                     }
-                    spots.add(new ParkingSpot(name, category, state, city, Integer.parseInt(count), Integer.parseInt(free), lat, lon));
+                    spots.add(new ParkingSpot(name, category, state, city, Integer.parseInt(count), Integer.parseInt(free), lat, lon, forecast));
                 }
             }
         }catch(JSONException e){
