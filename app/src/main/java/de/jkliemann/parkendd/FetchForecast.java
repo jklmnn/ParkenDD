@@ -93,6 +93,9 @@ public class FetchForecast extends AsyncTask<String, Void, int[]> {
 
     protected void onPostExecute(final int[] forecastMap){
         popup.setVisibility(View.GONE);
+        timePicker.setCurrentMinute(0);
+        float rating = 5 - ((float)forecastMap[timePicker.getCurrentHour()] / 20);
+        ratingBar.setRating(rating);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {

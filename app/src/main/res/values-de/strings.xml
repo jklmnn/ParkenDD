@@ -31,4 +31,9 @@
     <string name="setting_sorting_name">Name</string>
     <string name="setting_sorting_location">Standort</string>
     <string name="setting_sorting_available">Freie Plätze</string>
+    <string name="available">Verfügbar</string>
+    <string name="count">Anzahl</string>
+    <string name="distance">Entfernung</string>
+    <string name="map">Karte</string>
+    <string name="title_activity_details">Details</string>
 </resources>
