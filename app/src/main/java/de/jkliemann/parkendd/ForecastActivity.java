@@ -5,22 +5,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.DatePicker;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.sql.Time;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 
 public class ForecastActivity extends ActionBarActivity {
@@ -35,12 +30,18 @@ public class ForecastActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
         RelativeLayout popup = (RelativeLayout)findViewById(R.id.main_layoutPageLoading);
+        RatingBar ratingBar = (RatingBar)findViewById(R.id.ratingBar);
+        ratingBar.setIsIndicator(true);
+        TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
+        timePicker.setCurrentMinute(0);
         Intent i = getIntent();
         Calendar cal = Calendar.getInstance();
+        timePicker.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
         date = new Date(i.getIntExtra("year", cal.get(Calendar.YEAR)) - dateOffset, i.getIntExtra("month", cal.get(Calendar.MONTH)), i.getIntExtra("day", cal.get(Calendar.DAY_OF_MONTH)));
         name = i.getStringExtra("name");
         FetchForecast fetchForecast = new FetchForecast();
-        fetchForecast.init(this, popup, (TextView)findViewById(R.id.textView));
+        fetchForecast.init(this, popup, timePicker, ratingBar, (TextView)findViewById(R.id.textView));
         fetchForecast.execute("?spot=" + name + "&date=" + dateFormat.format(date));
     }
 

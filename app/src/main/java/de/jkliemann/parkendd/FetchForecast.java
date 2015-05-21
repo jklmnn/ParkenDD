@@ -4,8 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,34 +18,31 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by jkliemann on 21.05.15.
  */
-public class FetchForecast extends AsyncTask<String, Void, Map<Date, Integer>> {
+public class FetchForecast extends AsyncTask<String, Void, int[]> {
 
     private Context context;
     private RelativeLayout popup;
-    private TextView textView;
     private int error = 0;
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private String test;
+    private TimePicker timePicker;
+    private RatingBar ratingBar;
 
-
-    public void init(Context context, RelativeLayout popup, TextView textView){
+    public void init(Context context, RelativeLayout popup, TimePicker timePicker, RatingBar ratingBar){
         this.context = context;
         this.popup = popup;
-        this.textView = textView;
+        this.timePicker = timePicker;
+        this.ratingBar = ratingBar;
         popup.setVisibility(View.VISIBLE);
     }
 
-    protected Map<Date, Integer> doInBackground(String... parm){
+    protected int[] doInBackground(String... parm){
         String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
-        address = address + PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city)) + "/forecast/" + parm;
-        Map <Date, Integer> forecastMap = new HashMap<Date, Integer>();
+        address = address + PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city)) + "/forecast/" + parm[0];
+        int[] forecastMap = new int[24];
         try {
             URL url = new URL(address);
             HttpURLConnection cn = null;
@@ -67,9 +65,8 @@ public class FetchForecast extends AsyncTask<String, Void, Map<Date, Integer>> {
                     String line = "";
                     while ((line = br.readLine()) != null) {
                         String[] raw = line.split(",");
-                        test = test + line;
                         try {
-                            forecastMap.put(dateFormat.parse(raw[0]), Integer.parseInt(raw[1]));
+                            forecastMap[dateFormat.parse(raw[0]).getHours()] = Integer.parseInt(raw[1]);
                         }catch (ParseException e){
                             e.printStackTrace();
                             error = 2;
@@ -94,9 +91,16 @@ public class FetchForecast extends AsyncTask<String, Void, Map<Date, Integer>> {
         return forecastMap;
     }
 
-    protected void onPostExecute(Map<Date, Integer> forecastMap){
+    protected void onPostExecute(final int[] forecastMap){
         popup.setVisibility(View.GONE);
-        textView.setText(test);
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                timePicker.setCurrentMinute(0);
+                float rating = 5 - ((float)forecastMap[hourOfDay] / 20);
+                ratingBar.setRating(rating);
+            }
+        });
         switch (error){
             case 2:
                 Error.showLongErrorToast(context, context.getString(R.string.invalid_error));
