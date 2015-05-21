@@ -10,18 +10,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
+
+import java.util.Calendar;
 
 public class DetailsActivity extends ActionBarActivity {
 
     private ParkingSpot spot;
+    private DatePicker datePicker;
+    private final DetailsActivity _this = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         Intent i = getIntent();
-        spot = (ParkingSpot)i.getParcelableExtra("spot");
+        spot = i.getParcelableExtra("spot");
         this.setTitle(spot.name() + " - " + getString(R.string.title_activity_details));
         fillForm();
     }
@@ -47,7 +52,12 @@ public class DetailsActivity extends ActionBarActivity {
         forecastbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent forecast = new Intent(_this, ForecastActivity.class);
+                forecast.putExtra("year", datePicker.getYear());
+                forecast.putExtra("month", datePicker.getMonth());
+                forecast.putExtra("day", datePicker.getDayOfMonth());
+                forecast.putExtra("name", spot.name());
+                startActivity(forecast);
             }
         });
         available.setText(getString(R.string.available) + ":");
@@ -63,6 +73,15 @@ public class DetailsActivity extends ActionBarActivity {
             distanceval.setText(getString(R.string.nodata));
             Error.showLongErrorToast(this, getString(R.string.location_error));
         }
+        datePicker = (DatePicker)findViewById(R.id.datePicker);
+        datePicker.setCalendarViewShown(false);
+        Calendar c = Calendar.getInstance();
+        datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+            }
+        });
     }
 
     @Override
@@ -87,7 +106,7 @@ public class DetailsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void openMap(){
+    private void openMap(){
         Uri geoUri = spot.geoUri();
         try{
             Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
@@ -97,4 +116,5 @@ public class DetailsActivity extends ActionBarActivity {
             Error.showLongErrorToast(this, getString(R.string.intent_error));
         }
     }
+
 }

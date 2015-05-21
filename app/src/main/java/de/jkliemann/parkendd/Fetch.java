@@ -182,10 +182,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
             spotView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //Uri geoUri = spotArray[position].geoUri();
                     try {
-                        //Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
-                        //context.startActivity(mapCall);
                         Intent details = new Intent(context, DetailsActivity.class);
                         details.putExtra("spot", spotArray[position]);
                         context.startActivity(details);

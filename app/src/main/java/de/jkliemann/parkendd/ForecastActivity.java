@@ -1,11 +1,13 @@
 package de.jkliemann.parkendd;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -23,85 +25,23 @@ import java.util.HashMap;
 
 public class ForecastActivity extends ActionBarActivity {
 
-    private HashMap<Date, Integer> forecast_data;
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private DatePicker datePicker;
-    private TimePicker timePicker;
-    private TextView tv;
+    private Date date;
+    private String name;
     private static final int dateOffset = 1900;
-
-    private void parseForecast(){
-        forecast_data = new HashMap<Date, Integer>();
-        InputStream inputStream = getResources().openRawResource(R.raw.forecast);
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        try{
-            String line;
-            while ((line = br.readLine()) != null){
-                String[] raw = line.split(",");
-
-                try {
-                    forecast_data.put(dateFormat.parse(raw[0]), Integer.parseInt(raw[1]));
-                }catch (ParseException e){
-                    e.printStackTrace();
-                }
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
-    }
-
-    public int getForecastByDate(Date d){
-        try {
-            //tv.setText(forecast_data.get(d).toString());
-            tv.setText("");
-            return 100 - forecast_data.get(d).intValue();
-        }catch(Exception e){
-            e.printStackTrace();
-            tv.setText(getString(R.string.nodata));
-        }
-        return 0;
-    }
-
-    private void setStars(int percentage){
-        float rating = (float)percentage / 20;
-        RatingBar ratingBar = (RatingBar)findViewById(R.id.ratingBar);
-        ratingBar.setRating(rating);
-    }
+    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
-        this.setTitle(getString(R.string.action_forecast) + " - Centrum-Galerie");
-        tv = (TextView)findViewById(R.id.textView);
-        tv.setText(getString(R.string.nodata));
-        datePicker = (DatePicker)findViewById(R.id.c);
-        timePicker = (TimePicker)findViewById(R.id.timePicker);
-        datePicker.setCalendarViewShown(false);
-        timePicker.setIs24HourView(true);
-        Calendar c = Calendar.getInstance();
-        datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Date date = new Date(year - dateOffset, monthOfYear, dayOfMonth);
-                date.setHours(timePicker.getCurrentHour());
-                date.setMinutes(0);
-                setStars(getForecastByDate(date));
-            }
-        });
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                Date date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
-                date.setHours(hourOfDay);
-                date.setMinutes(0);
-                setStars(getForecastByDate(date));
-            }
-        });
-        parseForecast();
-        timePicker.setCurrentMinute(0);
+        RelativeLayout popup = (RelativeLayout)findViewById(R.id.main_layoutPageLoading);
+        Intent i = getIntent();
+        Calendar cal = Calendar.getInstance();
+        date = new Date(i.getIntExtra("year", cal.get(Calendar.YEAR)) - dateOffset, i.getIntExtra("month", cal.get(Calendar.MONTH)), i.getIntExtra("day", cal.get(Calendar.DAY_OF_MONTH)));
+        name = i.getStringExtra("name");
+        FetchForecast fetchForecast = new FetchForecast();
+        fetchForecast.init(this, popup, (TextView)findViewById(R.id.textView));
+        fetchForecast.execute("?spot=" + name + "&date=" + dateFormat.format(date));
     }
 
 
