@@ -1,11 +1,14 @@
 package de.jkliemann.parkendd;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -32,9 +35,21 @@ public class DetailsActivity extends ActionBarActivity {
         TextView distanceval = (TextView)findViewById(R.id.distanceval);
         Button mapbutton = (Button)findViewById(R.id.mapbutton);
         mapbutton.setText(getString(R.string.map));
+        mapbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMap();
+            }
+        });
         Button forecastbutton = (Button)findViewById(R.id.forecast_button);
         forecastbutton.setText(getString(R.string.action_forecast));
         forecastbutton.setEnabled(spot.forecast());
+        forecastbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         available.setText(getString(R.string.available) + ":");
         count.setText(getString(R.string.count) + ":");
         distance.setText(getString(R.string.distance) + ":");
@@ -42,7 +57,12 @@ public class DetailsActivity extends ActionBarActivity {
         countval.setText(Integer.toString(spot.count()));
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         Location currentLocation = gs.getLastKnownLocation();
-        distanceval.setText(Util.getViewDistance(Util.getDistance(currentLocation, spot.location())));
+        try {
+            distanceval.setText(Util.getViewDistance(Util.getDistance(currentLocation, spot.location())));
+        }catch (NullPointerException e){
+            distanceval.setText(getString(R.string.nodata));
+            Error.showLongErrorToast(this, getString(R.string.location_error));
+        }
     }
 
     @Override
@@ -65,5 +85,16 @@ public class DetailsActivity extends ActionBarActivity {
 //        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void openMap(){
+        Uri geoUri = spot.geoUri();
+        try{
+            Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
+            startActivity(mapCall);
+        }catch (ActivityNotFoundException e){
+            e.printStackTrace();
+            Error.showLongErrorToast(this, getString(R.string.intent_error));
+        }
     }
 }
