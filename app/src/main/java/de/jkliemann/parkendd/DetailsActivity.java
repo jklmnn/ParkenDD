@@ -75,6 +75,7 @@ public class DetailsActivity extends ActionBarActivity {
         }
         datePicker = (DatePicker)findViewById(R.id.datePicker);
         datePicker.setCalendarViewShown(false);
+        datePicker.setEnabled(spot.forecast());
         Calendar c = Calendar.getInstance();
         datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
