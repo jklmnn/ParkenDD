@@ -40,6 +40,7 @@ public class ForecastActivity extends ActionBarActivity {
         timePicker.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
         date = new Date(i.getIntExtra("year", cal.get(Calendar.YEAR)) - dateOffset, i.getIntExtra("month", cal.get(Calendar.MONTH)), i.getIntExtra("day", cal.get(Calendar.DAY_OF_MONTH)));
         name = i.getStringExtra("name");
+        this.setTitle(name + " - " + getString(R.string.action_forecast));
         FetchForecast fetchForecast = new FetchForecast();
         fetchForecast.init(this, popup, timePicker, ratingBar);
         fetchForecast.execute("?spot=" + name + "&date=" + dateFormat.format(date));

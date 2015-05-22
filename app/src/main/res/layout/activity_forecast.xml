@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/timePicker"
         android:layout_alignParentTop="true"
+        android:timePickerMode="spinner"
         android:layout_centerHorizontal="true" />
 
     <RatingBar

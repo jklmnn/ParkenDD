@@ -23,6 +23,8 @@
         android:id="@+id/datePicker"
         android:layout_above="@+id/forecast_button"
         android:layout_centerHorizontal="true"
+        android:spinnersShown="false"
+        android:datePickerMode="spinner"
         android:calendarViewShown="false" />
 
     <RelativeLayout
