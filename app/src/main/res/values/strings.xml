@@ -35,6 +35,9 @@
     <string name="app_url" translatable="false">http://jkliemann.de/parkendd/</string>
     <string name="disclaimer">No responsiblity is taken for the correctness of this information!</string>
     <string name="server">Contact to server:</string>
+    <string name="feedback">Feedback</string>
+    <string name="send">Send</string>
+    <string name="sent">Message sent.</string>
     <!--slotstates-->
     <string name="closed">closed</string>
     <string name="nodata">n/a</string>

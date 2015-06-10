@@ -1,9 +1,13 @@
 package de.jkliemann.parkendd;
 
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
@@ -15,6 +19,18 @@ public class AboutActivity extends ActionBarActivity {
         setContentView(R.layout.activity_about);
         TextView aboutView = (TextView)findViewById(R.id.aboutView);
         aboutView.setText(getString(R.string.app_name) + " " + getString(R.string.version) + "\n" + getString(R.string.app_url) + "\n" + getString(R.string.disclaimer));
+        TextView feedbackView = (TextView)findViewById(R.id.feedbackView);
+        feedbackView.setText(getString(R.string.feedback));
+        feedbackView.setTypeface(null, Typeface.BOLD);
+        Button feedbackButton = (Button)findViewById(R.id.sendfeedback);
+        feedbackButton.setText(getString(R.string.send));
+        feedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendFeedback sfb = new SendFeedback();
+                sfb.execute((EditText)findViewById(R.id.feedback));
+            }
+        });
         if(!GlobalSettings.getGlobalSettings().getMail().equals("")){
             TextView serverView = (TextView)findViewById(R.id.serverView);
             serverView.setText(getString(R.string.server) + "\n" + GlobalSettings.getGlobalSettings().getMail());
