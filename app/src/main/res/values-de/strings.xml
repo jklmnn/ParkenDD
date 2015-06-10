@@ -36,4 +36,7 @@
     <string name="distance">Entfernung</string>
     <string name="map">Karte</string>
     <string name="title_activity_details">Details</string>
+    <string name="feedback">Feedback</string>
+    <string name="sent">Nachricht gesendet.</string>
+    <string name="send">Absenden</string>
 </resources>
