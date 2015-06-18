@@ -125,14 +125,14 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                    spots = parseJSon(json);
                } catch (IOException e) {
                    e.printStackTrace();
-                   error = 2;
+                   error = 1;
                } finally {
                    if (br != null) {
                        try {
                            br.close();
                        } catch (IOException e) {
                            e.printStackTrace();
-                           error = 2;
+                           error = 1;
                        }
                    }
                }
