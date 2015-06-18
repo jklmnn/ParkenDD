@@ -7,11 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
