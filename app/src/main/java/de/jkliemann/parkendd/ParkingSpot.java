@@ -34,6 +34,13 @@ public class ParkingSpot implements Parcelable{
         INSTANCE;
         @Override
         public int compare(ParkingSpot p1, ParkingSpot p2){
+            if(p1.location() == null && p2.location() == null){
+                return 0;
+            }else if(p1.location() == null){
+                return 1;
+            }else if(p2.location() == null){
+                return -1;
+            }
             GlobalSettings gs = GlobalSettings.getGlobalSettings();
             Location currentLocation = gs.getLastKnownLocation();
             Double d1 = new Double(Util.getDistance(p1.location(), currentLocation));

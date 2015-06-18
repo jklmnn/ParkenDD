@@ -71,7 +71,6 @@ public class DetailsActivity extends ActionBarActivity {
             distanceval.setText(Util.getViewDistance(Util.getDistance(currentLocation, spot.location())));
         }catch (NullPointerException e){
             distanceval.setText(getString(R.string.nodata));
-            Error.showLongErrorToast(this, getString(R.string.location_error));
         }
         datePicker = (DatePicker)findViewById(R.id.datePicker);
         datePicker.setCalendarViewShown(false);
