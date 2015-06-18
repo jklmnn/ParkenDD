@@ -20,9 +20,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -98,9 +100,8 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
        String json = "";
        ArrayList<ParkingSpot> spots = null;
        String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
-       address = address + PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city));
        try {
-           URL url = new URL(address);
+           URL url = new URL(address + URLEncoder.encode(this.CITY, "UTF-8"));
            HttpURLConnection cn = null;
            try {
                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("ignore_cert", false)) {
@@ -137,7 +138,10 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                    }
                }
            }
-       }catch(MalformedURLException e){
+       }catch(MalformedURLException e) {
+           e.printStackTrace();
+           error = 4;
+       }catch (UnsupportedEncodingException e){
            e.printStackTrace();
            error = 4;
        }
