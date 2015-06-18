@@ -53,6 +53,11 @@ public class ParkingSpot implements Parcelable{
        INSTANCE;
        @Override
        public int compare(ParkingSpot p1, ParkingSpot p2){
+           if(p1.state().equals("nodata") && p2.state().equals("closed")){
+               return -1;
+           }else if(p1.state().equals("closed") && p2.state().equals("nodata")){
+               return 1;
+           }
            Float f1 = 1 - ((float)p1.free()) / ((float)p1.count());
            Float f2 = 1 - ((float)p2.free()) / ((float)p2.count());
            return f1.compareTo(f2);
