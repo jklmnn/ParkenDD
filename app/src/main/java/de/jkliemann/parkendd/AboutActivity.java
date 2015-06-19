@@ -19,21 +19,13 @@ public class AboutActivity extends ActionBarActivity {
         setContentView(R.layout.activity_about);
         TextView aboutView = (TextView)findViewById(R.id.aboutView);
         aboutView.setText(getString(R.string.app_name) + " " + getString(R.string.version) + "\n" + getString(R.string.app_url) + "\n" + getString(R.string.disclaimer));
-        TextView feedbackView = (TextView)findViewById(R.id.feedbackView);
-        feedbackView.setText(getString(R.string.feedback));
-        feedbackView.setTypeface(null, Typeface.BOLD);
-        Button feedbackButton = (Button)findViewById(R.id.sendfeedback);
-        feedbackButton.setText(getString(R.string.send));
-        feedbackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SendFeedback sfb = new SendFeedback();
-                sfb.execute((EditText)findViewById(R.id.feedback));
-            }
-        });
-        if(!GlobalSettings.getGlobalSettings().getMail().equals("")){
-            TextView serverView = (TextView)findViewById(R.id.serverView);
+
+        TextView serverView = (TextView)findViewById(R.id.serverView);
+        if(GlobalSettings.getGlobalSettings().getMail() != null && !GlobalSettings.getGlobalSettings().getMail().equals("")){
+
             serverView.setText(getString(R.string.server) + "\n" + GlobalSettings.getGlobalSettings().getMail());
+        }else{
+            serverView.setText("");
         }
     }
 
