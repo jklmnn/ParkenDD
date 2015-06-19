@@ -2,6 +2,7 @@
 <resources>
     <!--Meta-->
     <string name="app_name" translatable="false">ParkenDD</string>
+
     <string name="version" translatable="false">0.8.1</string>
     <!--actions-->
     <string name="action_settings">Settings</string>
@@ -35,6 +36,9 @@
     <string name="app_url" translatable="false">http://jkliemann.de/parkendd/</string>
     <string name="disclaimer">No responsiblity is taken for the correctness of this information!</string>
     <string name="server">Contact to server:</string>
+    <string name="feedback">Feedback</string>
+    <string name="send">Send</string>
+    <string name="sent">Message sent.</string>
     <!--slotstates-->
     <string name="closed">closed</string>
     <string name="nodata">n/a</string>
