@@ -20,6 +20,8 @@ public class GlobalSettings {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private String locationProvider;
+    private int API_V_MAJOR;
+    private int API_V_MINOR;
 
     private GlobalSettings(){
         citylist = null;
@@ -83,11 +85,24 @@ public class GlobalSettings {
         return mail;
     }
 
+    public int getAPI_V_MAJOR(){
+        return API_V_MAJOR;
+    }
+
+    public int getAPI_V_MINOR(){
+        return API_V_MINOR;
+    }
+
     public void setCitylist(String[] citylist){
         this.citylist = citylist;
     }
 
     public void setMail(String mail){
         this.mail = mail;
+    }
+
+    public void setAPI(int maj, int min){
+        this.API_V_MAJOR = maj;
+        this.API_V_MINOR = min;
     }
 }

@@ -94,56 +94,64 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         return spots;
     }
 
+    private ArrayList<ParkingSpot> fetchOldAPI(){
+        String json = "";
+        ArrayList<ParkingSpot> spots = null;
+        String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
+        try {
+            URL url = new URL(address + URLEncoder.encode(this.CITY, "UTF-8"));
+            HttpURLConnection cn = null;
+            try {
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("ignore_cert", false)) {
+                    cn = Util.getUnsecureConnection(url);
+                }else {
+                    cn = (HttpURLConnection) url.openConnection();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+                error = 3;
+                cn = null;
+            }
+            if(cn != null) {
+                BufferedReader br = null;
+                try{
+                    InputStream in = cn.getInputStream();
+                    br = new BufferedReader(new InputStreamReader(in));
+                    String line = "";
+                    while ((line = br.readLine()) != null) {
+                        json = json + line + "\n";
+                    }
+                    spots = parseJSon(json);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    error = 1;
+                } finally {
+                    if (br != null) {
+                        try {
+                            br.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            error = 1;
+                        }
+                    }
+                }
+            }
+        }catch(MalformedURLException e) {
+            e.printStackTrace();
+            error = 4;
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+            error = 4;
+        }
+        return spots;
+    }
+
    protected ArrayList<ParkingSpot> doInBackground(String... ct){
-       String json = "";
-       ArrayList<ParkingSpot> spots = null;
-       String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
-       try {
-           URL url = new URL(address + URLEncoder.encode(this.CITY, "UTF-8"));
-           HttpURLConnection cn = null;
-           try {
-               if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("ignore_cert", false)) {
-                   cn = Util.getUnsecureConnection(url);
-               }else {
-                   cn = (HttpURLConnection) url.openConnection();
-               }
-           }catch (IOException e){
-               e.printStackTrace();
-               error = 3;
-               cn = null;
-           }
-           if(cn != null) {
-               BufferedReader br = null;
-               try{
-                   InputStream in = cn.getInputStream();
-                   br = new BufferedReader(new InputStreamReader(in));
-                   String line = "";
-                   while ((line = br.readLine()) != null) {
-                       json = json + line + "\n";
-                   }
-                   spots = parseJSon(json);
-               } catch (IOException e) {
-                   e.printStackTrace();
-                   error = 1;
-               } finally {
-                   if (br != null) {
-                       try {
-                           br.close();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                           error = 1;
-                       }
-                   }
-               }
-           }
-       }catch(MalformedURLException e) {
-           e.printStackTrace();
-           error = 4;
-       }catch (UnsupportedEncodingException e){
-           e.printStackTrace();
-           error = 4;
+       GlobalSettings gs = GlobalSettings.getGlobalSettings();
+       if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0){
+           return fetchOldAPI();
        }
-       return spots;
+       return null;
    }
 
     protected void onPostExecute(ArrayList<ParkingSpot> spots){

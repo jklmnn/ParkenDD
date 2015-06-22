@@ -25,16 +25,29 @@ public class Server extends AsyncTask<Context, Void, String[]> {
 
     private static final String MAIL = "mail";
     private static final String CITIES = "cities";
+    private static final String VERSION_MAJOR = "version_major";
+    private static final String VERSION_MINOR = "version_minor";
     private String mail;
     private String[] citylist;
     private Context context;
+    private int major = 0;
+    private int minor = 0;
     private int error = 0;
 
     private String[] parseJSon(String data){
         ArrayList<String> cities = new ArrayList<String>();
+        GlobalSettings gs = GlobalSettings.getGlobalSettings();
         try{
             JSONObject global = new JSONObject(data);
             mail = global.getString(MAIL);
+            try{
+                major = global.getInt(VERSION_MAJOR);
+                minor = global.getInt(VERSION_MINOR);
+                gs.setAPI(major, minor);
+            }catch (JSONException e){
+                e.printStackTrace();
+                gs.setAPI(0, 0);
+            }
             JSONArray citystrings = global.getJSONArray(CITIES);
             for(int i = 0; i < citystrings.length(); i++){
                 cities.add(citystrings.getString(i));
