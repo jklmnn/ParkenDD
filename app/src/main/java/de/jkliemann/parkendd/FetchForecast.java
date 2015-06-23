@@ -39,9 +39,9 @@ public class FetchForecast extends AsyncTask<String, Void, int[]> {
         popup.setVisibility(View.VISIBLE);
     }
 
-    protected int[] doInBackground(String... parm){
+    private int[] fetchOldAPI(String parm){
         String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
-        address = address + PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city)) + "/forecast/" + parm[0];
+        address = address + PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city)) + "/forecast/" + parm;
         int[] forecastMap = new int[24];
         try {
             URL url = new URL(address);
@@ -89,6 +89,14 @@ public class FetchForecast extends AsyncTask<String, Void, int[]> {
             error = 4;
         }
         return forecastMap;
+    }
+
+    protected int[] doInBackground(String... parm){
+        GlobalSettings gs = GlobalSettings.getGlobalSettings();
+        if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0 ){
+            return fetchOldAPI(parm[0]);
+        }
+        return null;
     }
 
     protected void onPostExecute(final int[] forecastMap){
