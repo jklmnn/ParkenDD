@@ -15,6 +15,7 @@
     <string name="setting_city">City</string>
     <string name="setting_sorting">Sort by</string>
     <string name="setting_sorting_nothing">Nothing</string>
+    <string name="setting_sorting_euklid">euklid</string>
     <string name="setting_sorting_name">Name</string>
     <string name="setting_sorting_location">Location</string>
     <string name="setting_sorting_available">Available lots</string>
@@ -23,6 +24,7 @@
         <item>@string/setting_sorting_name</item>
         <item>@string/setting_sorting_location</item>
         <item>@string/setting_sorting_available</item>
+        <item>@string/setting_sorting_euklid</item>
     </string-array>
     <string name="setting_location">Use location</string>
     <string name="setting_reset">Reset</string>

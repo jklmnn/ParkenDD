@@ -21,6 +21,7 @@ public class ParkingSpot implements Parcelable{
     private int count;
     private int free;
     private Boolean forecast;
+    private static int modifier = 500;
 
     public static enum byNAME implements Comparator<ParkingSpot>{
         INSTANCE;
@@ -36,9 +37,9 @@ public class ParkingSpot implements Parcelable{
         public int compare(ParkingSpot p1, ParkingSpot p2){
             if(p1.location() == null && p2.location() == null){
                 return 0;
-            }else if(p1.location() == null){
+            }else if(p1.location() == null && p2.location() != null){
                 return 1;
-            }else if(p2.location() == null){
+            }else if(p2.location() == null && p1.location() != null){
                 return -1;
             }
             GlobalSettings gs = GlobalSettings.getGlobalSettings();
@@ -58,11 +59,52 @@ public class ParkingSpot implements Parcelable{
            }else if(p1.state().equals("closed") && p2.state().equals("nodata")){
                return 1;
            }
-           Float f1 = 1 - ((float)p1.free()) / ((float)p1.count());
-           Float f2 = 1 - ((float)p2.free()) / ((float)p2.count());
-           return f1.compareTo(f2);
+           if(p1.state().equals("nodata") && !p2.state().equals("closed") && !p2.state().equals("nodata")){
+               return 1;
+           }
+           if(p2.state().equals("nodata") && !p1.state().equals("closed") && !p1.state().equals("nodata")){
+               return -1;
+           }
+           Double b1 = new Double(p1.count() - p1.free());
+           Double b2 = new Double(p2.count() - p2.free());
+           return b1.compareTo(b2);
        }
    }
+
+    public static enum byEUKLID implements Comparator<ParkingSpot>{
+        INSTANCE;
+        @Override
+        public int compare(ParkingSpot p1, ParkingSpot p2){
+            try{
+                GlobalSettings gs = GlobalSettings.getGlobalSettings();
+                Location currentLocation = gs.getLastKnownLocation();
+                Double d1 = new Double(Util.getDistance(p1.location(), currentLocation));
+                Double d2 = new Double(Util.getDistance(p2.location(), currentLocation));
+                if(p1.state().equals("nodata") && p2.state().equals("nodata")){
+                    return d1.compareTo(d2);
+                }
+                if(p1.state().equals("nodata") && p2.state().equals("closed")){
+                    return -1;
+                }if(p1.state().equals("closed") && p2.state().equals("nodata")){
+                    return 1;
+                }
+                if(p1.state().equals("nodata") && !p2.state().equals("closed") && !p2.state().equals("nodata")){
+                    return 1;
+                }
+                if(p2.state().equals("nodata") && !p1.state().equals("closed") && !p1.state().equals("nodata")){
+                    return -1;
+                }
+                Double b1 = modifier * (1 - ((double)p1.free()) / ((double)p1.count()));
+                Double b2 = modifier * (1 - ((double)p2.free()) / ((double)p2.count()));
+                Double e1 = Math.sqrt(Math.pow(d1, 2) + Math.pow(b1, 2));
+                Double e2 = Math.sqrt(Math.pow(d2, 2) + Math.pow(b2, 2));
+                return e1.compareTo(e2);
+            }catch (NullPointerException e) {
+                //TODO: implement sorting for lots without location data.
+                return 0;
+            }
+        }
+    }
 
     public ParkingSpot(String name, String category, String state, String city, int count, int free, double lat, double lon, Boolean forecast){
         this.name = name;
