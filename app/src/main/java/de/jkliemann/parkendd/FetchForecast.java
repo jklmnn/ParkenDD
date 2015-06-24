@@ -12,9 +12,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,10 +43,15 @@ public class FetchForecast extends AsyncTask<String, Void, int[]> {
 
     private int[] fetchOldAPI(String parm){
         String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
-        address = address + PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city)) + "/forecast/" + parm;
+        String city = "";
+        try{
+            city = URLEncoder.encode(PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city)), "UTF-8");
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
         int[] forecastMap = new int[24];
         try {
-            URL url = new URL(address);
+            URL url = new URL(address + city + "/forecast/" + parm);
             HttpURLConnection cn = null;
             try {
                 if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("ignore_cert", false)) {

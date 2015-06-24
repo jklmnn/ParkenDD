@@ -9,6 +9,8 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,7 +42,11 @@ public class ForecastActivity extends ActionBarActivity {
         this.setTitle(name + " - " + getString(R.string.action_forecast));
         FetchForecast fetchForecast = new FetchForecast();
         fetchForecast.init(this, popup, timePicker, ratingBar);
-        fetchForecast.execute("?spot=" + name + "&date=" + dateFormat.format(date));
+        try {
+            fetchForecast.execute("?spot=" + URLEncoder.encode(name, "UTF-8") + "&date=" + dateFormat.format(date));
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
     }
 
 
