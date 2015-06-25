@@ -15,7 +15,7 @@
     <string name="negative">Zrušit</string>
     <string name="network_error">Chyba při získávání dat.</string>
     <string name="nodata">Žádná data</string>
-    <string name="positive">OK</string>
+    <string name="positive">Ok</string>
     <string name="server">Kontakt k serveru:</string>
     <string name="setting_city">Město</string>
     <string name="setting_ignore_cert">Ignorovat SSL certifikát (nedoporučeno!).</string>
@@ -27,7 +27,7 @@
     <string name="action_forecast">Prognóza</string>
     <string name="location_error">žádné umístění nalezeno</string><!--no location found-->
     <string name="setting_sorting">seřazeno podle</string><!--sort by-->
-    <string name="setting_sorting_nothing">nic</string>
+    <string name="setting_sorting_default">standardní</string>
     <string name="setting_sorting_name">název</string>
     <string name="setting_sorting_location">místo</string>
 </resources>

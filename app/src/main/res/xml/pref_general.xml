@@ -7,7 +7,7 @@
     <ListPreference
         android:key="sorting"
         android:title="@string/setting_sorting"
-        android:defaultValue="@string/setting_sorting_nothing"/>
+        android:defaultValue="@string/setting_sorting_default"/>
     <CheckBoxPreference
         android:key="use_location"
         android:title="@string/setting_location"

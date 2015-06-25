@@ -160,8 +160,14 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
             String sortPreference = PreferenceManager.getDefaultSharedPreferences(this.context).getString("sorting", sortOptions[0]);
             final ParkingSpot[] spotArray;
             ParkingSpot[] preArray;
-            Comparator<ParkingSpot> c;
-            if(sortPreference.equals(sortOptions[1])) {
+            if(sortPreference.equals(sortOptions[0])){
+                try{
+                    preArray = ParkingSpot.getSortedArray(spots.toArray(new ParkingSpot[spots.size()]), ParkingSpot.byEUKLID.INSTANCE);
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                    preArray = spots.toArray(new ParkingSpot[spots.size()]);
+                }
+            }else if(sortPreference.equals(sortOptions[1])) {
                 try {
                     preArray = ParkingSpot.getSortedArray(spots.toArray(new ParkingSpot[spots.size()]), ParkingSpot.byNAME.INSTANCE);
                 }catch (NullPointerException e){
@@ -179,13 +185,6 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                 try {
                     preArray = ParkingSpot.getSortedArray(spots.toArray(new ParkingSpot[spots.size()]), ParkingSpot.byFREE.INSTANCE);
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
-                    preArray = spots.toArray(new ParkingSpot[spots.size()]);
-                }
-            }else if(sortPreference.equals(sortOptions[4])){
-                try{
-                    preArray = ParkingSpot.getSortedArray(spots.toArray(new ParkingSpot[spots.size()]), ParkingSpot.byEUKLID.INSTANCE);
-                }catch (NullPointerException e){
                     e.printStackTrace();
                     preArray = spots.toArray(new ParkingSpot[spots.size()]);
                 }

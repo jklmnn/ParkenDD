@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <!-- actions -->
-<string name="action_settings">"Ustawienia"</string>
-<string name="action_forecast">"Prognoza"</string>
-<string name="action_refresh">"Aktualizować"</string>
-<string name="action_about">"O tej aplikacji"</string>
+<string name="action_settings">Ustawienia</string>
+<string name="action_forecast">Prognoza</string>
+<string name="action_refresh">Aktualizować</string>
+<string name="action_about">O tej aplikacji</string>
 
 <!-- settings -->
-<string name="header_general">"Ogólnie"</string>
-<string name="header_network">"Sieć"</string>
-<string name="setting_server">"serwer"</string>
-<string name="setting_city">"Miasto"</string>
-<string name="setting_location">"Użyć lokalizacjię"</string>
-<string name="setting_reset">"Resetować"</string>
-<string name="setting_ignore_cert">"Ignorować SSL-Certyfikat (niepewny!)"</string>
-<string name="disclaimer">"Wszystkje informacje bez gwarancji!"</string>
-<string name="server">"Kontakt do serwera:"</string>
+<string name="header_general">Ogólnie</string>
+<string name="header_network">Sieć</string>
+<string name="setting_server">serwer</string>
+<string name="setting_city">Miasto</string>
+<string name="setting_location">Użyć lokalizacjię</string>
+<string name="setting_reset">Resetować</string>
+<string name="setting_ignore_cert">Ignorować SSL-Certyfikat (niepewny!)</string>
+<string name="disclaimer">Wszystkje informacje bez gwarancji!</string>
+<string name="server">Kontakt do serwera:</string>
 
 <!-- slotstates -->
-<string name="closed">"Zamknięty"</string>
-<string name="nodata">"Nie ma danych"</string>
+<string name="closed">Zamknięty</string>
+<string name="nodata">Nie ma danych</string>
 
 <!-- alerts -->
-<string name="alert_reset">"Resetować ustawienia?"</string>
-<string name="positive">"Ok"</string>
-<string name="negative">"Anuluj"</string>
+<string name="alert_reset">Resetować ustawienia?</string>
+<string name="positive">Ok</string>
+<string name="negative">Anuluj</string>
 
 <!-- errors -->
-<string name="network_error">"Błąd przy pobieraniu danych."</string>
-<string name="invalid_error">"Otrzymano nieprawidłowe dane."</string>
-<string name="url_error">"Nieprawidłowy adres"</string>
-<string name="connection_error">"Błąd połączenia"</string>
-<string name="intent_error">"Nieznaleźono odpowiedniej aplikacji."</string>
+<string name="network_error">Błąd przy pobieraniu danych.</string>
+<string name="invalid_error">Otrzymano nieprawidłowe dane.</string>
+<string name="url_error">Nieprawidłowy adres</string>
+<string name="connection_error">Błąd połączenia</string>
+<string name="intent_error">Nieznaleźono odpowiedniej aplikacji.</string>
 
 <!-- view -->
-<string name="of">"od"</string>
-<string name="setting_sorting">"Sortowanie"</string>
-<string name="setting_sorting_nothing">"nic"</string>
-<string name="setting_sorting_name">"Imie"</string>
-<string name="setting_sorting_location">"Lokalizacja"</string>
-<string name="setting_sorting_available">"Wolne parkingi"</string>
-<string name="location_error">"Brak dostępu do lokalizacji."</string>
+<string name="of">od</string>
+<string name="setting_sorting">Sortowanie</string>
+<string name="setting_sorting_default">standard</string>
+<string name="setting_sorting_name">Imie</string>
+<string name="setting_sorting_location">Lokalizacja</string>
+<string name="setting_sorting_available">Wolne parkingi</string>
+<string name="location_error">Brak dostępu do lokalizacji.</string>
     <string name="title_activity_settings">Ustawienia</string>
 </resources>
