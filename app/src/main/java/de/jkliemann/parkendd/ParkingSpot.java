@@ -80,6 +80,12 @@ public class ParkingSpot implements Parcelable{
                 Location currentLocation = gs.getLastKnownLocation();
                 Double d1 = new Double(Util.getDistance(p1.location(), currentLocation));
                 Double d2 = new Double(Util.getDistance(p2.location(), currentLocation));
+                if(d1 == null){
+                    d1 = Double.MAX_VALUE;
+                }
+                if(d2 == null){
+                    d2 = Double.MAX_VALUE;
+                }
                 if(p1.state().equals("nodata") && p2.state().equals("nodata")){
                     return d1.compareTo(d2);
                 }
@@ -94,13 +100,15 @@ public class ParkingSpot implements Parcelable{
                 if(p2.state().equals("nodata") && !p1.state().equals("closed") && !p1.state().equals("nodata")){
                     return -1;
                 }
-                Double b1 = modifier * (1 - ((double)p1.free()) / ((double)p1.count()));
-                Double b2 = modifier * (1 - ((double)p2.free()) / ((double)p2.count()));
-                Double e1 = Math.sqrt(Math.pow(d1, 2) + Math.pow(b1, 2));
-                Double e2 = Math.sqrt(Math.pow(d2, 2) + Math.pow(b2, 2));
+                if(p1.free() == 0 && p2.free() != 0){
+                    return 1;
+                }
+                Double b1 = (1 - ((double)p1.free()) / ((double)p1.count()));
+                Double b2 = (1 - ((double)p2.free()) / ((double)p2.count()));
+                Double e1 = Math.sqrt(Math.pow(d1, 2) + Math.pow(b1, 2)) * b1;
+                Double e2 = Math.sqrt(Math.pow(d2, 2) + Math.pow(b2, 2)) * b2;
                 return e1.compareTo(e2);
             }catch (NullPointerException e) {
-                //TODO: implement sorting for lots without location data.
                 return 0;
             }
         }
