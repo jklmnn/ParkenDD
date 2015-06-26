@@ -36,4 +36,7 @@
     <string name="count">Count</string>
     <string name="available">Available</string>
     <string name="distance">Distance</string>
+    <string name="setting_hide_closed">Hide closed spots.</string>
+    <string name="setting_hide_full">Hide full spots.</string>
+    <string name="setting_hide_nodata">Hide spots without data.</string>
 </resources>

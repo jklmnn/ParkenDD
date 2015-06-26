@@ -9,6 +9,18 @@
         android:title="@string/setting_sorting"
         android:defaultValue="@string/setting_sorting_default"/>
     <CheckBoxPreference
+        android:key="hide_closed"
+        android:title="@string/setting_hide_closed"
+        android:defaultValue="true"/>
+    <CheckBoxPreference
+        android:key="hide_nodata"
+        android:title="@string/setting_hide_nodata"
+        android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="hide_empty"
+        android:title="@string/setting_hide_full"
+        android:defaultValue="true"/>
+    <CheckBoxPreference
         android:key="use_location"
         android:title="@string/setting_location"
         android:defaultValue="true"/>

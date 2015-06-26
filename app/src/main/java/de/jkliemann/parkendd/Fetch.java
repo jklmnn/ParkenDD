@@ -158,8 +158,26 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         if(context != null && spotView != null && spots != null) {
             String sortOptions[] = this.context.getResources().getStringArray(R.array.setting_sort_options);
             String sortPreference = PreferenceManager.getDefaultSharedPreferences(this.context).getString("sorting", sortOptions[0]);
+            Boolean hide_closed = PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("hide_closed", true);
+            Boolean hide_nodata = PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("hide_nodata", false);
+            Boolean hide_full = PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("hide_full", true);
             final ParkingSpot[] spotArray;
             ParkingSpot[] preArray;
+            ArrayList<ParkingSpot> cachelist = new ArrayList<>();
+            for(ParkingSpot spot : spots){
+                if(hide_closed && spot.state().equals("closed")){
+                    cachelist.add(spot);
+                }
+                if(hide_nodata && spot.state().equals("nodata")){
+                    cachelist.add(spot);
+                }
+                if(hide_full && spot.free() == 0 && !spot.state().equals("nodata") && !spot.state().equals("closed")){
+                    cachelist.add(spot);
+                }
+            }
+            for (ParkingSpot spot : cachelist){
+                spots.remove(spot);
+            }
             if(sortPreference.equals(sortOptions[0])){
                 try{
                     preArray = ParkingSpot.getSortedArray(spots.toArray(new ParkingSpot[spots.size()]), ParkingSpot.byEUKLID.INSTANCE);
