@@ -21,7 +21,6 @@ public class ParkingSpot implements Parcelable{
     private int count;
     private int free;
     private Boolean forecast;
-    private static int modifier = 500;
 
     public static enum byNAME implements Comparator<ParkingSpot>{
         INSTANCE;
@@ -105,8 +104,8 @@ public class ParkingSpot implements Parcelable{
                 }
                 Double b1 = (1 - ((double)p1.free()) / ((double)p1.count()));
                 Double b2 = (1 - ((double)p2.free()) / ((double)p2.count()));
-                Double e1 = Math.sqrt(Math.pow(d1, 2) + Math.pow(b1, 2)) * b1;
-                Double e2 = Math.sqrt(Math.pow(d2, 2) + Math.pow(b2, 2)) * b2;
+                Double e1 = Math.sqrt(Math.pow(d1, 2) + Math.pow(b1, 2)) / (1 - b1 + Double.MIN_VALUE);
+                Double e2 = Math.sqrt(Math.pow(d2, 2) + Math.pow(b2, 2)) / (1 - b2 + Double.MIN_VALUE);
                 return e1.compareTo(e2);
             }catch (NullPointerException e) {
                 return 0;

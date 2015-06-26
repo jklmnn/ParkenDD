@@ -82,7 +82,6 @@ public class SettingsActivity extends PreferenceActivity{
         addPreferencesFromResource(R.xml.pref_network);
         bindResetToDefault(findPreference("reset"));
         EditTextPreference url = (EditTextPreference)findPreference("fetch_url");
-        //CheckBoxPreference ignorecert = (CheckBoxPreference)findPreference("ignore_cert");
         if(url.getText().equals(getString(R.string.old_fetch_url))){
             url.setText(getString(R.string.default_fetch_url));
         }
