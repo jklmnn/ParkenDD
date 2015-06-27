@@ -16,6 +16,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by jkliemann on 05.01.15.
@@ -25,13 +28,11 @@ public class Server extends AsyncTask<Context, Void, String[]> {
 
     private static final String MAIL = "mail";
     private static final String CITIES = "cities";
-    private static final String VERSION_MAJOR = "version_major";
-    private static final String VERSION_MINOR = "version_minor";
+    private static final String VERSION = "api_version";
     private String mail;
     private String[] citylist;
     private Context context;
-    private int major = 0;
-    private int minor = 0;
+    private String version;
     private int error = 0;
 
     private String[] parseJSon(String data){
@@ -39,18 +40,35 @@ public class Server extends AsyncTask<Context, Void, String[]> {
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         try{
             JSONObject global = new JSONObject(data);
-            mail = global.getString(MAIL);
             try{
-                major = global.getInt(VERSION_MAJOR);
-                minor = global.getInt(VERSION_MINOR);
-                gs.setAPI(major, minor);
+                version = global.getString(VERSION);
+                String[] vs = version.split("\\.");
+                gs.setAPI(Integer.parseInt(vs[0]), Integer.parseInt(vs[1]));
             }catch (JSONException e){
                 e.printStackTrace();
                 gs.setAPI(0, 0);
             }
-            JSONArray citystrings = global.getJSONArray(CITIES);
-            for(int i = 0; i < citystrings.length(); i++){
-                cities.add(citystrings.getString(i));
+            if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0) {
+                mail = global.getString(MAIL);
+                JSONArray citystrings = global.getJSONArray(CITIES);
+                for (int i = 0; i < citystrings.length(); i++) {
+                    cities.add(citystrings.getString(i));
+                }
+            }
+            if(gs.getAPI_V_MAJOR() == 1){
+                JSONObject citystrings = global.getJSONObject(CITIES);
+                Iterator<String> city_ids = citystrings.keys();
+                Map<String, String> idmap = new HashMap<>();
+                while(city_ids.hasNext()){
+                    String id = city_ids.next();
+                    try{
+                        cities.add(id);
+                        idmap.put(id, citystrings.getString(id));
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+                gs.setIdMap(idmap);
             }
         }catch (JSONException e){
             e.printStackTrace();

@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 /**
  * Created by jkliemann on 07.01.15.
  */
@@ -15,6 +18,7 @@ public class GlobalSettings {
 
     private static GlobalSettings mInstance = null;
     private String[] citylist;
+    private Map<String, String> idmap;
     private String mail;
     private Context context;
     private LocationManager locationManager;
@@ -78,7 +82,16 @@ public class GlobalSettings {
 
 
     public String[] getCitylist(){
-        return citylist;
+        if(API_V_MAJOR == 0) {
+            return citylist;
+        }else if(API_V_MAJOR == 1){
+            ArrayList<String> idlist = new ArrayList<>();
+            for(String id : citylist){
+                idlist.add(this.getCityById(id));
+            }
+            return idlist.toArray(new String[idlist.size()]);
+        }
+        return null;
     }
 
     public String getMail(){
@@ -93,8 +106,16 @@ public class GlobalSettings {
         return API_V_MINOR;
     }
 
+    public String getCityById(String id){
+        return this.idmap.get(id);
+    }
+
     public void setCitylist(String[] citylist){
         this.citylist = citylist;
+    }
+
+    public void setIdMap(Map<String, String> idmap){
+        this.idmap = idmap;
     }
 
     public void setMail(String mail){
