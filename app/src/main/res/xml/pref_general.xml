@@ -24,5 +24,7 @@
         android:key="use_location"
         android:title="@string/setting_location"
         android:defaultValue="true"/>
-
+    <Preference
+        android:key="reset"
+        android:title="@string/setting_reset" />
 </PreferenceScreen>

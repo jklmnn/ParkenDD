@@ -54,11 +54,7 @@ public class FetchForecast extends AsyncTask<String, Void, int[]> {
             URL url = new URL(address + city + "/forecast/" + parm);
             HttpURLConnection cn = null;
             try {
-                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("ignore_cert", false)) {
-                    cn = Util.getUnsecureConnection(url);
-                } else {
-                    cn = (HttpURLConnection) url.openConnection();
-                }
+                cn = (HttpURLConnection) url.openConnection();
             } catch (IOException e) {
                 e.printStackTrace();
                 error = 3;
