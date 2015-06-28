@@ -114,9 +114,8 @@ public class ParkingSpot implements Parcelable{
         }
     }
 
-    public ParkingSpot(String name, String category, String state, String city, String id, int count, int free, double lat, double lon, Boolean forecast){
+    public ParkingSpot(String name, String state, String city, String id, int count, int free, double lat, double lon, Boolean forecast){
         this.name = name;
-        this.category = category;
         this.state = state;
         this.city = city;
         this.id = id;
@@ -125,6 +124,10 @@ public class ParkingSpot implements Parcelable{
         this.lat = lat;
         this.lon = lon;
         this.forecast = forecast;
+    }
+
+    public void setCategory(String category){
+        this.category = category;
     }
 
     public String name(){

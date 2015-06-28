@@ -34,11 +34,18 @@ public class Fetch extends AsyncTask<String, Void, Void> {
     private static final String NAME = "name";
     private static final String LOTS = "lots";
     private static final String COUNT = "count";
+    private static final String TOTAL = "total";
     private static final String FREE = "free";
     private static final String STATE = "state";
+    private static final String COORDS = "coords";
     private static final String LAT = "lat";
     private static final String LON = "lon";
+    private static final String LNG = "lng";
     private static final String FORECAST = "forecast";
+    private static final String DATA_SOURCE = "data_source";
+    private static final String LAST_DOWNLOADED = "last_downloaded";
+    private static final String LAST_UPDATED = "last_updated";
+    private static final String ID = "id";
     private static City CITY = null;
     private ListView spotView = null;
     private Context context = null;
@@ -83,7 +90,7 @@ public class Fetch extends AsyncTask<String, Void, Void> {
                     if(free.length() < 1 || free.equals("null")){
                         free = "0";
                     }
-                    spots.add(new ParkingSpot(name, category, state, city, "", Integer.parseInt(count), Integer.parseInt(free), lat, lon, forecast));
+                    spots.add(new ParkingSpot(name, state, city, "", Integer.parseInt(count), Integer.parseInt(free), lat, lon, forecast));
                 }
             }
         }catch(JSONException e){
@@ -142,10 +149,89 @@ public class Fetch extends AsyncTask<String, Void, Void> {
         return spots;
     }
 
+    private void fetchAPI_1_1(){
+        String data = "";
+        String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
+        if(!address.substring(address.length() - 1).equals("/")){
+            address = address + "/";
+        }
+        try{
+            URL url = null;
+            HttpURLConnection connection = null;
+            try{
+                url = new URL(address + URLEncoder.encode(this.CITY.id(), "UTF-8"));
+            }catch (UnsupportedEncodingException e){
+                e.printStackTrace();
+            }catch (MalformedURLException e){
+                e.printStackTrace();
+                error = 4;
+                return;
+            }
+            try{
+                connection = (HttpURLConnection)url.openConnection();
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = "";
+                while((line = br.readLine()) != null){
+                    data = data + line;
+                }
+                br.close();
+            }catch (IOException e){
+                e.printStackTrace();
+                error = 3;
+                return;
+            }
+            ArrayList<ParkingSpot> spotlist = new ArrayList<>();
+            String last_downloaded = "";
+            String last_updated = "";
+            String data_source = "";
+            try{
+                JSONObject global = new JSONObject(data);
+                last_downloaded = global.getString(LAST_DOWNLOADED);
+                last_updated = global.getString(LAST_UPDATED);
+                data_source = global.getString(DATA_SOURCE);
+                JSONArray spotarray = global.getJSONArray(LOTS);
+                for(int i = 0; i < spotarray.length(); i++){
+                    JSONObject lot = spotarray.getJSONObject(i);
+                    String name = lot.getString(NAME);
+                    String state = lot.getString(STATE);
+                    String city = CITY.name();
+                    String id = CITY.id();
+                    int total = lot.getInt(TOTAL);
+                    int free = lot.getInt(FREE);
+                    double lat, lon;
+                    try {
+                        JSONObject coord = lot.getJSONObject(COORDS);
+                        lat = coord.getDouble(LAT);
+                        lon = coord.getDouble(LNG);
+                    }catch (JSONException e){
+                        lat = 0;
+                        lon = 0;
+                    }
+                    Boolean forecast = lot.getBoolean(FORECAST);
+                    ParkingSpot spot = new ParkingSpot(name, state, city, id, total, free, lat, lon, forecast);
+                    spotlist.add(spot);
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+                error = 2;
+                return;
+            }
+            CITY.setSpots(spotlist);
+            CITY.setData_source(data_source);
+            CITY.setLast_downloaded(last_downloaded);
+            CITY.setLast_updated(last_updated);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+    }
+
     protected Void doInBackground(String... ct){
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0){
             CITY.setSpots(fetchOldAPI());
+        }
+        if(gs.getAPI_V_MAJOR() == 1 && gs.getAPI_V_MINOR() == 0){
+            fetchAPI_1_1();
         }
         return null;
     }
