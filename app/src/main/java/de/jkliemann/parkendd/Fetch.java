@@ -39,7 +39,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
     private static final String LAT = "lat";
     private static final String LON = "lon";
     private static final String FORECAST = "forecast";
-    private static String CITY = "";
+    private static City CITY = null;
     private ListView spotView = null;
     private Context context = null;
     private RelativeLayout popup = null;
@@ -49,7 +49,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         this.spotView = spotView;
         this.context = context;
         this.popup = popup;
-        CITY = PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city));
+        CITY = GlobalSettings.getGlobalSettings().getCityByName(PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city)));
         popup.setVisibility(View.VISIBLE);
     }
 
@@ -76,7 +76,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                         lat = 0;
                         lon = 0;
                     }
-                    String city = CITY;
+                    String city = CITY.name();
                     if(count.length() < 1 || count.equals("null")){
                         count = "0";
                     }
@@ -98,7 +98,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         ArrayList<ParkingSpot> spots = null;
         String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
         try {
-            URL url = new URL(address + URLEncoder.encode(this.CITY, "UTF-8"));
+            URL url = new URL(address + URLEncoder.encode(this.CITY.name(), "UTF-8"));
             HttpURLConnection cn = null;
             try {
                 cn = (HttpURLConnection) url.openConnection();

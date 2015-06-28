@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by jkliemann on 07.01.15.
@@ -17,8 +18,7 @@ import java.util.Map;
 public class GlobalSettings {
 
     private static GlobalSettings mInstance = null;
-    private String[] citylist;
-    private Map<String, String> idmap;
+    private ArrayList<City> citylist;
     private String mail;
     private Context context;
     private LocationManager locationManager;
@@ -81,17 +81,8 @@ public class GlobalSettings {
     }
 
 
-    public String[] getCitylist(){
-        if(API_V_MAJOR == 0) {
-            return citylist;
-        }else if(API_V_MAJOR == 1){
-            ArrayList<String> idlist = new ArrayList<>();
-            for(String id : citylist){
-                idlist.add(this.getCityById(id));
-            }
-            return idlist.toArray(new String[idlist.size()]);
-        }
-        return null;
+    public ArrayList<City> getCitylist(){
+        return citylist;
     }
 
     public String getMail(){
@@ -106,16 +97,34 @@ public class GlobalSettings {
         return API_V_MINOR;
     }
 
-    public String getCityById(String id){
-        return this.idmap.get(id);
+    public City getCityById(String id){
+        for(City city: this.citylist){
+            if(city.id().equals(id)){
+                return city;
+            }
+        }
+        return null;
     }
 
-    public void setCitylist(String[] citylist){
-        this.citylist = citylist;
+    public City getCityByName(String name){
+        for(City city : this.citylist){
+            if(city.name().equals(name)){
+                return city;
+            }
+        }
+        return null;
     }
 
-    public void setIdMap(Map<String, String> idmap){
-        this.idmap = idmap;
+    public void setCitylist(Object citylist){
+        if(citylist instanceof ArrayList){
+            this.citylist = (ArrayList)citylist;
+        }
+        if(citylist instanceof String[]){
+            this.citylist = new ArrayList<>();
+            for(String city : (String[])citylist){
+                this.citylist.add(new City(city, city));
+            }
+        }
     }
 
     public void setMail(String mail){

@@ -61,9 +61,10 @@ public class SettingsActivity extends PreferenceActivity{
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_general);
         ListPreference citylist = (ListPreference)findPreference("city");
-        if(GlobalSettings.getGlobalSettings().getCitylist().length > 0) {
-            citylist.setEntries(GlobalSettings.getGlobalSettings().getCitylist());
-            citylist.setEntryValues(GlobalSettings.getGlobalSettings().getCitylist());
+        if(GlobalSettings.getGlobalSettings().getCitylist().size() > 0) {
+            String[] cities = GlobalSettings.getGlobalSettings().getCitylist().toArray(new String[GlobalSettings.getGlobalSettings().getCitylist().size()]);
+            citylist.setEntries(cities);
+            citylist.setEntryValues(cities);
         }else{
             String[] def = new String[1];
             def[0] = getString(R.string.default_city);
