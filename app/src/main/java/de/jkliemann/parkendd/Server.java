@@ -16,27 +16,25 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Created by jkliemann on 05.01.15.
  */
 
-public class Server extends AsyncTask<Context, Void, String[]> {
+public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
 
     private static final String MAIL = "mail";
     private static final String CITIES = "cities";
     private static final String VERSION = "api_version";
     private String mail;
-    private String[] citylist;
+    private ArrayList<City> citylist;
     private Context context;
     private String version;
     private int error = 0;
 
-    private String[] parseJSon(String data){
-        ArrayList<String> cities = new ArrayList<String>();
+    private ArrayList<City> parseJSon(String data){
+        ArrayList<City> cities = new ArrayList<>();
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         try{
             JSONObject global = new JSONObject(data);
@@ -52,32 +50,29 @@ public class Server extends AsyncTask<Context, Void, String[]> {
                 mail = global.getString(MAIL);
                 JSONArray citystrings = global.getJSONArray(CITIES);
                 for (int i = 0; i < citystrings.length(); i++) {
-                    cities.add(citystrings.getString(i));
+                    cities.add(new City(citystrings.getString(i), citystrings.getString(i)));
                 }
             }
             if(gs.getAPI_V_MAJOR() == 1){
                 JSONObject citystrings = global.getJSONObject(CITIES);
                 Iterator<String> city_ids = citystrings.keys();
-                Map<String, String> idmap = new HashMap<>();
                 while(city_ids.hasNext()){
                     String id = city_ids.next();
                     try{
-                        cities.add(id);
-                        idmap.put(id, citystrings.getString(id));
+                        cities.add(new City(id, citystrings.getString(id)));
                     }catch (JSONException e){
                         e.printStackTrace();
                     }
                 }
-                gs.setIdMap(idmap);
             }
         }catch (JSONException e){
             e.printStackTrace();
             error = 1;
         }
-        return cities.toArray(new String[cities.size()]);
+        return cities;
     }
 
-    protected String[] doInBackground(Context... context){
+    protected ArrayList<City> doInBackground(Context... context){
         this.context = context[0];
         String urlstring = PreferenceManager.getDefaultSharedPreferences(this.context).getString("fetch_url", this.context.getString(R.string.default_fetch_url));
         String meta = "";
@@ -112,7 +107,7 @@ public class Server extends AsyncTask<Context, Void, String[]> {
         return citylist;
     }
 
-    protected void onPostExecute(String[] cities){
+    protected void onPostExecute(ArrayList<City> cities){
         GlobalSettings.getGlobalSettings().setMail(mail);
         GlobalSettings.getGlobalSettings().setCitylist(citylist);
         switch (error){

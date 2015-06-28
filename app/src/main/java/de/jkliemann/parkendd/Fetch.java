@@ -29,7 +29,7 @@ import java.util.ArrayList;
 /**
  * Created by jkliemann on 10.12.14.
  */
-public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
+public class Fetch extends AsyncTask<String, Void, Void> {
 
     private static final String NAME = "name";
     private static final String LOTS = "lots";
@@ -141,16 +141,16 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         return spots;
     }
 
-   protected ArrayList<ParkingSpot> doInBackground(String... ct){
-       GlobalSettings gs = GlobalSettings.getGlobalSettings();
-       if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0){
-           return fetchOldAPI();
-       }
-       return null;
-   }
+    protected Void doInBackground(String... ct){
+        GlobalSettings gs = GlobalSettings.getGlobalSettings();
+        if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0){
+            CITY.setSpots(fetchOldAPI());
+        }
+        return null;
+    }
 
-    protected void onPostExecute(ArrayList<ParkingSpot> spots){
-        if(context != null && spotView != null && spots != null) {
+    protected void onPostExecute(Void v){
+        if(context != null && spotView != null && CITY.spots() != null) {
             String sortOptions[] = this.context.getResources().getStringArray(R.array.setting_sort_options);
             String sortPreference = PreferenceManager.getDefaultSharedPreferences(this.context).getString("sorting", sortOptions[0]);
             Boolean hide_closed = PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("hide_closed", true);
@@ -158,6 +158,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
             Boolean hide_full = PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("hide_full", true);
             final ParkingSpot[] spotArray;
             ParkingSpot[] preArray;
+            ArrayList<ParkingSpot> spots = CITY.spots();
             ArrayList<ParkingSpot> cachelist = new ArrayList<>();
             for(ParkingSpot spot : spots){
                 if(hide_closed && spot.state().equals("closed")){

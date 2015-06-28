@@ -119,12 +119,6 @@ public class GlobalSettings {
         if(citylist instanceof ArrayList){
             this.citylist = (ArrayList)citylist;
         }
-        if(citylist instanceof String[]){
-            this.citylist = new ArrayList<>();
-            for(String city : (String[])citylist){
-                this.citylist.add(new City(city, city));
-            }
-        }
     }
 
     public void setMail(String mail){

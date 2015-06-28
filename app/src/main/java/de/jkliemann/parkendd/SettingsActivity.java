@@ -16,6 +16,8 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
+import java.util.ArrayList;
+
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -62,7 +64,11 @@ public class SettingsActivity extends PreferenceActivity{
         addPreferencesFromResource(R.xml.pref_general);
         ListPreference citylist = (ListPreference)findPreference("city");
         if(GlobalSettings.getGlobalSettings().getCitylist().size() > 0) {
-            String[] cities = GlobalSettings.getGlobalSettings().getCitylist().toArray(new String[GlobalSettings.getGlobalSettings().getCitylist().size()]);
+            ArrayList<String> citystrings = new ArrayList<>();
+            for(City ct : GlobalSettings.getGlobalSettings().getCitylist()){
+                citystrings.add(ct.name());
+            }
+            String[] cities = citystrings.toArray(new String[citystrings.size()]);
             citylist.setEntries(cities);
             citylist.setEntryValues(cities);
         }else{

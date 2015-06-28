@@ -17,7 +17,7 @@ public class City {
     private Date last_downloaded;
     private Date last_updated;
     private ArrayList<ParkingSpot> spots = null;
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
+    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public City(String id, String name){
         this.id = id;
