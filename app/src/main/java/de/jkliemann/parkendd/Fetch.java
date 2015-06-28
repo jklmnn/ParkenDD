@@ -131,6 +131,7 @@ public class Fetch extends AsyncTask<String, Void, Void> {
                     }
                 }
             }
+            cn.disconnect();
         }catch(MalformedURLException e) {
             e.printStackTrace();
             error = 4;

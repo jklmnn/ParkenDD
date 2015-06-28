@@ -3,6 +3,9 @@ package de.jkliemann.parkendd;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +35,15 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
     private Context context;
     private String version;
     private int error = 0;
+    private ListView spotView;
+    private RelativeLayout popup;
+
+    public void setUi(ListView spotView, Context context, RelativeLayout popup){
+        this.spotView = spotView;
+        this.context = context;
+        this.popup = popup;
+        popup.setVisibility(View.VISIBLE);
+    }
 
     private ArrayList<City> parseJSon(String data){
         ArrayList<City> cities = new ArrayList<>();
@@ -99,6 +111,7 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
                     error = 2;
                 }
             }
+            connection.disconnect();
         }catch (MalformedURLException e){
             e.printStackTrace();
             error = 3;
@@ -113,15 +126,18 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
         switch (error){
             case 1:
                 Error.showLongErrorToast(context, context.getString(R.string.invalid_error));
-                break;
+                return;
             case 2:
                 Error.showLongErrorToast(context, context.getString(R.string.invalid_error));
-                break;
+                return;
             case 3:
                 Error.showLongErrorToast(context, context.getString(R.string.url_error));
-                break;
+                return;
             default:
                 break;
         }
+        Fetch ff = new Fetch();
+        ff.setUi(spotView, this.context, popup);
+        ff.execute(PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url)));
     }
 }

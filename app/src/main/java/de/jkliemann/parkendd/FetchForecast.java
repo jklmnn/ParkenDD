@@ -87,6 +87,7 @@ public class FetchForecast extends AsyncTask<String, Void, int[]> {
                     }
                 }
             }
+            cn.disconnect();
         }catch (MalformedURLException e){
             e.printStackTrace();
             error = 4;

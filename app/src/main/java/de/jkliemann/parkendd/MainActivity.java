@@ -2,11 +2,13 @@ package de.jkliemann.parkendd;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -18,13 +20,14 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_main);
+        RelativeLayout popup = (RelativeLayout)findViewById(R.id.main_layoutPageLoading);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         gs.initLocation(this);
         Server s = new Server();
+        s.setUi((ListView)findViewById(R.id.spotListView), this, popup);
         s.execute(this);
-        refresh();
     }
 
     private void refresh(){
