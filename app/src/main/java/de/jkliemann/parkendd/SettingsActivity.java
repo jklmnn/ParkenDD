@@ -151,8 +151,14 @@ public class SettingsActivity extends PreferenceActivity{
                     EditTextPreference url = (EditTextPreference)preferenceManager.findPreference("fetch_url");
                     url.setText(context.getString(R.string.default_fetch_url));
                     url.setSummary(context.getString(R.string.default_fetch_url));
-                    CheckBoxPreference ignorecert = (CheckBoxPreference)preferenceManager.findPreference("ignore_cert");
-                    ignorecert.setChecked(false);
+                    CheckBoxPreference use_location = (CheckBoxPreference)preferenceManager.findPreference("use_location");
+                    use_location.setChecked(true);
+                    CheckBoxPreference hide_closed = (CheckBoxPreference)preferenceManager.findPreference("hide_closed");
+                    hide_closed.setChecked(true);
+                    CheckBoxPreference hide_nodata = (CheckBoxPreference)preferenceManager.findPreference("hide_nodata");
+                    hide_nodata.setChecked(false);
+                    CheckBoxPreference hide_full = (CheckBoxPreference)preferenceManager.findPreference("hide_full");
+                    hide_full.setChecked(true);
                 }
             });
             resetDialog.setNegativeButton(context.getString(R.string.negative), new DialogInterface.OnClickListener() {

@@ -53,8 +53,8 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
         popup.setVisibility(View.VISIBLE);
     }
 
-    private ArrayList<ParkingSpot> parseJSon(String json){
-        ArrayList<ParkingSpot> spots = new ArrayList<ParkingSpot>();
+    private ArrayList<ParkingSpot> parseOldJSon(String json){
+        ArrayList<ParkingSpot> spots = new ArrayList<>();
         try{
             JSONArray global = new JSONArray(json);
             for(int i = 0; i < global.length(); i++){
@@ -83,7 +83,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     if(free.length() < 1 || free.equals("null")){
                         free = "0";
                     }
-                    spots.add(new ParkingSpot(name, category, state, city, Integer.parseInt(count), Integer.parseInt(free), lat, lon, forecast));
+                    spots.add(new ParkingSpot(name, category, state, city, "", Integer.parseInt(count), Integer.parseInt(free), lat, lon, forecast));
                 }
             }
         }catch(JSONException e){
@@ -116,7 +116,7 @@ public class Fetch extends AsyncTask<String, Void, ArrayList<ParkingSpot>> {
                     while ((line = br.readLine()) != null) {
                         json = json + line + "\n";
                     }
-                    spots = parseJSon(json);
+                    spots = parseOldJSon(json);
                 } catch (IOException e) {
                     e.printStackTrace();
                     error = 1;

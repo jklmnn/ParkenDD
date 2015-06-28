@@ -16,6 +16,7 @@ public class ParkingSpot implements Parcelable{
     private String category;
     private String state;
     private String city;
+    private String id;
     private double lat;
     private double lon;
     private int count;
@@ -113,11 +114,12 @@ public class ParkingSpot implements Parcelable{
         }
     }
 
-    public ParkingSpot(String name, String category, String state, String city, int count, int free, double lat, double lon, Boolean forecast){
+    public ParkingSpot(String name, String category, String state, String city, String id, int count, int free, double lat, double lon, Boolean forecast){
         this.name = name;
         this.category = category;
         this.state = state;
         this.city = city;
+        this.id = id;
         this.count = count;
         this.free = free;
         this.lat = lat;
@@ -135,6 +137,10 @@ public class ParkingSpot implements Parcelable{
 
     public String state(){
         return state;
+    }
+
+    public String id(){
+        return id;
     }
 
     public int count(){
@@ -189,6 +195,7 @@ public class ParkingSpot implements Parcelable{
         out.writeString(category);
         out.writeString(state);
         out.writeString(city);
+        out.writeString(id);
         out.writeDouble(lat);
         out.writeDouble(lon);
         out.writeInt(count);
@@ -211,6 +218,7 @@ public class ParkingSpot implements Parcelable{
         category = in.readString();
         state = in.readString();
         city = in.readString();
+        id = in.readString();
         lat = in.readDouble();
         lon = in.readDouble();
         count = in.readInt();
