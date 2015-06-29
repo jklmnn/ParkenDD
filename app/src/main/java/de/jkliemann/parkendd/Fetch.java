@@ -149,7 +149,7 @@ public class Fetch extends AsyncTask<String, Void, Void> {
         return spots;
     }
 
-    private void fetchAPI_1_1(){
+    private void fetchAPI_1_0(){
         String data = "";
         String address = PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url));
         if(!address.substring(address.length() - 1).equals("/")){
@@ -231,7 +231,7 @@ public class Fetch extends AsyncTask<String, Void, Void> {
             CITY.setSpots(fetchOldAPI());
         }
         if(gs.getAPI_V_MAJOR() == 1 && gs.getAPI_V_MINOR() == 0){
-            fetchAPI_1_1();
+            fetchAPI_1_0();
         }
         return null;
     }
