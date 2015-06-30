@@ -191,25 +191,29 @@ public class Fetch extends AsyncTask<String, Void, Void> {
                 data_source = global.getString(DATA_SOURCE);
                 JSONArray spotarray = global.getJSONArray(LOTS);
                 for(int i = 0; i < spotarray.length(); i++){
-                    JSONObject lot = spotarray.getJSONObject(i);
-                    String name = lot.getString(NAME);
-                    String state = lot.getString(STATE);
-                    String city = CITY.name();
-                    String id = CITY.id();
-                    int total = lot.getInt(TOTAL);
-                    int free = lot.getInt(FREE);
-                    double lat, lon;
                     try {
-                        JSONObject coord = lot.getJSONObject(COORDS);
-                        lat = coord.getDouble(LAT);
-                        lon = coord.getDouble(LNG);
+                        JSONObject lot = spotarray.getJSONObject(i);
+                        String name = lot.getString(NAME);
+                        String state = lot.getString(STATE);
+                        String city = CITY.name();
+                        String id = CITY.id();
+                        int total = lot.getInt(TOTAL);
+                        int free = lot.getInt(FREE);
+                        double lat, lon;
+                        try {
+                            JSONObject coord = lot.getJSONObject(COORDS);
+                            lat = coord.getDouble(LAT);
+                            lon = coord.getDouble(LNG);
+                        } catch (JSONException e) {
+                            lat = 0;
+                            lon = 0;
+                        }
+                        Boolean forecast = lot.getBoolean(FORECAST);
+                        ParkingSpot spot = new ParkingSpot(name, state, city, id, total, free, lat, lon, forecast);
+                        spotlist.add(spot);
                     }catch (JSONException e){
-                        lat = 0;
-                        lon = 0;
+                        e.printStackTrace();
                     }
-                    Boolean forecast = lot.getBoolean(FORECAST);
-                    ParkingSpot spot = new ParkingSpot(name, state, city, id, total, free, lat, lon, forecast);
-                    spotlist.add(spot);
                 }
             }catch (JSONException e){
                 e.printStackTrace();
