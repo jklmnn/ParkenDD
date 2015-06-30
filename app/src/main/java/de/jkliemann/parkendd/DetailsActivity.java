@@ -46,20 +46,6 @@ public class DetailsActivity extends ActionBarActivity {
                 openMap();
             }
         });
-        Button forecastbutton = (Button)findViewById(R.id.forecast_button);
-        forecastbutton.setText(getString(R.string.action_forecast));
-        forecastbutton.setEnabled(spot.forecast());
-        forecastbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent forecast = new Intent(_this, ForecastActivity.class);
-                forecast.putExtra("year", datePicker.getYear());
-                forecast.putExtra("month", datePicker.getMonth());
-                forecast.putExtra("day", datePicker.getDayOfMonth());
-                forecast.putExtra("name", spot.name());
-                startActivity(forecast);
-            }
-        });
         available.setText(getString(R.string.available) + ":");
         count.setText(getString(R.string.count) + ":");
         distance.setText(getString(R.string.distance) + ":");
@@ -72,16 +58,6 @@ public class DetailsActivity extends ActionBarActivity {
         }catch (NullPointerException e){
             distanceval.setText(getString(R.string.nodata));
         }
-        datePicker = (DatePicker)findViewById(R.id.datePicker);
-        datePicker.setCalendarViewShown(false);
-        datePicker.setEnabled(spot.forecast());
-        Calendar c = Calendar.getInstance();
-        datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
-            }
-        });
     }
 
     @Override
