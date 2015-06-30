@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,10 +49,10 @@ public class Fetch extends AsyncTask<String, Void, Void> {
     private static City CITY = null;
     private ListView spotView = null;
     private Context context = null;
-    private RelativeLayout popup = null;
+    private ProgressBar popup = null;
     private int error = 0;
 
-    public void setUi(ListView spotView, Context context, RelativeLayout popup){
+    public void setUi(ListView spotView, Context context, ProgressBar popup){
         this.spotView = spotView;
         this.context = context;
         this.popup = popup;
@@ -68,7 +68,11 @@ public class Fetch extends AsyncTask<String, Void, Void> {
                 JSONObject catg = global.getJSONObject(i);
                 String category = catg.getString(NAME);
                 JSONArray lots = catg.getJSONArray(LOTS);
+                popup.setProgress(15);
+                double step = 55.0 / (double)lots.length();
+                double stepcount = 0;
                 for(int j = 0; j < lots.length(); j++){
+                    stepcount += step;
                     JSONObject lot = lots.getJSONObject(j);
                     String name = lot.getString(NAME);
                     String count = lot.getString(COUNT);
@@ -94,12 +98,17 @@ public class Fetch extends AsyncTask<String, Void, Void> {
                         free = "0";
                     }
                     spots.add(new ParkingSpot(name, state, city, "", Integer.parseInt(count), Integer.parseInt(free), lat, lon, forecast));
+                    if(stepcount >= 1){
+                        stepcount -= 1;
+                        popup.setProgress(popup.getProgress() + 1);
+                    }
                 }
             }
         }catch(JSONException e){
             e.printStackTrace();
             error = 2;
         }
+        popup.setProgress(70);
         return spots;
     }
 
@@ -112,6 +121,7 @@ public class Fetch extends AsyncTask<String, Void, Void> {
             HttpURLConnection cn = null;
             try {
                 cn = (HttpURLConnection) url.openConnection();
+                popup.setProgress(5);
             }catch (IOException e){
                 e.printStackTrace();
                 error = 3;
@@ -123,10 +133,21 @@ public class Fetch extends AsyncTask<String, Void, Void> {
                     InputStream in = cn.getInputStream();
                     br = new BufferedReader(new InputStreamReader(in));
                     String line = "";
-                    while ((line = br.readLine()) != null) {
-                        json = json + line + "\n";
+                    try {
+                        int content_length = cn.getContentLength();
+                        double part;
+                        while ((line = br.readLine()) != null) {
+                            part = (double)line.length() / (double)content_length;
+                            json = json + line + "\n";
+                            popup.setProgress(popup.getProgress() + (int)(part * 90));
+                        }
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                        while ((line = br.readLine()) != null) {
+                            json = json + line + "\n";
+                        }
+                        popup.setProgress(95);
                     }
-                    spots = parseOldJSon(json);
                 } catch (IOException e) {
                     e.printStackTrace();
                     error = 1;
@@ -142,6 +163,7 @@ public class Fetch extends AsyncTask<String, Void, Void> {
                 }
             }
             cn.disconnect();
+            spots = parseOldJSon(json);
         }catch(MalformedURLException e) {
             e.printStackTrace();
             error = 4;
@@ -172,12 +194,25 @@ public class Fetch extends AsyncTask<String, Void, Void> {
             }
             try{
                 connection = (HttpURLConnection)url.openConnection();
+                popup.setProgress(5);
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = "";
-                while((line = br.readLine()) != null){
-                    data = data + line;
+                try {
+                    int len = connection.getContentLength();
+                    double part;
+                    while ((line = br.readLine()) != null) {
+                        part = (double) data.length() / (double) len;
+                        data = data + line;
+                        popup.setProgress(popup.getProgress() + (int) (part * 90));
+                    }
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                    while ((line = br.readLine()) != null) {
+                        data = data + line;
+                    }
                 }
                 br.close();
+                connection.disconnect();
             }catch (IOException e){
                 e.printStackTrace();
                 error = 3;
@@ -227,12 +262,14 @@ public class Fetch extends AsyncTask<String, Void, Void> {
             CITY.setData_source(data_source);
             CITY.setLast_downloaded(last_downloaded);
             CITY.setLast_updated(last_updated);
+            popup.setProgress(95);
         }catch (NullPointerException e){
             e.printStackTrace();
         }
     }
 
     protected Void doInBackground(String... ct){
+        popup.setProgress(0);
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0){
             CITY.setSpots(fetchOldAPI());
@@ -316,8 +353,11 @@ public class Fetch extends AsyncTask<String, Void, Void> {
                     }
                 }
             });
+            popup.setProgress(100);
         }
         popup.setVisibility(View.GONE);
+        MainActivity ma = (MainActivity)this.context;
+        ma.setTitle(this.context.getString(R.string.app_name) + " - " + CITY.name());
         switch (error){
             case 2:
                 Error.showLongErrorToast(context, context.getString(R.string.invalid_error));

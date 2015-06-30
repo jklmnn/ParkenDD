@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,9 +36,9 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
     private String version;
     private int error = 0;
     private ListView spotView;
-    private RelativeLayout popup;
+    private ProgressBar popup;
 
-    public void setUi(ListView spotView, Context context, RelativeLayout popup){
+    public void setUi(ListView spotView, Context context, ProgressBar popup){
         this.spotView = spotView;
         this.context = context;
         this.popup = popup;
@@ -81,6 +81,7 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
             e.printStackTrace();
             error = 1;
         }
+        popup.setProgress(15);
         return cities;
     }
 
@@ -93,25 +94,37 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
             HttpURLConnection connection = null;
             try {
                 connection = (HttpURLConnection) url.openConnection();
+                popup.setProgress(5);
             }catch (IOException e) {
                 e.printStackTrace();
                 error = 2;
             }
             if(connection != null){
                 try {
-                    BufferedReader br = null;
+                    BufferedReader br;
                     InputStream in = connection.getInputStream();
                     br = new BufferedReader(new InputStreamReader(in));
                     String line = "";
-                    while ((line = br.readLine()) != null) {
-                        meta = meta + line;
+                    try {
+                        int len = connection.getContentLength();
+                        double part;
+                        while ((line = br.readLine()) != null) {
+                            part = (double)line.length() / (double)len;
+                            meta = meta + line;
+                            popup.setProgress(popup.getProgress() + (int)(part * 90));
+                        }
+                    }catch (NullPointerException e){
+                        while ((line = br.readLine()) != null) {
+                            meta = meta + line;
+                        }
                     }
                 }catch (IOException e) {
                     e.printStackTrace();
                     error = 2;
                 }
+                connection.disconnect();
             }
-            connection.disconnect();
+            popup.setProgress(95);
         }catch (MalformedURLException e){
             e.printStackTrace();
             error = 3;
@@ -137,6 +150,7 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
                 break;
         }
         Fetch ff = new Fetch();
+        popup.setProgress(100);
         ff.setUi(spotView, this.context, popup);
         ff.execute(PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url)));
     }

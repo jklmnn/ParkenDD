@@ -88,26 +88,23 @@ public class ParkingSpot implements Parcelable{
                 }
                 if(p1.state().equals("nodata") && p2.state().equals("nodata")){
                     return d1.compareTo(d2);
-                }
-                if(p1.state().equals("nodata") && p2.state().equals("closed")){
+                }else if(p1.state().equals("nodata") && p2.state().equals("closed")){
                     return -1;
-                }if(p1.state().equals("closed") && p2.state().equals("nodata")){
+                }else if(p1.state().equals("closed") && p2.state().equals("nodata")){
                     return 1;
-                }
-                if(p1.state().equals("nodata") && !p2.state().equals("closed") && !p2.state().equals("nodata")){
+                }else if(p1.state().equals("nodata") && !p2.state().equals("closed") && !p2.state().equals("nodata")){
                     return 1;
-                }
-                if(p2.state().equals("nodata") && !p1.state().equals("closed") && !p1.state().equals("nodata")){
+                }else if(p2.state().equals("nodata") && !p1.state().equals("closed") && !p1.state().equals("nodata")){
                     return -1;
-                }
-                if(p1.free() == 0 && p2.free() != 0){
+                }else if(p1.free() == 0 && p2.free() != 0){
                     return 1;
+                }else {
+                    Double b1 = (1 - ((double) p1.free()) / ((double) p1.count()));
+                    Double b2 = (1 - ((double) p2.free()) / ((double) p2.count()));
+                    Double e1 = Math.sqrt(Math.pow(d1, 2) + Math.pow(b1, 2)) / (1 - b1 + Double.MIN_VALUE);
+                    Double e2 = Math.sqrt(Math.pow(d2, 2) + Math.pow(b2, 2)) / (1 - b2 + Double.MIN_VALUE);
+                    return e1.compareTo(e2);
                 }
-                Double b1 = (1 - ((double)p1.free()) / ((double)p1.count()));
-                Double b2 = (1 - ((double)p2.free()) / ((double)p2.count()));
-                Double e1 = Math.sqrt(Math.pow(d1, 2) + Math.pow(b1, 2)) / (1 - b1 + Double.MIN_VALUE);
-                Double e2 = Math.sqrt(Math.pow(d2, 2) + Math.pow(b2, 2)) / (1 - b2 + Double.MIN_VALUE);
-                return e1.compareTo(e2);
             }catch (NullPointerException e) {
                 return 0;
             }

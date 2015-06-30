@@ -13,12 +13,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import java.util.Calendar;
-
 public class DetailsActivity extends ActionBarActivity {
 
     private ParkingSpot spot;
-    private DatePicker datePicker;
     private final DetailsActivity _this = this;
 
     @Override

@@ -2,18 +2,13 @@ package de.jkliemann.parkendd;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-
-import java.util.concurrent.ExecutionException;
-
+import android.widget.ProgressBar;
 
 public class MainActivity extends ActionBarActivity {
     SharedPreferences preferences;
@@ -21,7 +16,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RelativeLayout popup = (RelativeLayout)findViewById(R.id.main_layoutPageLoading);
+        ProgressBar popup = (ProgressBar)findViewById(R.id.progressBar);
+        popup.setIndeterminate(false);
+        popup.setProgress(0);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         gs.initLocation(this);
@@ -33,8 +30,8 @@ public class MainActivity extends ActionBarActivity {
     private void refresh(){
         try{
             Fetch f = new Fetch();
-            RelativeLayout popup = (RelativeLayout)findViewById(R.id.main_layoutPageLoading);
-            f.setUi((ListView)findViewById(R.id.spotListView), this, popup);
+            ProgressBar popup = (ProgressBar)findViewById(R.id.progressBar);
+            f.setUi((ListView) findViewById(R.id.spotListView), this, popup);
             f.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)));
         }catch(Exception e){
             e.printStackTrace();
