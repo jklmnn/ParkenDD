@@ -61,4 +61,7 @@
     <string name="count">Count</string>
     <string name="distance">Distance</string>
     <string name="map">Map</string>
+    <string name="title_activity_place">PlaceActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

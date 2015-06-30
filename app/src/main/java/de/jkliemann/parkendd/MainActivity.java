@@ -24,10 +24,6 @@ public class MainActivity extends ActionBarActivity {
             //Uri geouri = Uri.parse()
             Log.i("Intent", uri.toString());
         }
-        if(intent.ACTION_VIEW.equals(intent.getAction())){
-            Uri geouri = intent.getData();
-            Log.i("geo", geouri.toString());
-        }
         ProgressBar popup = (ProgressBar)findViewById(R.id.progressBar);
         popup.setIndeterminate(false);
         popup.setProgress(0);
