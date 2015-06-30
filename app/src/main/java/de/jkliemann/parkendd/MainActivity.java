@@ -2,9 +2,11 @@ package de.jkliemann.parkendd;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -16,6 +18,16 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        if(intent.ACTION_SEND.equals(intent.getAction())){
+            String uri = intent.getStringExtra(intent.EXTRA_TEXT);
+            //Uri geouri = Uri.parse()
+            Log.i("Intent", uri.toString());
+        }
+        if(intent.ACTION_VIEW.equals(intent.getAction())){
+            Uri geouri = intent.getData();
+            Log.i("geo", geouri.toString());
+        }
         ProgressBar popup = (ProgressBar)findViewById(R.id.progressBar);
         popup.setIndeterminate(false);
         popup.setProgress(0);
