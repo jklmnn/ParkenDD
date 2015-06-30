@@ -30,10 +30,6 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name=".ForecastActivity"
-            android:label="@string/title_activity_forecast" >
-        </activity>
-        <activity
             android:name=".DetailsActivity"
             android:label="@string/title_activity_details" >
         </activity>

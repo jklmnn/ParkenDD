@@ -74,6 +74,9 @@ public class Fetch extends AsyncTask<String, Void, Void> {
                     String count = lot.getString(COUNT);
                     String free = lot.getString(FREE);
                     String state = lot.getString(STATE);
+                    if(state.equals("few") || state.equals("many") || state.equals("full")){
+                        state = "open";
+                    }
                     double lat, lon;
                     Boolean forecast = lot.getBoolean(FORECAST);
                     try {
