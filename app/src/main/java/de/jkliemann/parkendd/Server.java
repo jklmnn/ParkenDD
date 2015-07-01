@@ -1,11 +1,6 @@
 package de.jkliemann.parkendd;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,25 +20,15 @@ import java.util.Iterator;
  * Created by jkliemann on 05.01.15.
  */
 
-public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
+public class Server extends AsyncTask<String, Void, ArrayList<City>> {
 
     private static final String MAIL = "mail";
     private static final String CITIES = "cities";
     private static final String VERSION = "api_version";
     private String mail;
     private ArrayList<City> citylist;
-    private Context context;
     private String version;
     private int error = 0;
-    private ListView spotView;
-    private ProgressBar popup;
-
-    public void setUi(ListView spotView, Context context, ProgressBar popup){
-        this.spotView = spotView;
-        this.context = context;
-        this.popup = popup;
-        popup.setVisibility(View.VISIBLE);
-    }
 
     private ArrayList<City> parseJSon(String data){
         ArrayList<City> cities = new ArrayList<>();
@@ -81,20 +66,16 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
             e.printStackTrace();
             error = 1;
         }
-        popup.setProgress(15);
         return cities;
     }
 
-    protected ArrayList<City> doInBackground(Context... context){
-        this.context = context[0];
-        String urlstring = PreferenceManager.getDefaultSharedPreferences(this.context).getString("fetch_url", this.context.getString(R.string.default_fetch_url));
+    protected ArrayList<City> doInBackground(String... urlstring){
         String meta = "";
         try {
-            URL url = new URL(urlstring);
+            URL url = new URL(urlstring[0]);
             HttpURLConnection connection = null;
             try {
                 connection = (HttpURLConnection) url.openConnection();
-                popup.setProgress(5);
             }catch (IOException e) {
                 e.printStackTrace();
                 error = 2;
@@ -105,18 +86,8 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
                     InputStream in = connection.getInputStream();
                     br = new BufferedReader(new InputStreamReader(in));
                     String line = "";
-                    try {
-                        int len = connection.getContentLength();
-                        double part;
-                        while ((line = br.readLine()) != null) {
-                            part = (double)line.length() / (double)len;
-                            meta = meta + line;
-                            popup.setProgress(popup.getProgress() + (int)(part * 90));
-                        }
-                    }catch (NullPointerException e){
-                        while ((line = br.readLine()) != null) {
-                            meta = meta + line;
-                        }
+                    while ((line = br.readLine()) != null) {
+                        meta = meta + line;
                     }
                 }catch (IOException e) {
                     e.printStackTrace();
@@ -124,7 +95,6 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
                 }
                 connection.disconnect();
             }
-            popup.setProgress(95);
         }catch (MalformedURLException e){
             e.printStackTrace();
             error = 3;
@@ -133,25 +103,6 @@ public class Server extends AsyncTask<Context, Void, ArrayList<City>> {
         return citylist;
     }
 
-    protected void onPostExecute(ArrayList<City> cities){
-        GlobalSettings.getGlobalSettings().setMail(mail);
-        GlobalSettings.getGlobalSettings().setCitylist(citylist);
-        switch (error){
-            case 1:
-                Error.showLongErrorToast(context, context.getString(R.string.invalid_error));
-                return;
-            case 2:
-                Error.showLongErrorToast(context, context.getString(R.string.invalid_error));
-                return;
-            case 3:
-                Error.showLongErrorToast(context, context.getString(R.string.url_error));
-                return;
-            default:
-                break;
-        }
-        Fetch ff = new Fetch();
-        popup.setProgress(100);
-        ff.setUi(spotView, this.context, popup);
-        ff.execute(PreferenceManager.getDefaultSharedPreferences(context).getString("fetch_url", context.getString(R.string.default_fetch_url)));
+    protected void onPostExecute(ArrayList<City> cities) {
     }
 }
