@@ -1,8 +1,6 @@
 package de.jkliemann.parkendd;
 
 import android.os.AsyncTask;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;

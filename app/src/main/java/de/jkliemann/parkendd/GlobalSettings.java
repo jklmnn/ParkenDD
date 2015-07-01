@@ -17,7 +17,6 @@ public class GlobalSettings {
 
     private static GlobalSettings mInstance = null;
     private ArrayList<City> citylist;
-    private String mail;
     private Context context;
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -25,11 +24,9 @@ public class GlobalSettings {
     private int API_V_MAJOR;
     private int API_V_MINOR;
     private Location providedLocation = null;
-    public enum LOCATIONTYPE {PHONE, PROVIDED};
 
     private GlobalSettings(){
         citylist = null;
-        mail = "";
         locationManager = null;
         locationListener = null;
         locationProvider = "network";
@@ -93,10 +90,6 @@ public class GlobalSettings {
         return citylist;
     }
 
-    public String getMail(){
-        return mail;
-    }
-
     public int getAPI_V_MAJOR(){
         return API_V_MAJOR;
     }
@@ -127,10 +120,6 @@ public class GlobalSettings {
         if(citylist instanceof ArrayList){
             this.citylist = (ArrayList)citylist;
         }
-    }
-
-    public void setMail(String mail){
-        this.mail = mail;
     }
 
     public void setAPI(int maj, int min){

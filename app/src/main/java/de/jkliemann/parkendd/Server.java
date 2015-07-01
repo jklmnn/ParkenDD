@@ -1,7 +1,6 @@
 package de.jkliemann.parkendd;
 
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
