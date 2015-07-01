@@ -18,22 +18,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 
-public class PlaceActivity extends ActionBarActivity {
+public class PlaceActivity extends ActionBarActivity implements ServerInterface{
 
     private SharedPreferences preferences;
     private final PlaceActivity _this = this;
+    private ProgressBar pg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
-        ProgressBar pg = (ProgressBar)findViewById(R.id.progressBar);
+        pg = (ProgressBar)findViewById(R.id.progressBar);
         pg.setIndeterminate(true);
         pg.setVisibility(View.VISIBLE);
-        pg.setProgress(0);
         Object data = null;
         Intent intent = getIntent();
         TextView tv = (TextView)findViewById(R.id.textView);
@@ -42,42 +43,35 @@ public class PlaceActivity extends ActionBarActivity {
         if(intent.ACTION_VIEW.equals(intent.getAction())){
             data = intent.getData();
         }
-        try {
-            Server s = new Server();
-            NominatimOSM nosm = new NominatimOSM();
-            nosm.execute(data);
-            s.execute(preferences.getString("fetch_url",getString(R.string.default_fetch_url)));
-            try{
-                ArrayList<City> cityArrayList = s.get();
-                GlobalSettings.getGlobalSettings().setCitylist(cityArrayList);
-                GlobalSettings.getGlobalSettings().setLocation(nosm.get());
-                refresh();
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }catch (ExecutionException e){
-                e.printStackTrace();
-            }
+        Server s = new Server(this);
+        NominatimOSM nosm = new NominatimOSM(this);
+        nosm.execute(data);
+        s.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)));
+    }
+
+    public void onMetaFinished(ArrayList<City> cities){
+        GlobalSettings.getGlobalSettings().setCitylist(cities);
+        refresh();
+    }
+
+    public void onFetchFinished(City city){
+        setList(city);
+    }
+
+    public void onNominatimFinished(Location loc){
+        GlobalSettings.getGlobalSettings().setLocation(loc);
+        TextView tv = (TextView)findViewById(R.id.textView);
+        try{
+            tv.setText(GlobalSettings.getGlobalSettings().getLastKnownLocation().getExtras().getString("detail"));
         }catch (NullPointerException e){
-            tv.setText("null");
             e.printStackTrace();
+            tv.setText("null");
         }
-        pg.setVisibility(View.INVISIBLE);
     }
 
     private void refresh(){
-        Fetch f = new Fetch();
+        Fetch f = new Fetch(this);
         f.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)), preferences.getString("city", getString(R.string.default_city)));
-        TextView tv = (TextView)findViewById(R.id.textView);
-        tv.setText(GlobalSettings.getGlobalSettings().getLastKnownLocation().getExtras().getString("detail"));
-        try{
-            setList(f.get());
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }catch (ExecutionException e){
-            e.printStackTrace();
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
     }
 
 
@@ -154,6 +148,7 @@ public class PlaceActivity extends ActionBarActivity {
                 }
             }
         });
+        pg.setVisibility(View.INVISIBLE);
     }
 
     @Override

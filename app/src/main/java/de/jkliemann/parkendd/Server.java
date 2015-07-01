@@ -1,6 +1,7 @@
 package de.jkliemann.parkendd;
 
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBarActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +30,12 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
     private ArrayList<City> citylist;
     private String version;
     private int error = 0;
+
+    private final ServerInterface metaFinished;
+
+    public Server(ServerInterface m){
+        this.metaFinished = m;
+    }
 
     private ArrayList<City> parseJSon(String data){
         ArrayList<City> cities = new ArrayList<>();
@@ -69,6 +76,7 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
         return cities;
     }
 
+
     protected ArrayList<City> doInBackground(String... urlstring){
         String meta = "";
         try {
@@ -104,5 +112,6 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
     }
 
     protected void onPostExecute(ArrayList<City> cities) {
+        metaFinished.onMetaFinished(cities);
     }
 }

@@ -1,6 +1,8 @@
 package de.jkliemann.parkendd;
 
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +42,12 @@ public class Fetch extends AsyncTask<String, Void, City> {
     private static final String ID = "id";
     private City CITY;
     private int error = 0;
+
+    private final ServerInterface fetchFinished;
+
+    public Fetch(ServerInterface f){
+        this.fetchFinished = f;
+    }
 
     private ArrayList<ParkingSpot> parseOldJSon(String json){
         ArrayList<ParkingSpot> spots = new ArrayList<>();
@@ -218,6 +226,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
         }
     }
 
+
     protected City doInBackground(String... ct){
         CITY = GlobalSettings.getGlobalSettings().getCityByName(ct[1]);
         String fetch_url = ct[0];
@@ -237,5 +246,6 @@ public class Fetch extends AsyncTask<String, Void, City> {
     }
 
     protected void onPostExecute(City c) {
+        fetchFinished.onFetchFinished(c);
     }
 }

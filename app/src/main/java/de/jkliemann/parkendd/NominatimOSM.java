@@ -1,13 +1,10 @@
 package de.jkliemann.parkendd;
 
 
-import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.Callable;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -28,6 +26,14 @@ public class NominatimOSM extends AsyncTask<Object, Void, Location> {
 
     private static final String host = "https://nominatim.openstreetmap.org";
     private static final String format = "json";
+
+    private final ServerInterface osmFinished;
+
+    public NominatimOSM(ServerInterface osmf){
+
+        osmFinished = osmf;
+    }
+
 
     protected Location doInBackground(Object... objs){
         Uri geouri = null;
@@ -82,5 +88,6 @@ public class NominatimOSM extends AsyncTask<Object, Void, Location> {
     }
 
     protected void onPostExecute(Location loc){
+        osmFinished.onNominatimFinished(loc);
     }
 }

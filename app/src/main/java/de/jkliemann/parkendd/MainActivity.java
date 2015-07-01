@@ -3,6 +3,7 @@ package de.jkliemann.parkendd;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,53 +15,45 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends ActionBarActivity {
-
-    private final MainActivity _this = this;
+public class MainActivity extends ActionBarActivity implements ServerInterface {
 
     SharedPreferences preferences;
+    private final MainActivity _this = this;
+    private ProgressBar pg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ProgressBar pg = (ProgressBar)findViewById(R.id.progressBar);
-        pg.setVisibility(View.VISIBLE);
+        pg = (ProgressBar)findViewById(R.id.progressBar);
         pg.setIndeterminate(true);
+        pg.setVisibility(View.VISIBLE);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         gs.initLocation(this);
-        Server s = new Server();
+        Server s = new Server(this);
         s.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)));
-        try{
-            ArrayList<City> citylist = s.get();
-            gs.setCitylist(citylist);
-            refresh();
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }catch (ExecutionException e){
-            e.printStackTrace();
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
-        pg.setVisibility(View.INVISIBLE);
+    }
+
+    public void onMetaFinished(ArrayList<City> cities){
+        GlobalSettings.getGlobalSettings().setCitylist(cities);
+        refresh();
+    }
+
+    public void onFetchFinished(City city){
+        setList(city);
+    }
+
+    public void onNominatimFinished(Location location){
     }
 
     private void refresh(){
         GlobalSettings.getGlobalSettings().setLocation(null);
         this.setTitle(getString(R.string.app_name) + " - " + preferences.getString("city", getString(R.string.default_city)));
         try{
-            Fetch f = new Fetch();
+            Fetch f = new Fetch(this);
             f.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)), preferences.getString("city", getString(R.string.default_city)));
-            try{
-                City city = f.get();
-                setList(city);
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }catch (ExecutionException e){
-                e.printStackTrace();
-            }
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -139,6 +132,7 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
+        pg.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -165,11 +159,8 @@ public class MainActivity extends ActionBarActivity {
             startActivity(about);
         }
         if(id == R.id.action_refresh){
-            ProgressBar pg = (ProgressBar)findViewById(R.id.progressBar);
-            pg.setIndeterminate(true);
             pg.setVisibility(View.VISIBLE);
             this.refresh();
-            pg.setVisibility(View.INVISIBLE);
         }
 
         return super.onOptionsItemSelected(item);
