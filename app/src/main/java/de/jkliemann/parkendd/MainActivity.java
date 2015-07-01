@@ -27,8 +27,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         ProgressBar pg = (ProgressBar)findViewById(R.id.progressBar);
         pg.setVisibility(View.VISIBLE);
-        pg.setIndeterminate(false);
-        pg.setProgress(0);
+        pg.setIndeterminate(true);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         gs.initLocation(this);
@@ -37,19 +36,18 @@ public class MainActivity extends ActionBarActivity {
         try{
             ArrayList<City> citylist = s.get();
             gs.setCitylist(citylist);
-            refresh(20);
+            refresh();
         }catch (InterruptedException e){
             e.printStackTrace();
         }catch (ExecutionException e){
             e.printStackTrace();
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
-        pg.setProgress(0);
         pg.setVisibility(View.INVISIBLE);
     }
 
-    private void refresh(int progress){
-        ProgressBar pg = (ProgressBar)findViewById(R.id.progressBar);
-        pg.setProgress(progress);
+    private void refresh(){
         GlobalSettings.getGlobalSettings().setLocation(null);
         this.setTitle(getString(R.string.app_name) + " - " + preferences.getString("city", getString(R.string.default_city)));
         try{
@@ -57,7 +55,6 @@ public class MainActivity extends ActionBarActivity {
             f.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)), preferences.getString("city", getString(R.string.default_city)));
             try{
                 City city = f.get();
-                pg.setProgress(70);
                 setList(city);
             }catch (InterruptedException e){
                 e.printStackTrace();
@@ -66,7 +63,6 @@ public class MainActivity extends ActionBarActivity {
             }
         }catch(Exception e){
             e.printStackTrace();
-            Error.showLongErrorToast(this, e.getMessage());
         }
     }
 
@@ -170,8 +166,9 @@ public class MainActivity extends ActionBarActivity {
         }
         if(id == R.id.action_refresh){
             ProgressBar pg = (ProgressBar)findViewById(R.id.progressBar);
+            pg.setIndeterminate(true);
             pg.setVisibility(View.VISIBLE);
-            this.refresh(0);
+            this.refresh();
             pg.setVisibility(View.INVISIBLE);
         }
 

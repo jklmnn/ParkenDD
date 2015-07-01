@@ -4,14 +4,17 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,17 +30,17 @@ public class PlaceActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
+        ProgressBar pg = (ProgressBar)findViewById(R.id.progressBar);
+        pg.setIndeterminate(true);
+        pg.setVisibility(View.VISIBLE);
+        pg.setProgress(0);
         Object data = null;
         Intent intent = getIntent();
         TextView tv = (TextView)findViewById(R.id.textView);
         tv.setText("");
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if(intent.ACTION_VIEW.equals(intent.getAction())){
-            data = (Object)intent.getData();
-        }
-        if(intent.ACTION_SEND.equals(intent.getAction())){
-            String uri = intent.getStringExtra(intent.EXTRA_TEXT);
-            //Uri geouri = Uri.parse()
+            data = intent.getData();
         }
         try {
             Server s = new Server();
@@ -58,6 +61,7 @@ public class PlaceActivity extends ActionBarActivity {
             tv.setText("null");
             e.printStackTrace();
         }
+        pg.setVisibility(View.INVISIBLE);
     }
 
     private void refresh(){
@@ -70,6 +74,8 @@ public class PlaceActivity extends ActionBarActivity {
         }catch (InterruptedException e){
             e.printStackTrace();
         }catch (ExecutionException e){
+            e.printStackTrace();
+        }catch (NullPointerException e){
             e.printStackTrace();
         }
     }

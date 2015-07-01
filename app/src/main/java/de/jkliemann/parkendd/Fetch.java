@@ -129,6 +129,8 @@ public class Fetch extends AsyncTask<String, Void, City> {
         }catch (UnsupportedEncodingException e){
             e.printStackTrace();
             error = 4;
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
         return spots;
     }
@@ -221,7 +223,12 @@ public class Fetch extends AsyncTask<String, Void, City> {
         String fetch_url = ct[0];
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0){
-            CITY.setSpots(fetchOldAPI(fetch_url));
+            try {
+                CITY.setSpots(fetchOldAPI(fetch_url));
+            }catch (NullPointerException e){
+                e.printStackTrace();
+                return null;
+            }
         }
         if(gs.getAPI_V_MAJOR() == 1 && gs.getAPI_V_MINOR() == 0){
             fetchAPI_1_0(fetch_url);
