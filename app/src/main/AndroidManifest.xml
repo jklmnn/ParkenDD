@@ -19,11 +19,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".AboutActivity"
@@ -37,15 +32,20 @@
             android:name=".DetailsActivity"
             android:label="@string/title_activity_details" >
         </activity>
-       <!-- <activity
+        <activity
             android:name=".PlaceActivity"
-            android:label="@string/title_activity_place" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="geo" />
             </intent-filter>
-        </activity>-->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -4,10 +4,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.service.dreams.DreamService;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,12 +29,6 @@ public class MainActivity extends ActionBarActivity {
         pg.setVisibility(View.VISIBLE);
         pg.setIndeterminate(false);
         pg.setProgress(0);
-        Intent intent = getIntent();
-        if(intent.ACTION_SEND.equals(intent.getAction())){
-            String uri = intent.getStringExtra(intent.EXTRA_TEXT);
-            //Uri geouri = Uri.parse()
-            Log.i("Intent", uri.toString());
-        }
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         gs.initLocation(this);
@@ -58,6 +50,7 @@ public class MainActivity extends ActionBarActivity {
     private void refresh(int progress){
         ProgressBar pg = (ProgressBar)findViewById(R.id.progressBar);
         pg.setProgress(progress);
+        GlobalSettings.getGlobalSettings().setLocation(null);
         this.setTitle(getString(R.string.app_name) + " - " + preferences.getString("city", getString(R.string.default_city)));
         try{
             Fetch f = new Fetch();

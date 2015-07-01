@@ -24,6 +24,8 @@ public class GlobalSettings {
     private String locationProvider;
     private int API_V_MAJOR;
     private int API_V_MINOR;
+    private Location providedLocation = null;
+    public enum LOCATIONTYPE {PHONE, PROVIDED};
 
     private GlobalSettings(){
         citylist = null;
@@ -70,12 +72,20 @@ public class GlobalSettings {
         locationManager.requestLocationUpdates(locationProvider, (long) 60000, (float) 50, locationListener, Looper.getMainLooper());
     }
 
-    public Location getLastKnownLocation() {
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("use_location", true)){
-            return locationManager.getLastKnownLocation(locationProvider);
-        }else {
-            return null;
+    public void setLocation(Location loc){
+        if(loc == null){
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("use_location", true)){
+                providedLocation = locationManager.getLastKnownLocation(locationProvider);
+            }else {
+                return;
+            }
+        }else{
+            providedLocation = loc;
         }
+    }
+
+    public Location getLastKnownLocation() {
+        return providedLocation;
     }
 
 
