@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.service.dreams.DreamService;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,6 +58,7 @@ public class MainActivity extends ActionBarActivity {
     private void refresh(int progress){
         ProgressBar pg = (ProgressBar)findViewById(R.id.progressBar);
         pg.setProgress(progress);
+        this.setTitle(getString(R.string.app_name) + " - " + preferences.getString("city", getString(R.string.default_city)));
         try{
             Fetch f = new Fetch();
             f.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)), preferences.getString("city", getString(R.string.default_city)));

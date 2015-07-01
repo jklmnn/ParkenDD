@@ -83,16 +83,16 @@ public class SettingsActivity extends PreferenceActivity{
         sortList.setEntryValues(res.getStringArray(R.array.setting_sort_options));
         sortList.setEntries(res.getStringArray(R.array.setting_sort_options));
         bindPreferenceSummaryToValue(sortList);
-        fakeHeader = new PreferenceCategory(this);
+        bindResetToDefault(findPreference("reset"));
+        /*fakeHeader = new PreferenceCategory(this);
         fakeHeader.setTitle(R.string.header_network);
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_network);
-        bindResetToDefault(findPreference("reset"));
         EditTextPreference url = (EditTextPreference)findPreference("fetch_url");
         if(url.getText().equals(getString(R.string.old_fetch_url))){
             url.setText(getString(R.string.default_fetch_url));
         }
-        bindPreferenceSummaryToValue(url);
+        bindPreferenceSummaryToValue(url);*/
     }
 
     /**
@@ -155,9 +155,9 @@ public class SettingsActivity extends PreferenceActivity{
                     ListPreference city = (ListPreference)preferenceManager.findPreference("city");
                     city.setValue(context.getString(R.string.default_city));
                     city.setSummary(context.getString(R.string.default_city));
-                    EditTextPreference url = (EditTextPreference)preferenceManager.findPreference("fetch_url");
-                    url.setText(context.getString(R.string.default_fetch_url));
-                    url.setSummary(context.getString(R.string.default_fetch_url));
+                    //EditTextPreference url = (EditTextPreference)preferenceManager.findPreference("fetch_url");
+                    //url.setText(context.getString(R.string.default_fetch_url));
+                    //url.setSummary(context.getString(R.string.default_fetch_url));
                     CheckBoxPreference use_location = (CheckBoxPreference)preferenceManager.findPreference("use_location");
                     use_location.setChecked(true);
                     CheckBoxPreference hide_closed = (CheckBoxPreference)preferenceManager.findPreference("hide_closed");
