@@ -18,18 +18,21 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-public class PlaceActivity extends ActionBarActivity implements ServerInterface{
+public class PlaceActivity extends ActionBarActivity implements ServerInterface, FetchInterface, NominatimInterface{
 
     private SharedPreferences preferences;
     private final PlaceActivity _this = this;
     private ProgressBar pg;
+    private int progress = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
         pg = (ProgressBar)findViewById(R.id.progressBar);
-        pg.setIndeterminate(true);
+        pg.setIndeterminate(false);
+        pg.setProgress(progress);
+        pg.setMax(Fetch.PROGRESS + Server.PROGRESS + NominatimOSM.PROGRESS + 1);
         pg.setVisibility(View.VISIBLE);
         Object data = null;
         Intent intent = getIntent();
@@ -52,6 +55,11 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface{
 
     public void onFetchFinished(City city){
         setList(city);
+    }
+
+    public void updateProgress(){
+        progress += 1;
+        pg.setProgress(progress);
     }
 
     public void onNominatimFinished(Location loc){
@@ -144,6 +152,7 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface{
                 }
             }
         });
+        updateProgress();
         pg.setVisibility(View.INVISIBLE);
     }
 

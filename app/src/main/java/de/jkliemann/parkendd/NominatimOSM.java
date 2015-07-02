@@ -26,11 +26,17 @@ public class NominatimOSM extends AsyncTask<Object, Void, Location> {
     private static final String host = "https://nominatim.openstreetmap.org";
     private static final String format = "json";
 
-    private final ServerInterface osmFinished;
+    public static final int PROGRESS = 3;
 
-    public NominatimOSM(ServerInterface osmf){
+    private final NominatimInterface osmFinished;
+
+    public NominatimOSM(NominatimInterface osmf){
 
         osmFinished = osmf;
+    }
+
+    protected void onProgressUpdate(Void... v){
+        osmFinished.updateProgress();
     }
 
 
@@ -51,6 +57,7 @@ public class NominatimOSM extends AsyncTask<Object, Void, Location> {
             HttpsURLConnection connection;
             try{
                 connection = (HttpsURLConnection)url.openConnection();
+                publishProgress();
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line;
                 while((line = br.readLine()) != null){
@@ -58,6 +65,7 @@ public class NominatimOSM extends AsyncTask<Object, Void, Location> {
                 }
                 br.close();
                 connection.disconnect();
+                publishProgress();
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -80,6 +88,7 @@ public class NominatimOSM extends AsyncTask<Object, Void, Location> {
                 extra.putString("detail", name);
                 loc.setExtras(extra);
             }
+            publishProgress();
         }catch (JSONException e){
             e.printStackTrace();
         }

@@ -16,19 +16,22 @@ import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
-public class MainActivity extends ActionBarActivity implements ServerInterface {
+public class MainActivity extends ActionBarActivity implements ServerInterface, FetchInterface {
 
     SharedPreferences preferences;
     private final MainActivity _this = this;
     private ProgressBar pg;
+    private int progress = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pg = (ProgressBar)findViewById(R.id.progressBar);
-        pg.setIndeterminate(true);
+        pg.setIndeterminate(false);
         pg.setVisibility(View.VISIBLE);
+        pg.setProgress(0);
+        pg.setMax(Fetch.PROGRESS + Server.PROGRESS + 1);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         gs.initLocation(this);
@@ -45,7 +48,9 @@ public class MainActivity extends ActionBarActivity implements ServerInterface {
         setList(city);
     }
 
-    public void onNominatimFinished(Location location){
+    public void updateProgress(){
+        progress += 1;
+        pg.setProgress(progress);
     }
 
     private void refresh(){
@@ -132,6 +137,7 @@ public class MainActivity extends ActionBarActivity implements ServerInterface {
                 }
             }
         });
+        updateProgress();
         pg.setVisibility(View.INVISIBLE);
     }
 
@@ -160,6 +166,9 @@ public class MainActivity extends ActionBarActivity implements ServerInterface {
         }
         if(id == R.id.action_refresh){
             pg.setVisibility(View.VISIBLE);
+            progress = 0;
+            pg.setProgress(0);
+            pg.setMax(Fetch.PROGRESS + 1);
             this.refresh();
         }
 

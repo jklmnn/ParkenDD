@@ -40,10 +40,11 @@ public class Fetch extends AsyncTask<String, Void, City> {
     private static final String ID = "id";
     private City CITY;
     private int error = 0;
+    public static final int PROGRESS = 7;
 
-    private final ServerInterface fetchFinished;
+    private final FetchInterface fetchFinished;
 
-    public Fetch(ServerInterface f){
+    public Fetch(FetchInterface f){
         this.fetchFinished = f;
     }
 
@@ -55,6 +56,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
                 JSONObject catg = global.getJSONObject(i);
                 String category = catg.getString(NAME);
                 JSONArray lots = catg.getJSONArray(LOTS);
+                publishProgress();
                 for(int j = 0; j < lots.length(); j++){
                     JSONObject lot = lots.getJSONObject(j);
                     String name = lot.getString(NAME);
@@ -82,6 +84,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
                     }
                     spots.add(new ParkingSpot(name, state, city, "", Integer.parseInt(count), Integer.parseInt(free), lat, lon, forecast));
                 }
+                publishProgress();
             }
         }catch(JSONException e){
             e.printStackTrace();
@@ -99,6 +102,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
             HttpURLConnection cn = null;
             try {
                 cn = (HttpURLConnection) url.openConnection();
+                publishProgress();
             }catch (IOException e){
                 e.printStackTrace();
                 error = 3;
@@ -113,6 +117,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
                     while ((line = br.readLine()) != null) {
                         json = json + line + "\n";
                     }
+                    publishProgress();
                 } catch (IOException e) {
                     e.printStackTrace();
                     error = 1;
@@ -128,6 +133,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
                 }
             }
             cn.disconnect();
+            publishProgress();
             spots = parseOldJSon(json);
         }catch(MalformedURLException e) {
             e.printStackTrace();
@@ -163,13 +169,16 @@ public class Fetch extends AsyncTask<String, Void, City> {
             }
             try{
                 connection = (HttpURLConnection)url.openConnection();
+                publishProgress();
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = "";
                 while ((line = br.readLine()) != null) {
                     data = data + line;
                 }
+                publishProgress();
                 br.close();
                 connection.disconnect();
+                publishProgress();
             }catch (IOException e){
                 e.printStackTrace();
                 error = 3;
@@ -185,6 +194,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
                 last_updated = global.getString(LAST_UPDATED);
                 data_source = global.getString(DATA_SOURCE);
                 JSONArray spotarray = global.getJSONArray(LOTS);
+                publishProgress();
                 for(int i = 0; i < spotarray.length(); i++){
                     try {
                         JSONObject lot = spotarray.getJSONObject(i);
@@ -209,6 +219,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
                     }catch (JSONException e){
                         e.printStackTrace();
                     }
+                    publishProgress();
                 }
             }catch (JSONException e){
                 e.printStackTrace();
@@ -224,11 +235,16 @@ public class Fetch extends AsyncTask<String, Void, City> {
         }
     }
 
+    protected void onProgressUpdate(Void... v){
+        fetchFinished.updateProgress();
+    }
+
 
     protected City doInBackground(String... ct){
         CITY = GlobalSettings.getGlobalSettings().getCityByName(ct[1]);
         String fetch_url = ct[0];
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
+        publishProgress();
         if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0){
             try {
                 CITY.setSpots(fetchOldAPI(fetch_url));
@@ -240,6 +256,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
         if(gs.getAPI_V_MAJOR() == 1 && gs.getAPI_V_MINOR() == 0){
             fetchAPI_1_0(fetch_url);
         }
+        publishProgress();
         return CITY;
     }
 

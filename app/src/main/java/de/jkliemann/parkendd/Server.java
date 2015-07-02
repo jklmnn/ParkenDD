@@ -29,6 +29,7 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
     private ArrayList<City> citylist;
     private String version;
     private int error = 0;
+    public static final int PROGRESS = 4;
 
     private final ServerInterface metaFinished;
 
@@ -49,6 +50,7 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
                 e.printStackTrace();
                 gs.setAPI(0, 0);
             }
+            publishProgress();
             if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0) {
                 mail = global.getString(MAIL);
                 JSONArray citystrings = global.getJSONArray(CITIES);
@@ -72,9 +74,13 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
             e.printStackTrace();
             error = 1;
         }
+        publishProgress();
         return cities;
     }
 
+    protected void onProgressUpdate(Void... v){
+        metaFinished.updateProgress();
+    }
 
     protected ArrayList<City> doInBackground(String... urlstring){
         String meta = "";
@@ -83,6 +89,7 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
             HttpURLConnection connection = null;
             try {
                 connection = (HttpURLConnection) url.openConnection();
+                publishProgress();
             }catch (IOException e) {
                 e.printStackTrace();
                 error = 2;
@@ -101,6 +108,7 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
                     error = 2;
                 }
                 connection.disconnect();
+                publishProgress();
             }
         }catch (MalformedURLException e){
             e.printStackTrace();
