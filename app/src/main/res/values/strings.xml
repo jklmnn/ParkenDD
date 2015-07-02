@@ -53,6 +53,7 @@
     <string name="url_error">Invalid URL</string>
     <string name="connection_error">Connection error</string>
     <string name="intent_error">No suitable application found.</string>
+    <string name="no_address_error">No address found.</string>
     <!--view-->
     <string name="of">of</string>
     <string name="title_activity_forecast">@string/action_forecast</string>

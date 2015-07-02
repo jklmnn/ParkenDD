@@ -5,6 +5,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +51,7 @@ public class NominatimOSM extends AsyncTask<Object, Void, Location> {
             String query = geouri.getEncodedQuery();
             URL url = null;
             try{
-                url = new URL(host + "/search?" + query + "&format=" + format);
+                url = new URL(host + "/search?" + query + "&format=" + format + "&addressdetails=1");
             }catch (MalformedURLException e){
                 e.printStackTrace();
             }
@@ -63,6 +64,7 @@ public class NominatimOSM extends AsyncTask<Object, Void, Location> {
                 while((line = br.readLine()) != null){
                     data = data + line;
                 }
+                Log.i("OSM JSON", data);
                 br.close();
                 connection.disconnect();
                 publishProgress();
@@ -80,10 +82,11 @@ public class NominatimOSM extends AsyncTask<Object, Void, Location> {
                 JSONObject jsondata = osm.getJSONObject(0);
                 double lat = jsondata.getDouble("lat");
                 double lon = jsondata.getDouble("lon");
-                String name = jsondata.getString("display_name");
                 loc = new Location("gps");
                 loc.setLatitude(lat);
                 loc.setLongitude(lon);
+                JSONObject address = jsondata.getJSONObject("address");
+                String name = address.getString("road") + " " + address.getString("house_number") + "\n" + address.getString("postcode") + " " + address.getString("city");
                 Bundle extra = new Bundle();
                 extra.putString("detail", name);
                 loc.setExtras(extra);

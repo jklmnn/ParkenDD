@@ -3,10 +3,13 @@ package de.jkliemann.parkendd;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +18,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PlaceActivity extends ActionBarActivity implements ServerInterface, FetchInterface, NominatimInterface{
@@ -29,17 +34,17 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
-        pg = (ProgressBar)findViewById(R.id.progressBar);
+        pg = (ProgressBar) findViewById(R.id.progressBar);
         pg.setIndeterminate(false);
         pg.setProgress(progress);
         pg.setMax(Fetch.PROGRESS + Server.PROGRESS + NominatimOSM.PROGRESS + 1);
         pg.setVisibility(View.VISIBLE);
         Object data = null;
         Intent intent = getIntent();
-        TextView tv = (TextView)findViewById(R.id.textView);
+        TextView tv = (TextView) findViewById(R.id.textView);
         tv.setText("");
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if(intent.ACTION_VIEW.equals(intent.getAction())){
+        if (intent.ACTION_VIEW.equals(intent.getAction())) {
             data = intent.getData();
         }
         Server s = new Server(this);
@@ -66,10 +71,12 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
         GlobalSettings.getGlobalSettings().setLocation(loc);
         TextView tv = (TextView)findViewById(R.id.textView);
         try{
-            tv.setText(GlobalSettings.getGlobalSettings().getLastKnownLocation().getExtras().getString("detail"));
+            tv.setText(loc.getExtras().getString("detail"));
         }catch (NullPointerException e){
             e.printStackTrace();
-            tv.setText("null");
+            tv.setText(getString(R.string.no_address_error));
+            ListView spotView = (ListView)findViewById(R.id.spotListView);
+            spotView.setVisibility(View.INVISIBLE);
         }
     }
 

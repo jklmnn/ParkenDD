@@ -39,4 +39,5 @@
     <string name="setting_hide_closed">Geschlossene Parkplätze ausblenden.</string>
     <string name="setting_hide_full">Volle Parkplätze ausblenden.</string>
     <string name="setting_hide_nodata">Parkplätze ohne Daten ausblenden.</string>
+    <string name="no_address_error">Keine Adresse gefunden.</string>
 </resources>
