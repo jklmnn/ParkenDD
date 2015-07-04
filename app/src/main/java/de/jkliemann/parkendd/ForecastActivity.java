@@ -4,14 +4,37 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 
 public class ForecastActivity extends ActionBarActivity {
+
+    private final ForecastActivity _this = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
+        RelativeLayout datePickerLayout = (RelativeLayout)findViewById(R.id.datePickerLayout);
+        datePickerLayout.setVisibility(View.INVISIBLE);
+        Button okbutton = (Button)findViewById(R.id.okbutton);
+        okbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RelativeLayout datePickerLayout = (RelativeLayout)_this.findViewById(R.id.datePickerLayout);
+                datePickerLayout.setVisibility(View.INVISIBLE);
+            }
+        });
+        Button cancelbutton = (Button)findViewById(R.id.cancelbutton);
+        cancelbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RelativeLayout datePickerLayout = (RelativeLayout)_this.findViewById(R.id.datePickerLayout);
+                datePickerLayout.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
@@ -29,7 +52,9 @@ public class ForecastActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_datePicker) {
+            RelativeLayout datePickerLayout = (RelativeLayout)findViewById(R.id.datePickerLayout);
+            datePickerLayout.setVisibility(View.VISIBLE);
             return true;
         }
 

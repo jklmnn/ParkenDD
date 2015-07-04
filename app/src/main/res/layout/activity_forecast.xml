@@ -6,26 +6,63 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="de.jkliemann.parkendd.ForecastActivity">
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/dateChooseButton"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar2"
-        android:layout_below="@+id/dateChooseButton"
         android:layout_centerHorizontal="true" />
 
-    <ListView
+    <RelativeLayout
+        android:id="@+id/datePickerLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:background="@color/dim_foreground_disabled_material_dark">
+
+        <DatePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/datePicker"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/cancelbutton"
+            android:layout_alignTop="@+id/okbutton"
+            android:layout_alignLeft="@+id/datePicker"
+            android:layout_alignStart="@+id/datePicker" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/okbutton"
+            android:layout_below="@+id/datePicker"
+            android:layout_alignRight="@+id/datePicker"
+            android:layout_alignEnd="@+id/datePicker" />
+    </RelativeLayout>
+
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timePicker"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:timePickerMode="spinner"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/listView"
-        android:layout_below="@+id/progressBar2"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/timePicker"/>
 </RelativeLayout>
