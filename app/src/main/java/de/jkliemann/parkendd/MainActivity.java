@@ -171,6 +171,10 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
             pg.setMax(Fetch.PROGRESS + 1);
             this.refresh();
         }
+        if(id == R.id.action_forecast){
+            Intent forecast = new Intent(this, ForecastActivity.class);
+            startActivity(forecast);
+        }
 
         return super.onOptionsItemSelected(item);
     }
