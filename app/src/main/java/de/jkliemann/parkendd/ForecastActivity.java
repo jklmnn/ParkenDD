@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
@@ -30,11 +31,18 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
     private static final int dateOffset = 1900;
     private Map<ParkingSpot, Map<Date, Integer>> spotmap;
     private Date date;
+    private int progress = 0;
+    ProgressBar pg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
+        pg = (ProgressBar)findViewById(R.id.progressBar2);
+        pg.setVisibility(View.VISIBLE);
+        pg.setIndeterminate(false);
+        pg.setMax(FetchForecast.PROGRESS + 3);
+        pg.setProgress(progress);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         RelativeLayout datePickerLayout = (RelativeLayout)findViewById(R.id.datePickerLayout);
         datePickerLayout.setVisibility(View.INVISIBLE);
@@ -66,6 +74,7 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
                 updateList(hourOfDay);
             }
         });
+        updateProgress();
     }
 
     private void updateList(int hour){
@@ -73,23 +82,21 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         try {
             date.setHours(hour);
             date.setMinutes(0);
-            Log.i("SPOTMAP2", spotmap.toString());
             for(Map.Entry<ParkingSpot, Map<Date, Integer>> pair : spotmap.entrySet()){
-                Log.i("PAIR", pair.toString());
                 ParkingSpot spot = pair.getKey();
                 Map<Date, Integer> dataMap = (Map) pair.getValue();
                 try {
                     spot.setState("open");
-                    double perc = (double)dataMap.get(date) / 100;
+                    double perc = 1 - (double)dataMap.get(date) / 100;
                     double free = (double)spot.count() * perc;
-                    spot.setFree((int)free);
-                    Log.i("DATE", date.toString());
+                    spot.setFree((int) free);
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                     spot.setState("nodata");
                 }
                 spotList.add(spot);
             }
+            updateProgress();
             setList(spotList);
         }catch (NullPointerException e){
             e.printStackTrace();
@@ -98,14 +105,14 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
 
     public void onForecastFinished(final Date date, Map<ParkingSpot, Map<Date, Integer>> forecastMap){
         spotmap = forecastMap;
-        Log.i("SPOTMAP", forecastMap.toString());
         this.date = date;
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         updateList(timePicker.getCurrentHour());
     }
 
     public void updateProgress(){
-
+        progress += 1;
+        pg.setProgress(progress);
     }
 
     @Override
@@ -133,7 +140,6 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
     }
 
     private void setList(ArrayList<ParkingSpot> spots){
-        Log.i("SPOTS", spots.toString());
         ListView spotView = (ListView)findViewById(R.id.listView);
         String sortOptions[] = getResources().getStringArray(R.array.setting_sort_options);
         String sortPreference = PreferenceManager.getDefaultSharedPreferences(this).getString("sorting", sortOptions[0]);
@@ -189,7 +195,6 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
             preArray = spots.toArray(new ParkingSpot[spots.size()]);
         }
         spotArray = preArray;
-        Log.i("SPOTARRAY", spotArray[0].toString());
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
         /*spotView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -206,5 +211,7 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
                 }
             }
         });*/
+        updateProgress();
+        pg.setVisibility(View.INVISIBLE);
     }
 }
