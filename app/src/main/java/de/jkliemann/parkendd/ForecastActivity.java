@@ -52,6 +52,9 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
             public void onClick(View v) {
                 RelativeLayout datePickerLayout = (RelativeLayout) _this.findViewById(R.id.datePickerLayout);
                 datePickerLayout.setVisibility(View.INVISIBLE);
+                DatePicker datePicker = (DatePicker)findViewById(R.id.datePicker);
+                Date date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
+                loadDate(date);
             }
         });
         Button cancelbutton = (Button)findViewById(R.id.cancelbutton);
@@ -66,7 +69,8 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         Date today = new Date(cal.get(Calendar.YEAR) - dateOffset, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         FetchForecast ff = new FetchForecast(this);
         City city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
-        ff.execute(getString(R.string.default_fetch_url), city, today);
+        String fetchUrl = preferences.getString("fetch_url", getString(R.string.default_fetch_url));
+        ff.execute(fetchUrl, city, today);
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
@@ -74,6 +78,17 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
                 updateList(hourOfDay);
             }
         });
+        updateProgress();
+    }
+
+    private void loadDate(Date dt){
+        pg.setProgress(0);
+        pg.setVisibility(View.VISIBLE);
+        date = dt;
+        FetchForecast ff = new FetchForecast(this);
+        City city = GlobalSettings.getGlobalSettings().getCityByName(PreferenceManager.getDefaultSharedPreferences(this).getString("city", getString(R.string.default_city)));
+        String fetchUrl = PreferenceManager.getDefaultSharedPreferences(this).getString("fetch_url", getString(R.string.default_fetch_url));
+        ff.execute(fetchUrl, city, date);
         updateProgress();
     }
 
