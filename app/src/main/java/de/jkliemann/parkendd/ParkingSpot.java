@@ -127,6 +127,18 @@ public class ParkingSpot implements Parcelable{
         this.category = category;
     }
 
+    public void setState(String state) throws NullPointerException{
+        this.state = state;
+    }
+
+    public void setCount(int count) throws NullPointerException{
+        this.count = count;
+    }
+
+    public void setFree(int free) throws NullPointerException{
+        this.free = free;
+    }
+
     public String name(){
         return name;
     }

@@ -13,6 +13,20 @@
         android:id="@+id/progressBar2"
         android:layout_centerHorizontal="true" />
 
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timePicker"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:timePickerMode="spinner"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listView"
+        android:layout_below="@+id/timePicker"/>
+
     <RelativeLayout
         android:id="@+id/datePickerLayout"
         android:layout_width="wrap_content"
@@ -52,17 +66,5 @@
             android:layout_alignEnd="@+id/datePicker" />
     </RelativeLayout>
 
-    <TimePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timePicker"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:timePickerMode="spinner"/>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listView"
-        android:layout_below="@+id/timePicker"/>
 </RelativeLayout>

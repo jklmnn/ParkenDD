@@ -32,7 +32,7 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
     private static final DateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
     private static final DateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-DD'T'HH:mm:ss");
     private static final String DATA = "data";
-
+    private Date date;
     private final FetchForecastInterface forecastInterface;
 
     public static final int PROGRESS = 2;
@@ -105,6 +105,7 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
             }
             if (parm[2] instanceof Date){
                 date = queryDateFormat.format(parm[2]);
+                this.date = (Date)parm[2];
             }
             ArrayList<ParkingSpot> spotList = city.spots();
             publishProgress();
@@ -157,6 +158,6 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
     }
 
     protected void onPostExecute(Map<ParkingSpot, Map<Date, Integer>> forecastMap){
-        forecastInterface.onForecastFinished(forecastMap);
+        forecastInterface.onForecastFinished(this.date, forecastMap);
     }
 }
