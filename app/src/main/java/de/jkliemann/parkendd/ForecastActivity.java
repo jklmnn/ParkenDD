@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,8 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
 
     private final ForecastActivity _this = this;
     private static final int dateOffset = 1900;
+    private Map<ParkingSpot, Map<Date, Integer>> spotmap;
+    private Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,39 +55,53 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
             }
         });
         Calendar cal = Calendar.getInstance();
-        Date today = new Date(cal.get(Calendar.YEAR) - dateOffset, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_WEEK));
+        Date today = new Date(cal.get(Calendar.YEAR) - dateOffset, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         FetchForecast ff = new FetchForecast(this);
         City city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
         ff.execute(getString(R.string.default_fetch_url), city, today);
-    }
-
-    public void onForecastFinished(final Date date, Map<ParkingSpot, Map<Date, Integer>> forecastMap){
-        final Map<ParkingSpot, Map<Date, Integer>> spotmap = forecastMap;
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                ArrayList<ParkingSpot> spotList = new ArrayList<>();
-                Iterator it = spotmap.entrySet().iterator();
-                date.setHours(hourOfDay);
-                date.setMinutes(minute);
-                while (it.hasNext()){
-                    Map.Entry pair = (Map.Entry)it.next();
-                    ParkingSpot spot = (ParkingSpot)pair.getKey();
-                    Map<Date, Integer> dataMap = (Map)pair.getValue();
-                    it.remove();
-                    try{
-                        spot.setState("open");
-                        spot.setFree(dataMap.get(date));
-                    }catch (NullPointerException e){
-                        e.printStackTrace();
-                        spot.setState("nodata");
-                    }
-                    spotList.add(spot);
-                }
-                setList(spotList);
+                updateList(hourOfDay);
             }
         });
+    }
+
+    private void updateList(int hour){
+        ArrayList<ParkingSpot> spotList = new ArrayList<>();
+        try {
+            date.setHours(hour);
+            date.setMinutes(0);
+            Log.i("SPOTMAP2", spotmap.toString());
+            for(Map.Entry<ParkingSpot, Map<Date, Integer>> pair : spotmap.entrySet()){
+                Log.i("PAIR", pair.toString());
+                ParkingSpot spot = pair.getKey();
+                Map<Date, Integer> dataMap = (Map) pair.getValue();
+                try {
+                    spot.setState("open");
+                    double perc = (double)dataMap.get(date) / 100;
+                    double free = (double)spot.count() * perc;
+                    spot.setFree((int)free);
+                    Log.i("DATE", date.toString());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                    spot.setState("nodata");
+                }
+                spotList.add(spot);
+            }
+            setList(spotList);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void onForecastFinished(final Date date, Map<ParkingSpot, Map<Date, Integer>> forecastMap){
+        spotmap = forecastMap;
+        Log.i("SPOTMAP", forecastMap.toString());
+        this.date = date;
+        TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
+        updateList(timePicker.getCurrentHour());
     }
 
     public void updateProgress(){
@@ -116,7 +133,8 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
     }
 
     private void setList(ArrayList<ParkingSpot> spots){
-        ListView spotView = (ListView)findViewById(R.id.spotListView);
+        Log.i("SPOTS", spots.toString());
+        ListView spotView = (ListView)findViewById(R.id.listView);
         String sortOptions[] = getResources().getStringArray(R.array.setting_sort_options);
         String sortPreference = PreferenceManager.getDefaultSharedPreferences(this).getString("sorting", sortOptions[0]);
         Boolean hide_closed = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("hide_closed", true);
@@ -171,6 +189,7 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
             preArray = spots.toArray(new ParkingSpot[spots.size()]);
         }
         spotArray = preArray;
+        Log.i("SPOTARRAY", spotArray[0].toString());
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
         /*spotView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

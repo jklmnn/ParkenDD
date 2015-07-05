@@ -1,6 +1,7 @@
 package de.jkliemann.parkendd;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,9 +29,9 @@ import java.util.Map;
 public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<Date, Integer>>> {
 
     private enum API {zero, one};
-    private static final DateFormat queryDateFormat = new SimpleDateFormat("yyyy-MM-DD");
-    private static final DateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
-    private static final DateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-DD'T'HH:mm:ss");
+    private static final DateFormat queryDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static final DateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final DateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static final String DATA = "data";
     private Date date;
     private final FetchForecastInterface forecastInterface;
