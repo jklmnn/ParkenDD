@@ -50,6 +50,8 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         okbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout);
+                layout.setVisibility(View.VISIBLE);
                 RelativeLayout datePickerLayout = (RelativeLayout) _this.findViewById(R.id.datePickerLayout);
                 datePickerLayout.setVisibility(View.INVISIBLE);
                 DatePicker datePicker = (DatePicker)findViewById(R.id.datePicker);
@@ -61,6 +63,8 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         cancelbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout);
+                layout.setVisibility(View.VISIBLE);
                 RelativeLayout datePickerLayout = (RelativeLayout)_this.findViewById(R.id.datePickerLayout);
                 datePickerLayout.setVisibility(View.INVISIBLE);
             }
@@ -146,6 +150,8 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_datePicker) {
+            RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout);
+            layout.setVisibility(View.INVISIBLE);
             RelativeLayout datePickerLayout = (RelativeLayout)findViewById(R.id.datePickerLayout);
             datePickerLayout.setVisibility(View.VISIBLE);
             return true;
