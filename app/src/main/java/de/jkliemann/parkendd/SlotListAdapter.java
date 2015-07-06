@@ -1,12 +1,14 @@
 package de.jkliemann.parkendd;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -46,21 +48,31 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
         TextView distanceView = (TextView)slotView.findViewById(R.id.distanceView);
         ParkingSpot spot = spots[position];
         nameView.setText(spot.name());
+        ProgressBar slotBar = (ProgressBar)slotView.findViewById(R.id.slotBar);
+        slotBar.setMax(spot.count());
+        slotBar.setProgress(spot.free());
+        Resources res = slotView.getResources();
         if(spot.state().equals(CLOSED)) {
             countView.setText(context.getString(R.string.closed));
             nameView.setTextColor(this.red);
+            slotBar.setProgressDrawable(res.getDrawable(R.drawable.dr_progress_red));
         }else if(spot.state().equals(NODATA)){
             countView.setText(context.getString(R.string.nodata) + " (" + Integer.toString(spot.count()) + ")");
             nameView.setTextColor(this.blue);
+            slotBar.setVisibility(View.INVISIBLE);
+            slotBar.setProgressDrawable(res.getDrawable(R.drawable.dr_progress_blue));
         }else{
             countView.setText(Integer.toString(spot.free()) + " " + context.getString(R.string.of) + " " + Integer.toString(spot.count()));
             double perc = (double)spot.free() / (double)spot.count();
             if(perc < 0.05){
                 nameView.setTextColor(this.red);
+                slotBar.setProgressDrawable(res.getDrawable(R.drawable.dr_progress_red));
             }else if(perc < 0.2){
                 nameView.setTextColor(this.yellow);
+                slotBar.setProgressDrawable(res.getDrawable(R.drawable.dr_progress_yellow));
             }else{
                 nameView.setTextColor(this.green);
+                slotBar.setProgressDrawable(res.getDrawable(R.drawable.dr_progress_green));
             }
         }
         if(currentLocation != null && spot.location() != null){

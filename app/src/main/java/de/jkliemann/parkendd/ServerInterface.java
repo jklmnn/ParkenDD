@@ -1,7 +1,5 @@
 package de.jkliemann.parkendd;
 
-import android.location.Location;
-
 import java.util.ArrayList;
 
 /**

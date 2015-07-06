@@ -5,7 +5,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,7 +63,6 @@ public class NominatimOSM extends AsyncTask<Object, Void, Location> {
                 while((line = br.readLine()) != null){
                     data = data + line;
                 }
-                Log.i("OSM JSON", data);
                 br.close();
                 connection.disconnect();
                 publishProgress();
