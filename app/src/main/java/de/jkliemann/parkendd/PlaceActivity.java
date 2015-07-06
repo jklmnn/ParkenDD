@@ -182,6 +182,11 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
 //            return true;
 //        }
 
+        if(id == R.id.action_forecast){
+            Intent forecast = new Intent(this, ForecastActivity.class);
+            startActivity(forecast);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }
