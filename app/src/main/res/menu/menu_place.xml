@@ -5,6 +5,10 @@
     <item android:id="@+id/action_forecast"
         android:title="@string/action_forecast"
         android:orderInCategory="100"
-        app:showAsAction="always"
-        />
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_refresh"
+        android:title="@string/action_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        app:showAsAction="always" />
 </menu>

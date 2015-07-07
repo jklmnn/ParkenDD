@@ -183,6 +183,13 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
             startActivity(forecast);
         }
 
+        if(id == R.id.action_refresh){
+            progress = 0;
+            pg.setProgress(progress);
+            pg.setVisibility(View.VISIBLE);
+            refresh();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }
