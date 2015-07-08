@@ -41,4 +41,5 @@
     <string name="setting_hide_nodata">Parkplätze ohne Daten ausblenden.</string>
     <string name="no_address_error">Keine Adresse gefunden.</string>
     <string name="type">Typ</string>
+    <string name="license">Die Lizenzen der App und genutzer Bibliotheken können hier eingesehen werden.</string>
 </resources>

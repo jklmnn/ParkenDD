@@ -37,6 +37,8 @@
     <!--about-->
     <string name="app_url" translatable="false">http://jkliemann.de/parkendd/</string>
     <string name="disclaimer">No responsiblity is taken for the correctness of this information!</string>
+    <string name="license_url" translatable="false">https://github.com/jklmnn/ParkenDD</string>
+    <string name="license">The licenses of this app and used libraries can be viewn here.</string>
     <string name="server">Contact to server:</string>
     <!--slotstates-->
     <string name="closed">closed</string>

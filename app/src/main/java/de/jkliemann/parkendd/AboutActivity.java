@@ -14,7 +14,9 @@ public class AboutActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         TextView aboutView = (TextView)findViewById(R.id.aboutView);
+        TextView licenseView = (TextView)findViewById(R.id.licenseView);
         aboutView.setText(getString(R.string.app_name) + " " + getString(R.string.version) + "\n" + getString(R.string.app_url) + "\n" + getString(R.string.disclaimer));
+        licenseView.setText(getString(R.string.license) + "\n" + getString(R.string.license_url));
     }
 
 
