@@ -18,10 +18,10 @@ public class SlotListAdapter extends ArrayAdapter<ParkingSpot> {
     private final ParkingSpot[] spots;
     private final GlobalSettings gs;
     private final Location currentLocation;
-    private final int red = Color.argb(255, 0xef, 0x53, 0x50);
-    private final int green = Color.argb(255, 0x66, 0xbb, 0x6a);
-    private final int yellow = Color.argb(255, 0xff, 0xee, 0x58);
-    private final int blue = Color.argb(255, 0x42, 0xa5, 0xf5);
+    private final int red = Color.argb(0xaa, 0xef, 0x53, 0x50);
+    private final int green = Color.argb(0xaa, 0x66, 0xbb, 0x6a);
+    private final int yellow = Color.argb(0xaa, 0xff, 0xee, 0x58);
+    private final int blue = Color.argb(0xaa, 0x42, 0xa5, 0xf5);
     private static final String CLOSED = "closed";
     private static final String NODATA = "nodata";;
 
