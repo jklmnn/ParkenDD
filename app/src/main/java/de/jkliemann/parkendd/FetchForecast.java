@@ -99,6 +99,9 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
         try {
             if (parm[0] instanceof String) {
                 fetch_url = (String) parm[0];
+                if(!fetch_url.substring(fetch_url.length() - 1).equals("/")){
+                    fetch_url = fetch_url + "/";
+                }
             }
             if (parm[1] instanceof City) {
                 city = (City) parm[1];
