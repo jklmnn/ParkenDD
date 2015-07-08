@@ -34,6 +34,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
     private static final String LON = "lon";
     private static final String LNG = "lng";
     private static final String FORECAST = "forecast";
+    private static final String LOT_TYPE = "lot_type";
     private static final String DATA_SOURCE = "data_source";
     private static final String LAST_DOWNLOADED = "last_downloaded";
     private static final String LAST_UPDATED = "last_updated";
@@ -201,7 +202,13 @@ public class Fetch extends AsyncTask<String, Void, City> {
                         String name = lot.getString(NAME);
                         String state = lot.getString(STATE);
                         String city = CITY.name();
-                        String id = CITY.id();
+                        String id = lot.getString(ID);
+                        String type = "";
+                        try{
+                            type = lot.getString(LOT_TYPE);
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
                         int total = lot.getInt(TOTAL);
                         int free = lot.getInt(FREE);
                         double lat, lon;
@@ -215,6 +222,7 @@ public class Fetch extends AsyncTask<String, Void, City> {
                         }
                         Boolean forecast = lot.getBoolean(FORECAST);
                         ParkingSpot spot = new ParkingSpot(name, state, city, id, total, free, lat, lon, forecast);
+                        spot.setType(type);
                         spotlist.add(spot);
                     }catch (JSONException e){
                         e.printStackTrace();

@@ -78,11 +78,29 @@
             android:layout_height="wrap_content"
             android:text="New Button"
             android:id="@+id/mapbutton"
+            android:layout_below="@+id/type"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="type"
+            android:id="@+id/type"
             android:layout_below="@+id/distance"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/countval"
-            android:layout_alignEnd="@+id/countval"/>
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/typeVal"
+            android:layout_below="@+id/distanceval"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -40,4 +40,5 @@
     <string name="setting_hide_full">Hide full spots.</string>
     <string name="setting_hide_nodata">Hide spots without data.</string>
     <string name="no_address_error">No address found.</string>
+    <string name="type">Type</string>
 </resources>

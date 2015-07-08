@@ -34,6 +34,8 @@ public class DetailsActivity extends ActionBarActivity {
         TextView countval = (TextView)findViewById(R.id.countval);
         TextView distance = (TextView)findViewById(R.id.distance);
         TextView distanceval = (TextView)findViewById(R.id.distanceval);
+        TextView type = (TextView)findViewById(R.id.type);
+        TextView typeval = (TextView)findViewById(R.id.typeVal);
         Button mapbutton = (Button)findViewById(R.id.mapbutton);
         mapbutton.setText(getString(R.string.map));
         mapbutton.setOnClickListener(new View.OnClickListener() {
@@ -45,8 +47,10 @@ public class DetailsActivity extends ActionBarActivity {
         available.setText(getString(R.string.available) + ":");
         count.setText(getString(R.string.count) + ":");
         distance.setText(getString(R.string.distance) + ":");
+        type.setText(getString(R.string.type) + ":");
         availableval.setText(Integer.toString(spot.free()));
         countval.setText(Integer.toString(spot.count()));
+        typeval.setText(spot.type());
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         Location currentLocation = gs.getLastKnownLocation();
         try {

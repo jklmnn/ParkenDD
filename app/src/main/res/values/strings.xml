@@ -61,6 +61,7 @@
     <string name="available">Available</string>
     <string name="count">Count</string>
     <string name="distance">Distance</string>
+    <string name="type">Type</string>
     <string name="map">Map</string>
     <string name="title_activity_place">PlaceActivity</string>
 
