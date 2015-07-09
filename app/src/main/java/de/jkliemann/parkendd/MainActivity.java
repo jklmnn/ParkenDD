@@ -1,17 +1,20 @@
 package de.jkliemann.parkendd;
 
+import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 
 import java.util.ArrayList;
 
@@ -36,6 +39,26 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
         gs.initLocation(this);
         Server s = new Server(this);
         s.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)));
+        SearchView search = (SearchView)findViewById(R.id.searchView);
+        search.setSubmitButtonEnabled(true);
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Intent place = new Intent(_this, PlaceActivity.class);
+                Bundle extra = new Bundle();
+                extra.putString("query", s);
+                place.putExtras(extra);
+                startActivity(place);
+                SearchView search = (SearchView)_this.findViewById(R.id.searchView);
+                search.setIconified(true);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
     public void onMetaFinished(ArrayList<City> cities){

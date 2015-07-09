@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 
@@ -37,12 +40,22 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
         pg.setVisibility(View.VISIBLE);
         Object data = null;
         Intent intent = getIntent();
+        if(intent.getAction() == null){
+            String query = intent.getExtras().getString("query");
+            try {
+                query = "geo:0,0?q=" + URLEncoder.encode(query, "UTF-8").replace("+", "%20");
+                data = Uri.parse(query);
+            }catch (UnsupportedEncodingException e){
+                e.printStackTrace();
+            }
+        }
         TextView tv = (TextView) findViewById(R.id.textView);
         tv.setText("");
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (intent.ACTION_VIEW.equals(intent.getAction())) {
             data = intent.getData();
         }
+        Log.i("DATA", data.toString());
         Server s = new Server(this);
         NominatimOSM nosm = new NominatimOSM(this);
         nosm.execute(data);

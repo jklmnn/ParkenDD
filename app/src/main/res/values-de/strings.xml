@@ -42,4 +42,5 @@
     <string name="no_address_error">Keine Adresse gefunden.</string>
     <string name="type">Typ</string>
     <string name="license">Die Lizenzen der App und genutzter Bibliotheken können hier eingesehen werden.</string>
+    <string name="address">Adresse</string>
 </resources>

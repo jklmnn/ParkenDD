@@ -42,4 +42,5 @@
     <string name="no_address_error">No address found.</string>
     <string name="type">Type</string>
     <string name="license">The licenses of this app and used libraries can be viewed here.</string>
+    <string name="address">Address</string>
 </resources>

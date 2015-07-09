@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spotListView"
-        android:layout_below="@+id/progressBar"
+        android:layout_below="@+id/searchView"
         android:layout_centerHorizontal="true" />
 
     <ProgressBar
@@ -25,5 +25,14 @@
         android:indeterminate="true"
         android:layout_marginBottom="-10dp"
         android:layout_marginTop="-6dp" />
+
+    <SearchView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/progressBar"
+        android:queryHint="@string/address"/>
 
 </RelativeLayout>
