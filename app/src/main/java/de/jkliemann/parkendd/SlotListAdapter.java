@@ -117,7 +117,8 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
         TextView address = (TextView)detailView.findViewById(R.id.address);
         address.setText(context.getString(R.string.address) + ":");
         TextView addressval = (TextView)detailView.findViewById(R.id.addressval);
-        addressval.setText(child.name());
+        addressval.setText(child.address() + "\n" + child.category());
+        Log.i("CATEGORY", child.category());
         return detailView;
     }
 

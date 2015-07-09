@@ -36,6 +36,8 @@ public class Fetch extends AsyncTask<String, Void, City> {
     private static final String LAST_DOWNLOADED = "last_downloaded";
     private static final String LAST_UPDATED = "last_updated";
     private static final String ID = "id";
+    private static final String ADDRESS = "address";
+    private static final String REGION = "region";
     private City CITY;
     public static final int PROGRESS = 7;
 
@@ -99,8 +101,20 @@ public class Fetch extends AsyncTask<String, Void, City> {
                         String city = CITY.name();
                         String id = lot.getString(ID);
                         String type = "";
+                        String adr = "";
+                        String region = "";
                         try{
                             type = lot.getString(LOT_TYPE);
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                        try{
+                            adr = lot.getString(ADDRESS);
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                        try {
+                            region = lot.getString(REGION);
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
@@ -118,6 +132,8 @@ public class Fetch extends AsyncTask<String, Void, City> {
                         Boolean forecast = lot.getBoolean(FORECAST);
                         ParkingSpot spot = new ParkingSpot(name, state, city, id, total, free, lat, lon, forecast);
                         spot.setType(type);
+                        spot.setAddress(adr);
+                        spot.setCategory(region);
                         spotlist.add(spot);
                     }catch (JSONException e){
                         e.printStackTrace();

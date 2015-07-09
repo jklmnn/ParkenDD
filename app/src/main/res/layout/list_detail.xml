@@ -22,7 +22,9 @@
         android:id="@+id/typeVal"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/space"
-        android:layout_toStartOf="@+id/space" />
+        android:layout_toRightOf="@+id/type"
+        android:layout_toEndOf="@+id/type"
+        android:gravity="right" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -61,18 +63,30 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/addressval"
-        android:layout_below="@+id/typeVal"
-        android:layout_alignBottom="@+id/address"
-        android:layout_alignRight="@+id/typeVal"
-        android:layout_alignEnd="@+id/typeVal" />
+        android:layout_alignTop="@+id/address"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toLeftOf="@+id/space"
+        android:layout_toRightOf="@+id/address"
+        android:layout_toEndOf="@+id/address"
+        android:gravity="right" />
 
     <Space
         android:layout_width="30px"
         android:layout_height="20px"
+        android:id="@+id/space"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/mapButton"
         android:layout_toStartOf="@+id/mapButton"
-        android:layout_alignBottom="@+id/navButton"
-        android:id="@+id/space" />
+        android:layout_alignBottom="@+id/addressval" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=""
+        android:id="@+id/splaceView2"
+        android:layout_below="@+id/address"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

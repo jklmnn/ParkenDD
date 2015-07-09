@@ -18,6 +18,7 @@ public class ParkingSpot implements Parcelable{
     private String city;
     private String id;
     private String type;
+    private String address;
     private double lat;
     private double lon;
     private int count;
@@ -145,6 +146,10 @@ public class ParkingSpot implements Parcelable{
         this.type = type;
     }
 
+    public void setAddress(String address){
+        this.address = address;
+    }
+
     public String name(){
         return name;
     }
@@ -163,6 +168,10 @@ public class ParkingSpot implements Parcelable{
 
     public String type(){
         return type;
+    }
+
+    public String address(){
+        return address;
     }
 
     public int count(){
@@ -219,6 +228,7 @@ public class ParkingSpot implements Parcelable{
         out.writeString(city);
         out.writeString(id);
         out.writeString(type);
+        out.writeString(address);
         out.writeDouble(lat);
         out.writeDouble(lon);
         out.writeInt(count);
@@ -243,6 +253,7 @@ public class ParkingSpot implements Parcelable{
         city = in.readString();
         id = in.readString();
         type = in.readString();
+        address = in.readString();
         lat = in.readDouble();
         lon = in.readDouble();
         count = in.readInt();
