@@ -4,6 +4,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -17,6 +18,8 @@ public class AboutActivity extends ActionBarActivity {
         TextView licenseView = (TextView)findViewById(R.id.licenseView);
         aboutView.setText(getString(R.string.app_name) + " " + getString(R.string.version) + "\n" + getString(R.string.app_url) + "\n" + getString(R.string.disclaimer));
         licenseView.setText(getString(R.string.license) + "\n" + getString(R.string.license_url));
+        ImageView icon = (ImageView)findViewById(R.id.imageView);
+        icon.setImageDrawable(getDrawable(R.drawable.ic_app_icon));
     }
 
 
