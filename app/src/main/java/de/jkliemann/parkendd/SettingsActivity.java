@@ -84,17 +84,6 @@ public class SettingsActivity extends PreferenceActivity{
         sortList.setEntries(res.getStringArray(R.array.setting_sort_options));
         bindPreferenceSummaryToValue(sortList);
         bindResetToDefault(findPreference("reset"));
-        //* only for testing!!!
-        fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.header_network);
-        getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_network);
-        EditTextPreference url = (EditTextPreference)findPreference("fetch_url");
-        if(url.getText().equals(getString(R.string.old_fetch_url))){
-            url.setText(getString(R.string.default_fetch_url));
-        }
-        bindPreferenceSummaryToValue(url);
-        //*/
     }
 
     /**

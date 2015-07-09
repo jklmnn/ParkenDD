@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         gs.initLocation(this);
         Server s = new Server(this);
-        s.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)));
+        s.execute(getString(R.string.serveraddress));
         SearchView search = (SearchView)findViewById(R.id.searchView);
         search.setSubmitButtonEnabled(true);
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -80,7 +80,7 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
         this.setTitle(getString(R.string.app_name) + " - " + preferences.getString("city", getString(R.string.default_city)));
         try{
             Fetch f = new Fetch(this);
-            f.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)), preferences.getString("city", getString(R.string.default_city)));
+            f.execute(getString(R.string.serveraddress), preferences.getString("city", getString(R.string.default_city)));
         }catch(Exception e){
             e.printStackTrace();
         }

@@ -71,8 +71,7 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         Date today = new Date(cal.get(Calendar.YEAR) - dateOffset, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         FetchForecast ff = new FetchForecast(this);
         City city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
-        String fetchUrl = preferences.getString("fetch_url", getString(R.string.default_fetch_url));
-        ff.execute(fetchUrl, city, today);
+        ff.execute(getString(R.string.serveraddress), city, today);
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
@@ -89,8 +88,7 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         date = dt;
         FetchForecast ff = new FetchForecast(this);
         City city = GlobalSettings.getGlobalSettings().getCityByName(PreferenceManager.getDefaultSharedPreferences(this).getString("city", getString(R.string.default_city)));
-        String fetchUrl = PreferenceManager.getDefaultSharedPreferences(this).getString("fetch_url", getString(R.string.default_fetch_url));
-        ff.execute(fetchUrl, city, date);
+        ff.execute(getString(R.string.serveraddress), city, date);
         updateProgress();
     }
 

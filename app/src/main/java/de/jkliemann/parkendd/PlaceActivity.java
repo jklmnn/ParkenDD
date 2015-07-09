@@ -59,7 +59,7 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
         Server s = new Server(this);
         NominatimOSM nosm = new NominatimOSM(this);
         nosm.execute(data);
-        s.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)));
+        s.execute(getString(R.string.serveraddress));
     }
 
     public void onMetaFinished(ArrayList<City> cities){
@@ -91,7 +91,7 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
 
     private void refresh(){
         Fetch f = new Fetch(this);
-        f.execute(preferences.getString("fetch_url", getString(R.string.default_fetch_url)), preferences.getString("city", getString(R.string.default_city)));
+        f.execute(getString(R.string.serveraddress), preferences.getString("city", getString(R.string.default_city)));
     }
 
 
