@@ -111,9 +111,13 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
         View detailView = inflater.inflate(R.layout.list_detail, null);
         ParkingSpot child = spots[groupId];
         TextView type = (TextView)detailView.findViewById(R.id.type);
-        type.setText(context.getString(R.string.type));
+        type.setText(context.getString(R.string.type) + ":");
         TextView typeval = (TextView)detailView.findViewById(R.id.typeVal);
         typeval.setText(child.type());
+        TextView address = (TextView)detailView.findViewById(R.id.address);
+        address.setText(context.getString(R.string.address) + ":");
+        TextView addressval = (TextView)detailView.findViewById(R.id.addressval);
+        addressval.setText(child.name());
         return detailView;
     }
 
