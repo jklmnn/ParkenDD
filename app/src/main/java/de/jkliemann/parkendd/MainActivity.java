@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -85,7 +86,7 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
     }
 
     private void setList(City CITY){
-        ListView spotView = (ListView)findViewById(R.id.spotListView);
+        ExpandableListView spotView = (ExpandableListView)findViewById(R.id.spotListView);
         String sortOptions[] = getResources().getStringArray(R.array.setting_sort_options);
         String sortPreference = PreferenceManager.getDefaultSharedPreferences(this).getString("sorting", sortOptions[0]);
         Boolean hide_closed = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("hide_closed", true);
@@ -146,20 +147,6 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
         spotArray = preArray;
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
-        spotView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    Intent details = new Intent(_this, DetailsActivity.class);
-                    details.putExtra("spot", spotArray[position]);
-                    _this.startActivity(details);
-
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                    Error.showLongErrorToast(_this, getString(R.string.intent_error));
-                }
-            }
-        });
         updateProgress();
         pg.setVisibility(View.INVISIBLE);
     }

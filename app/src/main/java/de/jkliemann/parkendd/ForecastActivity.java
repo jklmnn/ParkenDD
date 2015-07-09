@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -157,7 +158,7 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
     }
 
     private void setList(ArrayList<ParkingSpot> spots){
-        ListView spotView = (ListView)findViewById(R.id.listView);
+        ExpandableListView spotView = (ExpandableListView)findViewById(R.id.listView);
         String sortOptions[] = getResources().getStringArray(R.array.setting_sort_options);
         String sortPreference = PreferenceManager.getDefaultSharedPreferences(this).getString("sorting", sortOptions[0]);
         Boolean hide_closed = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("hide_closed", true);
@@ -214,20 +215,6 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         spotArray = preArray;
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
-        spotView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    Intent details = new Intent(_this, DetailsActivity.class);
-                    details.putExtra("spot", spotArray[position]);
-                    _this.startActivity(details);
-
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                    Error.showLongErrorToast(_this, getString(R.string.intent_error));
-                }
-            }
-        });
         updateProgress();
         pg.setVisibility(View.INVISIBLE);
     }
