@@ -20,10 +20,6 @@
         android:key="hide_full"
         android:title="@string/setting_hide_full"
         android:defaultValue="true"/>
-    <CheckBoxPreference
-        android:key="use_location"
-        android:title="@string/setting_location"
-        android:defaultValue="true"/>
     <Preference
         android:key="reset"
         android:title="@string/setting_reset" />

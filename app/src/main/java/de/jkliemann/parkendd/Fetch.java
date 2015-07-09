@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -25,13 +24,11 @@ public class Fetch extends AsyncTask<String, Void, City> {
 
     private static final String NAME = "name";
     private static final String LOTS = "lots";
-    private static final String COUNT = "count";
     private static final String TOTAL = "total";
     private static final String FREE = "free";
     private static final String STATE = "state";
     private static final String COORDS = "coords";
     private static final String LAT = "lat";
-    private static final String LON = "lon";
     private static final String LNG = "lng";
     private static final String FORECAST = "forecast";
     private static final String LOT_TYPE = "lot_type";
@@ -40,112 +37,12 @@ public class Fetch extends AsyncTask<String, Void, City> {
     private static final String LAST_UPDATED = "last_updated";
     private static final String ID = "id";
     private City CITY;
-    private int error = 0;
     public static final int PROGRESS = 7;
 
     private final FetchInterface fetchFinished;
 
     public Fetch(FetchInterface f){
         this.fetchFinished = f;
-    }
-
-    private ArrayList<ParkingSpot> parseOldJSon(String json){
-        ArrayList<ParkingSpot> spots = new ArrayList<>();
-        try{
-            JSONArray global = new JSONArray(json);
-            for(int i = 0; i < global.length(); i++){
-                JSONObject catg = global.getJSONObject(i);
-                String category = catg.getString(NAME);
-                JSONArray lots = catg.getJSONArray(LOTS);
-                publishProgress();
-                for(int j = 0; j < lots.length(); j++){
-                    JSONObject lot = lots.getJSONObject(j);
-                    String name = lot.getString(NAME);
-                    String count = lot.getString(COUNT);
-                    String free = lot.getString(FREE);
-                    String state = lot.getString(STATE);
-                    if(state.equals("few") || state.equals("many") || state.equals("full")){
-                        state = "open";
-                    }
-                    double lat, lon;
-                    Boolean forecast = lot.getBoolean(FORECAST);
-                    try {
-                        lat = lot.getDouble(LAT);
-                        lon = lot.getDouble(LON);
-                    }catch (JSONException e){
-                        lat = 0;
-                        lon = 0;
-                    }
-                    String city = CITY.name();
-                    if(count.length() < 1 || count.equals("null")){
-                        count = "0";
-                    }
-                    if(free.length() < 1 || free.equals("null")){
-                        free = "0";
-                    }
-                    spots.add(new ParkingSpot(name, state, city, "", Integer.parseInt(count), Integer.parseInt(free), lat, lon, forecast));
-                }
-                publishProgress();
-            }
-        }catch(JSONException e){
-            e.printStackTrace();
-            error = 2;
-        }
-        return spots;
-    }
-
-    private ArrayList<ParkingSpot> fetchOldAPI(String fetch_url){
-        String json = "";
-        ArrayList<ParkingSpot> spots = null;
-        String address = fetch_url;
-        try {
-            URL url = new URL(address + URLEncoder.encode(this.CITY.id(), "UTF-8"));
-            HttpURLConnection cn = null;
-            try {
-                cn = (HttpURLConnection) url.openConnection();
-                publishProgress();
-            }catch (IOException e){
-                e.printStackTrace();
-                error = 3;
-                cn = null;
-            }
-            if(cn != null) {
-                BufferedReader br = null;
-                try{
-                    InputStream in = cn.getInputStream();
-                    br = new BufferedReader(new InputStreamReader(in));
-                    String line = "";
-                    while ((line = br.readLine()) != null) {
-                        json = json + line + "\n";
-                    }
-                    publishProgress();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    error = 1;
-                } finally {
-                    if (br != null) {
-                        try {
-                            br.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            error = 1;
-                        }
-                    }
-                }
-            }
-            cn.disconnect();
-            publishProgress();
-            spots = parseOldJSon(json);
-        }catch(MalformedURLException e) {
-            e.printStackTrace();
-            error = 4;
-        }catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-            error = 4;
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
-        return spots;
     }
 
     private void fetchAPI_1_0(String fetch_url){
@@ -165,7 +62,6 @@ public class Fetch extends AsyncTask<String, Void, City> {
                 e.printStackTrace();
             }catch (MalformedURLException e){
                 e.printStackTrace();
-                error = 4;
                 return;
             }
             try{
@@ -182,7 +78,6 @@ public class Fetch extends AsyncTask<String, Void, City> {
                 publishProgress();
             }catch (IOException e){
                 e.printStackTrace();
-                error = 3;
                 return;
             }
             ArrayList<ParkingSpot> spotlist = new ArrayList<>();
@@ -231,7 +126,6 @@ public class Fetch extends AsyncTask<String, Void, City> {
                 }
             }catch (JSONException e){
                 e.printStackTrace();
-                error = 2;
                 return;
             }
             CITY.setSpots(spotlist);
@@ -253,16 +147,12 @@ public class Fetch extends AsyncTask<String, Void, City> {
         String fetch_url = ct[0];
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         publishProgress();
-        if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0){
+        if(gs.getAPI_V_MAJOR() == 1 && gs.getAPI_V_MINOR() == 0){
             try {
-                CITY.setSpots(fetchOldAPI(fetch_url));
+                fetchAPI_1_0(fetch_url);
             }catch (NullPointerException e){
                 e.printStackTrace();
-                return null;
             }
-        }
-        if(gs.getAPI_V_MAJOR() == 1 && gs.getAPI_V_MINOR() == 0){
-            fetchAPI_1_0(fetch_url);
         }
         publishProgress();
         return CITY;

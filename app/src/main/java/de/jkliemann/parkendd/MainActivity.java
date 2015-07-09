@@ -1,13 +1,11 @@
 package de.jkliemann.parkendd;
 
-import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,6 +94,9 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
         final ParkingSpot[] spotArray;
         ParkingSpot[] preArray;
         ArrayList<ParkingSpot> spots = CITY.spots();
+        if(spots == null){
+            spots = new ArrayList<>();
+        }
         ArrayList<ParkingSpot> cachelist = new ArrayList<>();
         for(ParkingSpot spot : spots){
             if(hide_closed && spot.state().equals("closed")){

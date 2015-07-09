@@ -2,7 +2,6 @@ package de.jkliemann.parkendd;
 
 import android.os.AsyncTask;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,13 +21,10 @@ import java.util.Iterator;
 
 public class Server extends AsyncTask<String, Void, ArrayList<City>> {
 
-    private static final String MAIL = "mail";
     private static final String CITIES = "cities";
     private static final String VERSION = "api_version";
-    private String mail;
     private ArrayList<City> citylist;
     private String version;
-    private int error = 0;
     public static final int PROGRESS = 4;
 
     private final ServerInterface metaFinished;
@@ -51,20 +47,13 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
                 gs.setAPI(0, 0);
             }
             publishProgress();
-            if(gs.getAPI_V_MAJOR() == 0 && gs.getAPI_V_MINOR() == 0) {
-                mail = global.getString(MAIL);
-                JSONArray citystrings = global.getJSONArray(CITIES);
-                for (int i = 0; i < citystrings.length(); i++) {
-                    cities.add(new City(citystrings.getString(i), citystrings.getString(i)));
-                }
-            }
             if(gs.getAPI_V_MAJOR() == 1){
                 JSONObject citystrings = global.getJSONObject(CITIES);
                 Iterator<String> city_ids = citystrings.keys();
                 while(city_ids.hasNext()){
                     String id = city_ids.next();
                     try{
-                        cities.add(new City(id, citystrings.getString(id)));
+                        cities.add(new City(citystrings.getString(id), id));
                     }catch (JSONException e){
                         e.printStackTrace();
                     }
@@ -72,7 +61,6 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
             }
         }catch (JSONException e){
             e.printStackTrace();
-            error = 1;
         }
         publishProgress();
         return cities;
@@ -92,7 +80,6 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
                 publishProgress();
             }catch (IOException e) {
                 e.printStackTrace();
-                error = 2;
             }
             if(connection != null){
                 try {
@@ -105,14 +92,12 @@ public class Server extends AsyncTask<String, Void, ArrayList<City>> {
                     }
                 }catch (IOException e) {
                     e.printStackTrace();
-                    error = 2;
                 }
                 connection.disconnect();
                 publishProgress();
             }
         }catch (MalformedURLException e){
             e.printStackTrace();
-            error = 3;
         }
         citylist = parseJSon(meta);
         return citylist;

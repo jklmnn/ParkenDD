@@ -55,18 +55,6 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
         return map;
     }
 
-    private Map<Date, Integer> parseAPI_0_0(String data) throws ParseException{
-        String[] lines = data.split(System.getProperty("line.separator"));
-        Map<Date, Integer> map = new HashMap<>();
-        for(int i = 0; i < lines.length; i++){
-            String[] line = lines[i].split(",");
-            Date date = oldDateFormat.parse(line[0]);
-            Integer num = Integer.parseInt(line[1]);
-            map.put(date, num);
-        }
-        return map;
-    }
-
     private String fetch(URL url) throws IOException {
         HttpURLConnection connection;
         connection = (HttpURLConnection) url.openConnection();
@@ -116,23 +104,17 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
                 if(spot.forecast()){
                     URL forecasturl = null;
                     try {
-                        String encCityName = URLEncoder.encode(city.name(), "UTF-8");
                         String encCityId = URLEncoder.encode(city.id(), "UTF-8");
-                        String encSpotName = URLEncoder.encode(spot.name(), "UTF-8");
                         String encSpotId = URLEncoder.encode(spot.id(), "UTF-8");
                         String encDate = URLEncoder.encode(date, "UTF-8");
-                        if (api == API.zero) {
-                            forecasturl = new URL(fetch_url + encCityName + "/forecast/?spot=" + encSpotName + "&date=" + encDate);
-                        }else if(api == API.one){
+                        if(api == API.one){
                             forecasturl = new URL(fetch_url + encCityId + "/" + encSpotId + "/timespan?from=" + encDate + "&to=" + encDate);
                         }
                         try{
                             String data = fetch(forecasturl);
                             try{
                                 Map<Date, Integer> spotmap = null;
-                                if(api == API.zero){
-                                    spotmap = parseAPI_0_0(data);
-                                }else if(api == API.one){
+                                if(api == API.one){
                                     spotmap = parseAPI_1_0(data);
                                 }
                                 forecastMap.put(spot, spotmap);

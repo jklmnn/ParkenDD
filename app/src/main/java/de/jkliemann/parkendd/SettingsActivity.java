@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -146,8 +145,6 @@ public class SettingsActivity extends PreferenceActivity{
                     ListPreference city = (ListPreference)preferenceManager.findPreference("city");
                     city.setValue(context.getString(R.string.default_city));
                     city.setSummary(context.getString(R.string.default_city));
-                    CheckBoxPreference use_location = (CheckBoxPreference)preferenceManager.findPreference("use_location");
-                    use_location.setChecked(true);
                     CheckBoxPreference hide_closed = (CheckBoxPreference)preferenceManager.findPreference("hide_closed");
                     hide_closed.setChecked(true);
                     CheckBoxPreference hide_nodata = (CheckBoxPreference)preferenceManager.findPreference("hide_nodata");

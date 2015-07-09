@@ -6,7 +6,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 
@@ -71,11 +70,7 @@ public class GlobalSettings {
 
     public void setLocation(Location loc){
         if(loc == null){
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("use_location", true)){
-                providedLocation = locationManager.getLastKnownLocation(locationProvider);
-            }else {
-                return;
-            }
+            providedLocation = locationManager.getLastKnownLocation(locationProvider);
         }else{
             providedLocation = loc;
         }
