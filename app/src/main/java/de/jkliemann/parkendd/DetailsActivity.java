@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class DetailsActivity extends ActionBarActivity {
@@ -36,8 +38,7 @@ public class DetailsActivity extends ActionBarActivity {
         TextView distanceval = (TextView)findViewById(R.id.distanceval);
         TextView type = (TextView)findViewById(R.id.type);
         TextView typeval = (TextView)findViewById(R.id.typeVal);
-        Button mapbutton = (Button)findViewById(R.id.mapbutton);
-        mapbutton.setText(getString(R.string.map));
+        ImageButton mapbutton = (ImageButton)findViewById(R.id.mapbutton);
         mapbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
