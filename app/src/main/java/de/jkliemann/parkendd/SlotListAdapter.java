@@ -3,14 +3,15 @@ package de.jkliemann.parkendd;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -28,6 +29,14 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
     private final int blue = Color.argb(0xaa, 0x42, 0xa5, 0xf5);
     private static final String CLOSED = "closed";
     private static final String NODATA = "nodata";
+    private static final Map<String, Integer> typeMap;
+    static {
+        Map<String, Integer> initMap = new HashMap<>();
+        initMap.put("Tiefgarage", R.string.Tiefgarage);
+        initMap.put("Parkplatz", R.string.Parkplatz);
+        initMap.put("Parkhaus", R.string.Parkhaus);
+        typeMap = Collections.unmodifiableMap(initMap);
+    }
 
     public SlotListAdapter(Context context, ParkingSpot[] spots){
         this.context = context;
@@ -111,14 +120,16 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
         View detailView = inflater.inflate(R.layout.list_detail, null);
         ParkingSpot child = spots[groupId];
         TextView type = (TextView)detailView.findViewById(R.id.type);
-        type.setText(context.getString(R.string.type) + ":");
-        TextView typeval = (TextView)detailView.findViewById(R.id.typeVal);
-        typeval.setText(child.type());
+        try{
+            type.setText(context.getString(typeMap.get(child.type())));
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            type.setText(child.type());
+        }
         TextView address = (TextView)detailView.findViewById(R.id.address);
-        address.setText(context.getString(R.string.address) + ":");
-        TextView addressval = (TextView)detailView.findViewById(R.id.addressval);
-        addressval.setText(child.address() + "\n" + child.category());
-        Log.i("CATEGORY", child.category());
+        address.setText(child.address());
+        TextView region = (TextView)detailView.findViewById(R.id.region);
+        region.setText(child.category());
         return detailView;
     }
 

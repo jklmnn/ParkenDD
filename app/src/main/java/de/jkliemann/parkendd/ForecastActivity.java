@@ -74,6 +74,7 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         City city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
         ff.execute(getString(R.string.serveraddress), city, today);
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {

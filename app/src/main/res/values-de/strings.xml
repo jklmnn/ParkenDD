@@ -43,4 +43,7 @@
     <string name="type">Typ</string>
     <string name="license">Die Lizenzen der App und genutzter Bibliotheken können hier eingesehen werden.</string>
     <string name="address">Adresse</string>
+    <string name="Parkhaus">Parkhaus</string>
+    <string name="Parkplatz">Parkplatz</string>
+    <string name="Tiefgarage">Tiefgarage</string>
 </resources>

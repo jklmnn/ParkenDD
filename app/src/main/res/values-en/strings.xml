@@ -43,4 +43,7 @@
     <string name="type">Type</string>
     <string name="license">The licenses of this app and used libraries can be viewed here.</string>
     <string name="address">Address</string>
+    <string name="Parkhaus">parking garage</string>
+    <string name="Parkplatz">car park</string>
+    <string name="Tiefgarage">underground car park</string>
 </resources>

@@ -66,4 +66,8 @@
     <string name="map">Map</string>
     <string name="title_activity_place">PlaceActivity</string>
     <string name="address">Address</string>
+    <!--parking types-->
+    <string name="Tiefgarage">underground car park</string>
+    <string name="Parkplatz">car park</string>
+    <string name="Parkhaus">parking garage</string>
 </resources>

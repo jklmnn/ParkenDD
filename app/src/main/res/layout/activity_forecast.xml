@@ -23,7 +23,7 @@
             android:id="@+id/timePicker"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:timePickerMode="spinner"/>
+            android:timePickerMode="spinner" />
 
         <ExpandableListView
             android:layout_width="match_parent"
