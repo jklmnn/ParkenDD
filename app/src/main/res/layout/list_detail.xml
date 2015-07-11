@@ -45,14 +45,6 @@
         android:layout_alignBottom="@+id/region">
 
         <ImageButton
-            android:layout_width="71dp"
-            android:layout_height="match_parent"
-            android:id="@+id/navButton"
-            android:layout_row="0"
-            android:layout_column="8"
-            android:background="@drawable/ic_action_directions"/>
-
-        <ImageButton
             android:layout_width="61dp"
             android:layout_height="match_parent"
             android:id="@+id/mapButton"

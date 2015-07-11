@@ -1,12 +1,16 @@
 package de.jkliemann.parkendd;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -117,8 +121,8 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupId, int childId, boolean isLastChild, View view, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        View detailView = inflater.inflate(R.layout.list_detail, null);
-        ParkingSpot child = spots[groupId];
+        final View detailView = inflater.inflate(R.layout.list_detail, null);
+        final ParkingSpot child = spots[groupId];
         TextView type = (TextView)detailView.findViewById(R.id.type);
         try{
             type.setText(context.getString(typeMap.get(child.type())));
@@ -130,6 +134,20 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
         address.setText(child.address());
         TextView region = (TextView)detailView.findViewById(R.id.region);
         region.setText(child.category());
+        ImageButton mapButton = (ImageButton)detailView.findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri geouri = child.geoUri();
+                try{
+                    Intent map = new Intent(Intent.ACTION_VIEW, geouri);
+                    context.startActivity(map);
+                }catch (ActivityNotFoundException e){
+                    e.printStackTrace();
+                    Error.showLongErrorToast(context, context.getString(R.string.intent_error));
+                }
+            }
+        });
         return detailView;
     }
 
