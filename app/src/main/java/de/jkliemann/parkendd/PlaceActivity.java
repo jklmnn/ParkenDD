@@ -34,6 +34,7 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         pg = (ProgressBar) findViewById(R.id.progressBar);
         pg.setIndeterminate(false);
         pg.setProgress(progress);
@@ -44,6 +45,9 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
         if(intent.getAction() == null){
             String query = intent.getExtras().getString("query");
             try {
+                if(!query.contains(preferences.getString("city", getString(R.string.default_city)))){
+                    query = "Dresden " + query;
+                }
                 query = "geo:0,0?q=" + URLEncoder.encode(query, "UTF-8").replace("+", "%20");
                 data = Uri.parse(query);
             }catch (UnsupportedEncodingException e){
@@ -52,7 +56,6 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
         }
         TextView tv = (TextView) findViewById(R.id.textView);
         tv.setText("");
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (intent.ACTION_VIEW.equals(intent.getAction())) {
             data = intent.getData();
         }
