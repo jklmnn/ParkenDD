@@ -31,7 +31,7 @@
     <string name="setting_hide_nodata">Hide spots without data.</string>
     <string name="setting_hide_full">Hide full spots.</string>
     <!--defaults-->
-    <string name="serveraddress" translatable="false">http://parkendd.higgsboson.tk/</string>
+    <string name="serveraddress" translatable="false">http://park-api.higgsboson.tk/</string>
     <string name="default_city" translatable="false">Dresden</string>
     <!--about-->
     <string name="app_url" translatable="false">http://jkliemann.de/parkendd/</string>
