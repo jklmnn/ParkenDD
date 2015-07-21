@@ -28,8 +28,7 @@ import java.util.Map;
 public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<Date, Integer>>> {
 
     private enum API {zero, one};
-    private static final DateFormat queryDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private static final DateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final DateFormat queryDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static final DateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static final String DATA = "data";
     private Date date;
@@ -77,7 +76,8 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
         String fetch_url = null;
         City city = null;
         API api = null;
-        String date = null;
+        String date_start = null;
+        String date_end = null;
         Map<ParkingSpot, Map<Date, Integer>> forecastMap = new HashMap<>();
         if(GlobalSettings.getGlobalSettings().getAPI_V_MAJOR() == 0 && GlobalSettings.getGlobalSettings().getAPI_V_MINOR() == 0){
             api = API.zero;
@@ -95,8 +95,11 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
                 city = (City) parm[1];
             }
             if (parm[2] instanceof Date){
-                date = queryDateFormat.format(parm[2]);
                 this.date = (Date)parm[2];
+                date_start = queryDateFormat.format(this.date);
+                Date end = (Date)this.date.clone();
+                end.setDate(end.getDate() + 1);
+                date_end = queryDateFormat.format(end);
             }
             ArrayList<ParkingSpot> spotList = city.spots();
             publishProgress();
@@ -106,9 +109,10 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
                     try {
                         String encCityId = URLEncoder.encode(city.id(), "UTF-8");
                         String encSpotId = URLEncoder.encode(spot.id(), "UTF-8");
-                        String encDate = URLEncoder.encode(date, "UTF-8");
+                        String encDate_start = URLEncoder.encode(date_start, "UTF-8");
+                        String encDate_end = URLEncoder.encode(date_end, "UTF-8");
                         if(api == API.one){
-                            forecasturl = new URL(fetch_url + encCityId + "/" + encSpotId + "/timespan?from=" + encDate + "&to=" + encDate);
+                            forecasturl = new URL(fetch_url + encCityId + "/" + encSpotId + "/timespan?from=" + encDate_start + "&to=" + encDate_end);
                         }
                         try{
                             String data = fetch(forecasturl);

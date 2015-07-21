@@ -1,6 +1,5 @@
 package de.jkliemann.parkendd;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
