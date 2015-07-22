@@ -88,12 +88,12 @@ public class ParkingSpot implements Parcelable{
                 if(d2 == null){
                     d2 = Double.MAX_VALUE;
                 }
-                if(p1.state().equals("nodata") && p2.state().equals("nodata")){
+                if(p1.state().equals("nodata") && p2.state().equals("nodata")) {
                     return d1.compareTo(d2);
-                }else if(p1.state().equals("nodata") && p2.state().equals("closed")){
-                    return -1;
-                }else if(p1.state().equals("closed") && p2.state().equals("nodata")){
+                }else if(p1.state().equals("closed")) {
                     return 1;
+                }else if(p2.state().equals("closed")){
+                    return -1;
                 }else if(p1.state().equals("nodata") && !p2.state().equals("closed") && !p2.state().equals("nodata")){
                     return 1;
                 }else if(p2.state().equals("nodata") && !p1.state().equals("closed") && !p1.state().equals("nodata")){
@@ -105,6 +105,14 @@ public class ParkingSpot implements Parcelable{
                     Double b2 = (1 - ((double) p2.free()) / ((double) p2.count()));
                     Double e1 = Math.sqrt(Math.pow(d1, 2) + Math.pow(b1, 2)) * (1 / (Math.pow(2 * (1 - b1), 2) + 1));
                     Double e2 = Math.sqrt(Math.pow(d2, 2) + Math.pow(b2, 2)) * (1 / (Math.pow(2 * (1 - b2), 2) + 1));
+                    //<Parkhaus Mitte>
+                    if(p1.id().equals("dresdenparkhausmitte") && d1 < 2000 && b1 < 0.3){
+                        e1 = (double)-1;
+                    }
+                    if(p2.id().equals("dresdenparkhausmitte") && d2 < 2000 && b2 < 0.3){
+                        e2 = (double)-1;
+                    }
+                    //</Parkhaus Mitte>
                     return e1.compareTo(e2);
                 }
             }catch (NullPointerException e) {
