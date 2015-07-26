@@ -91,9 +91,12 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
         Boolean hide_full = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("hide_full", true);
         final ParkingSpot[] spotArray;
         ParkingSpot[] preArray;
-        ArrayList<ParkingSpot> spots = CITY.spots();
-        if(spots == null){
+        ArrayList<ParkingSpot> spots;
+        try {
+            spots = CITY.spots();
+        }catch (NullPointerException e){
             spots = new ArrayList<>();
+            e.printStackTrace();
         }
         ArrayList<ParkingSpot> cachelist = new ArrayList<>();
         for(ParkingSpot spot : spots){
