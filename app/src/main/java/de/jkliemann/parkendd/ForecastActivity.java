@@ -32,6 +32,7 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((ParkenDD) getApplication()).getTracker().trackAppDownload();
         setContentView(R.layout.activity_forecast);
         pg = (ProgressBar)findViewById(R.id.progressBar2);
         pg.setVisibility(View.VISIBLE);
@@ -78,6 +79,7 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
             }
         });
         updateProgress();
+        ((ParkenDD) getApplication()).getTracker().trackScreenView("/forecast/" + city.id(), "Vorhersage-" + city.name());
     }
 
     private void loadDate(Date dt){

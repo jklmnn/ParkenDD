@@ -48,7 +48,7 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
                 extra.putString("query", s);
                 place.putExtras(extra);
                 startActivity(place);
-                SearchView search = (SearchView)_this.findViewById(R.id.searchView);
+                SearchView search = (SearchView) _this.findViewById(R.id.searchView);
                 search.setIconified(true);
                 return true;
             }
@@ -67,6 +67,7 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
 
     public void onFetchFinished(City city){
         setList(city);
+        ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
         TimeZone tz = Calendar.getInstance().getTimeZone();
         DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
         dateFormat.setTimeZone(tz);

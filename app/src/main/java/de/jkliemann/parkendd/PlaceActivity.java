@@ -74,6 +74,7 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
 
     public void onFetchFinished(City city){
         setList(city);
+        ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
         TimeZone tz = Calendar.getInstance().getTimeZone();
         DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
         dateFormat.setTimeZone(tz);
