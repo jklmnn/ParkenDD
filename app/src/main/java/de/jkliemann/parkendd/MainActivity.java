@@ -12,7 +12,10 @@ import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class MainActivity extends ActionBarActivity implements ServerInterface, FetchInterface {
 
@@ -64,6 +67,14 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
 
     public void onFetchFinished(City city){
         setList(city);
+        TimeZone tz = Calendar.getInstance().getTimeZone();
+        DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
+        dateFormat.setTimeZone(tz);
+        DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+        timeFormat.setTimeZone(tz);
+        String locDate = dateFormat.format(city.last_updated());
+        String locTime = timeFormat.format(city.last_updated());
+        Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
     }
 
     public void updateProgress(){

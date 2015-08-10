@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by jkliemann on 28.06.15.
@@ -17,11 +18,12 @@ public class City {
     private Date last_downloaded;
     private Date last_updated;
     private ArrayList<ParkingSpot> spots = null;
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     public City(String id, String name){
         this.id = id;
         this.name = name;
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     public void setData_source(String url){

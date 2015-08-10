@@ -46,4 +46,5 @@
     <string name="Parkhaus">Parkhaus</string>
     <string name="Parkplatz">Parkplatz</string>
     <string name="Tiefgarage">Tiefgarage</string>
+    <string name="last_update">Letzte Aktualisierung</string>
 </resources>
