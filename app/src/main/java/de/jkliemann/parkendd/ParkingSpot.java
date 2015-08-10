@@ -78,43 +78,7 @@ public class ParkingSpot implements Parcelable{
         @Override
         public int compare(ParkingSpot p1, ParkingSpot p2){
             try{
-                GlobalSettings gs = GlobalSettings.getGlobalSettings();
-                Location currentLocation = gs.getLastKnownLocation();
-                Double d1 = new Double(Util.getDistance(p1.location(), currentLocation));
-                Double d2 = new Double(Util.getDistance(p2.location(), currentLocation));
-                if(d1 == null){
-                    d1 = Double.MAX_VALUE;
-                }
-                if(d2 == null){
-                    d2 = Double.MAX_VALUE;
-                }
-                if(p1.state().equals("nodata") && p2.state().equals("nodata")) {
-                    return d1.compareTo(d2);
-                }else if(p1.state().equals("closed")) {
-                    return 1;
-                }else if(p2.state().equals("closed")){
-                    return -1;
-                }else if(p1.state().equals("nodata") && !p2.state().equals("closed") && !p2.state().equals("nodata")){
-                    return 1;
-                }else if(p2.state().equals("nodata") && !p1.state().equals("closed") && !p1.state().equals("nodata")){
-                    return -1;
-                }else if(p1.free() == 0 && p2.free() != 0){
-                    return 1;
-                }else {
-                    Double b1 = (1 - ((double) p1.free()) / ((double) p1.count()));
-                    Double b2 = (1 - ((double) p2.free()) / ((double) p2.count()));
-                    Double e1 = Math.sqrt(Math.pow(d1, 2) + Math.pow(b1, 2)) * (1 / (Math.pow(2 * (1 - b1), 2) + 1));
-                    Double e2 = Math.sqrt(Math.pow(d2, 2) + Math.pow(b2, 2)) * (1 / (Math.pow(2 * (1 - b2), 2) + 1));
-                    //<Parkhaus Mitte>
-                    if(p1.id().equals("dresdenparkhausmitte") && d1 < 2000 && b1 < 0.3){
-                        e1 = (double)-1;
-                    }
-                    if(p2.id().equals("dresdenparkhausmitte") && d2 < 2000 && b2 < 0.3){
-                        e2 = (double)-1;
-                    }
-                    //</Parkhaus Mitte>
-                    return e1.compareTo(e2);
-                }
+                return p1.rating().compareTo(p2.rating());
             }catch (NullPointerException e) {
                 return 0;
             }
@@ -132,6 +96,29 @@ public class ParkingSpot implements Parcelable{
         this.lon = lon;
         this.forecast = forecast;
         this.type = "";
+    }
+
+    private Double rating(){
+        GlobalSettings gs = GlobalSettings.getGlobalSettings();
+        Location currentLocation = gs.getLastKnownLocation();
+        Double d;
+        try{
+            d = new Double(Util.getDistance(this.location(), currentLocation));
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            d = Double.MAX_VALUE;
+        }
+        Double b = (1 - ((double) this.free()) / ((double) this.count()));
+        Double e = Math.sqrt(Math.pow(d, 2) + Math.pow(b, 2)) * (1 / (Math.pow(2 * (1 - b), 2) + 1));
+        //<Parkhaus Mitte>
+        if(this.id().equals("dresdenparkhausmitte") && d < 2000 && b < 0.3){
+            e = (double)-1;
+        }
+        //</Parkhaus Mitte>
+        if(this.state().equals("closed") || this.free() == 0){
+            e = Double.POSITIVE_INFINITY;
+        }
+        return e;
     }
 
     public void setCategory(String category){
@@ -216,7 +203,7 @@ public class ParkingSpot implements Parcelable{
     }
 
 
-    static public ParkingSpot[] getSortedArray(ParkingSpot[] slotList, Comparator<ParkingSpot> comparator) {
+    static public ParkingSpot[] getSortedArray(ParkingSpot[] slotList, Comparator<ParkingSpot> comparator){
         ParkingSpot[] sorted = slotList.clone();
         Arrays.sort(sorted, comparator);
         return sorted;
