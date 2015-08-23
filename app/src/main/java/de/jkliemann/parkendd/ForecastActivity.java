@@ -26,7 +26,6 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
     private static final int dateOffset = 1900;
     private Map<ParkingSpot, Map<Date, Integer>> spotmap;
     private Date date;
-    private int progress = 0;
     ProgressBar pg;
 
     @Override
@@ -36,9 +35,7 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         setContentView(R.layout.activity_forecast);
         pg = (ProgressBar)findViewById(R.id.progressBar2);
         pg.setVisibility(View.VISIBLE);
-        pg.setIndeterminate(false);
-        pg.setMax(FetchForecast.PROGRESS + 3);
-        pg.setProgress(progress);
+        pg.setIndeterminate(true);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         RelativeLayout datePickerLayout = (RelativeLayout)findViewById(R.id.datePickerLayout);
         datePickerLayout.setVisibility(View.INVISIBLE);
@@ -78,7 +75,6 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
                 updateList(hourOfDay);
             }
         });
-        updateProgress();
         ((ParkenDD) getApplication()).getTracker().trackScreenView("/forecast/" + city.id(), "Vorhersage-" + city.name());
     }
 
@@ -89,7 +85,6 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         FetchForecast ff = new FetchForecast(this);
         City city = GlobalSettings.getGlobalSettings().getCityByName(PreferenceManager.getDefaultSharedPreferences(this).getString("city", getString(R.string.default_city)));
         ff.execute(getString(R.string.serveraddress), city, date);
-        updateProgress();
     }
 
     private void updateList(int hour){
@@ -111,7 +106,6 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
                 }
                 spotList.add(spot);
             }
-            updateProgress();
             setList(spotList);
         }catch (NullPointerException e){
             e.printStackTrace();
@@ -123,11 +117,6 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         this.date = date;
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         updateList(timePicker.getCurrentHour());
-    }
-
-    public void updateProgress(){
-        progress += 1;
-        pg.setProgress(progress);
     }
 
     @Override
@@ -214,7 +203,6 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         spotArray = preArray;
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
-        updateProgress();
         pg.setVisibility(View.INVISIBLE);
     }
 }

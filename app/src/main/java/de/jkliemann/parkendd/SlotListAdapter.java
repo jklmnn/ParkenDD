@@ -18,9 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/**
- * TODO: document your custom view class.
- */
 public class SlotListAdapter extends BaseExpandableListAdapter {
 
     private final Context context;

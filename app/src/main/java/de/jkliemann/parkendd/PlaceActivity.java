@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +15,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -24,12 +27,15 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 
-public class PlaceActivity extends ActionBarActivity implements ServerInterface, FetchInterface, NominatimInterface{
+public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
 
     private SharedPreferences preferences;
-    private final PlaceActivity _this = this;
     private ProgressBar pg;
-    private int progress = 0;
+    private Loader metaLoader;
+    private Loader cityLoader;
+    private Loader osmLoader;
+    private City city;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +43,9 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
         setContentView(R.layout.activity_place);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         pg = (ProgressBar) findViewById(R.id.progressBar);
-        pg.setIndeterminate(false);
-        pg.setProgress(progress);
-        pg.setMax(Fetch.PROGRESS + Server.PROGRESS + NominatimOSM.PROGRESS + 1);
+        pg.setIndeterminate(true);
         pg.setVisibility(View.VISIBLE);
-        Object data = null;
+        Uri data = null;
         Intent intent = getIntent();
         if(intent.getAction() == null){
             String query = intent.getExtras().getString("query");
@@ -60,52 +64,81 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
         if (intent.ACTION_VIEW.equals(intent.getAction())) {
             data = intent.getData();
         }
-        Log.i("DATA", data.toString());
-        Server s = new Server(this);
-        NominatimOSM nosm = new NominatimOSM(this);
-        nosm.execute(data);
-        s.execute(getString(R.string.serveraddress));
-    }
-
-    public void onMetaFinished(ArrayList<City> cities){
-        GlobalSettings.getGlobalSettings().setCitylist(cities);
-        refresh();
-    }
-
-    public void onFetchFinished(City city){
-        setList(city);
-        ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
-        TimeZone tz = Calendar.getInstance().getTimeZone();
-        DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
-        dateFormat.setTimeZone(tz);
-        DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
-        timeFormat.setTimeZone(tz);
-        String locDate = dateFormat.format(city.last_updated());
-        String locTime = timeFormat.format(city.last_updated());
-        Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
-    }
-
-    public void updateProgress(){
-        progress += 1;
-        pg.setProgress(progress);
-    }
-
-    public void onNominatimFinished(Location loc){
-        GlobalSettings.getGlobalSettings().setLocation(loc);
-        TextView tv = (TextView)findViewById(R.id.textView);
-        try{
-            tv.setText(loc.getExtras().getString("detail"));
-        }catch (NullPointerException e){
+        URL serverurl = null;
+        URL osmurl = null;
+        try {
+            osmurl = Loader.getNominatimURL(data);
+            osmLoader = new Loader(this);
+            osmLoader.execute(osmurl);
+            serverurl = Loader.getMetaUrl(getString(R.string.serveraddress));
+            metaLoader = new Loader(this);
+            metaLoader.execute(serverurl);
+        }catch (MalformedURLException e){
             e.printStackTrace();
-            tv.setText(getString(R.string.no_address_error));
-            ListView spotView = (ListView)findViewById(R.id.spotListView);
-            spotView.setVisibility(View.INVISIBLE);
         }
     }
 
+    public void onLoaderFinished(String data, Loader loader){
+        if(loader.equals(metaLoader)){
+            ArrayList<City> citylist;
+            try{
+                citylist = Parser.meta(data);
+                GlobalSettings.getGlobalSettings().setCitylist(citylist);
+                refresh();
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        if(loader.equals(cityLoader)){
+            try{
+                city = Parser.city(data, city);
+                setList(city);
+                ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
+                TimeZone tz = Calendar.getInstance().getTimeZone();
+                DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
+                dateFormat.setTimeZone(tz);
+                DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+                timeFormat.setTimeZone(tz);
+                String locDate = dateFormat.format(city.last_updated());
+                String locTime = timeFormat.format(city.last_updated());
+                Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        if(loader.equals(osmLoader)){
+            try{
+                Location loc = Parser.nominatim(data);
+                GlobalSettings.getGlobalSettings().setLocation(loc);
+                TextView tv = (TextView)findViewById(R.id.textView);
+                try{
+                    tv.setText(loc.getExtras().getString("detail"));
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                    tv.setText(getString(R.string.no_address_error));
+                    ListView spotView = (ListView)findViewById(R.id.spotListView);
+                    spotView.setVisibility(View.INVISIBLE);
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void onExceptionThrown(Exception e){
+
+    }
+
     private void refresh(){
-        Fetch f = new Fetch(this);
-        f.execute(getString(R.string.serveraddress), preferences.getString("city", getString(R.string.default_city)));
+        URL cityurl;
+        try{
+            city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
+            cityurl = Loader.getCityUrl(getString(R.string.serveraddress), city);
+            cityLoader = new Loader(this);
+            cityLoader.execute(cityurl);
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -168,7 +201,6 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
         spotArray = preArray;
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
-        updateProgress();
         pg.setVisibility(View.INVISIBLE);
     }
 
@@ -197,8 +229,6 @@ public class PlaceActivity extends ActionBarActivity implements ServerInterface,
         }
 
         if(id == R.id.action_refresh){
-            progress = 0;
-            pg.setProgress(progress);
             pg.setVisibility(View.VISIBLE);
             refresh();
         }

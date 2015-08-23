@@ -41,8 +41,6 @@ public class SettingsActivity extends PreferenceActivity{
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        //Server s = new Server();
-        //s.execute(this);
         setupSimplePreferencesScreen();
     }
 

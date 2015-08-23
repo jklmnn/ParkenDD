@@ -34,8 +34,6 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
     private Date date;
     private final FetchForecastInterface forecastInterface;
 
-    public static final int PROGRESS = 2;
-
     public FetchForecast(FetchForecastInterface forecastInterface){
         this.forecastInterface = forecastInterface;
     }
@@ -66,10 +64,6 @@ public class FetchForecast extends AsyncTask<Object, Void, Map<ParkingSpot, Map<
         br.close();
         connection.disconnect();
         return data;
-    }
-
-    protected void onProgressUpdate(Void... v){
-        forecastInterface.updateProgress();
     }
 
     protected Map<ParkingSpot, Map<Date, Integer>> doInBackground(Object... parm){

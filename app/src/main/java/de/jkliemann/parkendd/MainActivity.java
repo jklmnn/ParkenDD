@@ -12,32 +12,42 @@ import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
+import org.json.JSONException;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class MainActivity extends ActionBarActivity implements ServerInterface, FetchInterface {
+public class MainActivity extends ActionBarActivity implements LoaderInterface{
 
     SharedPreferences preferences;
     private final MainActivity _this = this;
     private ProgressBar pg;
-    private int progress = 0;
+    private Loader meta;
+    private Loader cityLoader;
+    private City city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pg = (ProgressBar)findViewById(R.id.progressBar);
-        pg.setIndeterminate(false);
+        pg.setIndeterminate(true);
         pg.setVisibility(View.VISIBLE);
-        pg.setProgress(0);
-        pg.setMax(Fetch.PROGRESS + Server.PROGRESS + 1);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         gs.initLocation(this);
-        Server s = new Server(this);
-        s.execute(getString(R.string.serveraddress));
+        URL serverurl = null;
+        try {
+            serverurl = Loader.getMetaUrl(getString(R.string.serveraddress));
+            meta = new Loader(this);
+            meta.execute(serverurl);
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }
         SearchView search = (SearchView)findViewById(R.id.searchView);
         search.setSubmitButtonEnabled(true);
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -60,36 +70,50 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
         });
     }
 
-    public void onMetaFinished(ArrayList<City> cities){
-        GlobalSettings.getGlobalSettings().setCitylist(cities);
-        refresh();
+    public void onLoaderFinished(String data, Loader loader){
+        if(loader.equals(meta)){
+            ArrayList<City> citylist;
+            try{
+                citylist = Parser.meta(data);
+                GlobalSettings.getGlobalSettings().setCitylist(citylist);
+                refresh();
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        if(loader.equals(cityLoader)){
+            try{
+                city = Parser.city(data, city);
+                setList(city);
+                ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
+                TimeZone tz = Calendar.getInstance().getTimeZone();
+                DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
+                dateFormat.setTimeZone(tz);
+                DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+                timeFormat.setTimeZone(tz);
+                String locDate = dateFormat.format(city.last_updated());
+                String locTime = timeFormat.format(city.last_updated());
+                Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void onFetchFinished(City city){
-        setList(city);
-        ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
-        TimeZone tz = Calendar.getInstance().getTimeZone();
-        DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
-        dateFormat.setTimeZone(tz);
-        DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
-        timeFormat.setTimeZone(tz);
-        String locDate = dateFormat.format(city.last_updated());
-        String locTime = timeFormat.format(city.last_updated());
-        Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
-    }
+    public void onExceptionThrown(Exception e){
 
-    public void updateProgress(){
-        progress += 1;
-        pg.setProgress(progress);
     }
 
     private void refresh(){
         GlobalSettings.getGlobalSettings().setLocation(null);
         this.setTitle(getString(R.string.app_name) + " - " + preferences.getString("city", getString(R.string.default_city)));
+        URL cityurl;
         try{
-            Fetch f = new Fetch(this);
-            f.execute(getString(R.string.serveraddress), preferences.getString("city", getString(R.string.default_city)));
-        }catch(Exception e){
+            city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
+            cityurl = Loader.getCityUrl(getString(R.string.serveraddress), city);
+            cityLoader = new Loader(this);
+            cityLoader.execute(cityurl);
+        }catch (MalformedURLException e){
             e.printStackTrace();
         }
     }
@@ -159,7 +183,6 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
         spotArray = preArray;
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
-        updateProgress();
         pg.setVisibility(View.INVISIBLE);
     }
 
@@ -188,9 +211,6 @@ public class MainActivity extends ActionBarActivity implements ServerInterface, 
         }
         if(id == R.id.action_refresh){
             pg.setVisibility(View.VISIBLE);
-            progress = 0;
-            pg.setProgress(0);
-            pg.setMax(Fetch.PROGRESS + 1);
             this.refresh();
         }
         if(id == R.id.action_forecast){
