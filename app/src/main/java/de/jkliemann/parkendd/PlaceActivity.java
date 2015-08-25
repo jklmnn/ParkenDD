@@ -33,7 +33,6 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
     private ProgressBar pg;
     private Loader metaLoader;
     private Loader cityLoader;
-    private Loader osmLoader;
     private City city;
 
 
@@ -64,13 +63,10 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         if (intent.ACTION_VIEW.equals(intent.getAction())) {
             data = intent.getData();
         }
-        URL serverurl = null;
-        URL osmurl = null;
+        URL[] serverurl = new URL[2];
         try {
-            osmurl = Loader.getNominatimURL(data);
-            osmLoader = new Loader(this);
-            osmLoader.execute(osmurl);
-            serverurl = Loader.getMetaUrl(getString(R.string.serveraddress));
+            serverurl[1] = Loader.getNominatimURL(data);
+            serverurl[0] = Loader.getMetaUrl(getString(R.string.serveraddress));
             metaLoader = new Loader(this);
             metaLoader.execute(serverurl);
         }catch (MalformedURLException e){
@@ -78,37 +74,18 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         }
     }
 
-    public void onLoaderFinished(String data, Loader loader){
+    public void onLoaderFinished(String data[], Loader loader){
         if(loader.equals(metaLoader)){
             ArrayList<City> citylist;
             try{
-                citylist = Parser.meta(data);
+                citylist = Parser.meta(data[0]);
                 GlobalSettings.getGlobalSettings().setCitylist(citylist);
                 refresh();
             }catch (JSONException e){
                 e.printStackTrace();
             }
-        }
-        if(loader.equals(cityLoader)){
             try{
-                city = Parser.city(data, city);
-                setList(city);
-                ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
-                TimeZone tz = Calendar.getInstance().getTimeZone();
-                DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
-                dateFormat.setTimeZone(tz);
-                DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
-                timeFormat.setTimeZone(tz);
-                String locDate = dateFormat.format(city.last_updated());
-                String locTime = timeFormat.format(city.last_updated());
-                Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-        }
-        if(loader.equals(osmLoader)){
-            try{
-                Location loc = Parser.nominatim(data);
+                Location loc = Parser.nominatim(data[1]);
                 GlobalSettings.getGlobalSettings().setLocation(loc);
                 TextView tv = (TextView)findViewById(R.id.textView);
                 try{
@@ -123,6 +100,23 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
                 e.printStackTrace();
             }
         }
+        if(loader.equals(cityLoader)){
+            try{
+                city = Parser.city(data[0], city);
+                setList(city);
+                ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
+                TimeZone tz = Calendar.getInstance().getTimeZone();
+                DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
+                dateFormat.setTimeZone(tz);
+                DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+                timeFormat.setTimeZone(tz);
+                String locDate = dateFormat.format(city.last_updated());
+                String locTime = timeFormat.format(city.last_updated());
+                Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     public void onExceptionThrown(Exception e){
@@ -130,10 +124,10 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
     }
 
     private void refresh(){
-        URL cityurl;
+        URL[] cityurl = new URL[1];
         try{
             city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
-            cityurl = Loader.getCityUrl(getString(R.string.serveraddress), city);
+            cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
             cityLoader = new Loader(this);
             cityLoader.execute(cityurl);
         }catch (MalformedURLException e){

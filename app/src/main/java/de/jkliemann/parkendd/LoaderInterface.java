@@ -5,5 +5,5 @@ package de.jkliemann.parkendd;
  */
 public interface LoaderInterface {
     void onExceptionThrown(Exception e);
-    void onLoaderFinished(String data, Loader instance);
+    void onLoaderFinished(String data[], Loader instance);
 }

@@ -40,9 +40,9 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
         gs.initLocation(this);
-        URL serverurl = null;
+        URL[] serverurl = new URL[1];
         try {
-            serverurl = Loader.getMetaUrl(getString(R.string.serveraddress));
+            serverurl[0] = Loader.getMetaUrl(getString(R.string.serveraddress));
             meta = new Loader(this);
             meta.execute(serverurl);
         }catch (MalformedURLException e){
@@ -70,11 +70,11 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
         });
     }
 
-    public void onLoaderFinished(String data, Loader loader){
+    public void onLoaderFinished(String data[], Loader loader){
         if(loader.equals(meta)){
             ArrayList<City> citylist;
             try{
-                citylist = Parser.meta(data);
+                citylist = Parser.meta(data[0]);
                 GlobalSettings.getGlobalSettings().setCitylist(citylist);
                 refresh();
             }catch (JSONException e){
@@ -83,7 +83,7 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
         }
         if(loader.equals(cityLoader)){
             try{
-                city = Parser.city(data, city);
+                city = Parser.city(data[0], city);
                 setList(city);
                 ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
                 TimeZone tz = Calendar.getInstance().getTimeZone();
@@ -107,10 +107,10 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
     private void refresh(){
         GlobalSettings.getGlobalSettings().setLocation(null);
         this.setTitle(getString(R.string.app_name) + " - " + preferences.getString("city", getString(R.string.default_city)));
-        URL cityurl;
+        URL[] cityurl = new URL[1];
         try{
             city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
-            cityurl = Loader.getCityUrl(getString(R.string.serveraddress), city);
+            cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
             cityLoader = new Loader(this);
             cityLoader.execute(cityurl);
         }catch (MalformedURLException e){

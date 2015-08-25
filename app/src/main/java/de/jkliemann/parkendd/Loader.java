@@ -18,7 +18,7 @@ import java.util.Date;
 /**
  * Created by jkliemann on 23.08.15.
  */
-public class Loader extends AsyncTask<URL, Void, String> {
+public class Loader extends AsyncTask<URL[], Void, String[]> {
 
     private final LoaderInterface LoaderFinished;
 
@@ -73,27 +73,31 @@ public class Loader extends AsyncTask<URL, Void, String> {
         return url;
     }
 
-    protected String doInBackground(URL... urls){
-        String data = "";
-        URL url = urls[0];
-        HttpURLConnection connection;
-        try{
-            connection = (HttpURLConnection)url.openConnection();
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                data = data + line;
+    protected String[] doInBackground(URL[]... urls){
+        URL[] url_list = urls[0];
+        String[] data = new String[url_list.length];
+        for(int i = 0; i < url_list.length; i++) {
+            data[i] = "";
+            URL url = url_list[i];
+            HttpURLConnection connection;
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = "";
+                while ((line = br.readLine()) != null) {
+                    data[i] += line;
+                }
+                publishProgress();
+                br.close();
+                connection.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            publishProgress();
-            br.close();
-            connection.disconnect();
-        }catch (IOException e){
-            e.printStackTrace();
         }
         return data;
     }
 
-    protected void onPostExecute(String data){
+    protected void onPostExecute(String[] data){
         LoaderFinished.onLoaderFinished(data, this);
     }
 }
