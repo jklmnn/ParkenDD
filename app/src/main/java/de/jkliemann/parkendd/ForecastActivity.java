@@ -14,19 +14,27 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
+import org.json.JSONException;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
-public class ForecastActivity extends ActionBarActivity implements FetchForecastInterface{
+public class ForecastActivity extends ActionBarActivity implements LoaderInterface{
 
     private final ForecastActivity _this = this;
     private static final int dateOffset = 1900;
     private Map<ParkingSpot, Map<Date, Integer>> spotmap;
     private Date date;
     ProgressBar pg;
+    ParkingSpot[] spotList;
+    Loader forecastLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +56,8 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
                 RelativeLayout datePickerLayout = (RelativeLayout) _this.findViewById(R.id.datePickerLayout);
                 datePickerLayout.setVisibility(View.INVISIBLE);
                 DatePicker datePicker = (DatePicker)findViewById(R.id.datePicker);
-                Date date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
-                loadDate(date);
+                date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
+                loadDate();
             }
         });
         Button cancelbutton = (Button)findViewById(R.id.cancelbutton);
@@ -63,10 +71,9 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
             }
         });
         Calendar cal = Calendar.getInstance();
-        Date today = new Date(cal.get(Calendar.YEAR) - dateOffset, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-        FetchForecast ff = new FetchForecast(this);
+        date = new Date(cal.get(Calendar.YEAR) - dateOffset, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         City city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
-        ff.execute(getString(R.string.serveraddress), city, today);
+        loadDate();
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
@@ -78,13 +85,28 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         ((ParkenDD) getApplication()).getTracker().trackScreenView("/forecast/" + city.id(), "Vorhersage-" + city.name());
     }
 
-    private void loadDate(Date dt){
+    private void loadDate(){
         pg.setProgress(0);
         pg.setVisibility(View.VISIBLE);
-        date = dt;
-        FetchForecast ff = new FetchForecast(this);
         City city = GlobalSettings.getGlobalSettings().getCityByName(PreferenceManager.getDefaultSharedPreferences(this).getString("city", getString(R.string.default_city)));
-        ff.execute(getString(R.string.serveraddress), city, date);
+        ArrayList<ParkingSpot> spots = city.spots();
+        ArrayList<ParkingSpot> forecastSpots = new ArrayList<>();
+        for(ParkingSpot spot : spots){
+            if(spot.forecast()){
+                forecastSpots.add(spot);
+            }
+        }
+        spotList = forecastSpots.toArray(new ParkingSpot[forecastSpots.size()]);
+        URL[] urlList = new URL[forecastSpots.size()];
+        try{
+            for(int i = 0; i < forecastSpots.size(); i++){
+                urlList[i] = Loader.getForecastUrl(getString(R.string.serveraddress), city, spotList[i], date);
+            }
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        forecastLoader = new Loader(this);
+        forecastLoader.execute(urlList);
     }
 
     private void updateList(int hour){
@@ -112,12 +134,26 @@ public class ForecastActivity extends ActionBarActivity implements FetchForecast
         }
     }
 
-    public void onForecastFinished(final Date date, Map<ParkingSpot, Map<Date, Integer>> forecastMap){
-        spotmap = forecastMap;
-        this.date = date;
+    public void onLoaderFinished(String data[], Loader loader){
+        spotmap = new HashMap<>();
+        Map<Date, Integer> dateMap;
+        for (int i = 0; i < data.length; i++) {
+            try {
+                dateMap = Parser.forecast(data[i]);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                dateMap = new HashMap<>();
+            } catch (ParseException e) {
+                e.printStackTrace();
+                dateMap = new HashMap<>();
+            }
+            spotmap.put(spotList[i], dateMap);
+        }
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         updateList(timePicker.getCurrentHour());
     }
+
+    public void onExceptionThrown(Exception e){}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
