@@ -113,14 +113,15 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
 
     private void refresh(){
         GlobalSettings.getGlobalSettings().setLocation(null);
-        this.setTitle(getString(R.string.app_name) + " - " + preferences.getString("city", getString(R.string.default_city)));
         URL[] cityurl = new URL[1];
         try{
             city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
+            this.setTitle(getString(R.string.app_name) + " - " + city.name());
             cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
             cityLoader = new Loader(this);
             cityLoader.execute(cityurl);
         }catch (MalformedURLException e){
+            this.setTitle(getString(R.string.app_name));
             e.printStackTrace();
         }
     }

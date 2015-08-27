@@ -30,9 +30,10 @@
     <string name="setting_hide_closed">Hide closed spots.</string>
     <string name="setting_hide_nodata">Hide spots without data.</string>
     <string name="setting_hide_full">Hide full spots.</string>
+    <string name="setting_city_auto">Automatically</string>
     <!--defaults-->
     <string name="serveraddress" translatable="false">http://jkliemann.de/parkendd/park-api/</string>
-    <string name="default_city" translatable="false">Dresden</string>
+    <string name="default_city" translatable="false">@string/setting_city_auto</string>
     <!--about-->
     <string name="app_url" translatable="false">http://jkliemann.de/parkendd/</string>
     <string name="disclaimer">No responsiblity is taken for the correctness of this information!</string>

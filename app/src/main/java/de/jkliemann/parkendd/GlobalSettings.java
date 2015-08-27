@@ -6,6 +6,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 
@@ -102,7 +103,31 @@ public class GlobalSettings {
         return null;
     }
 
+    private City getClosestCity(){
+        if(providedLocation == null){
+            return getCityByName("Dresden");
+        }
+        double distance = Double.MAX_VALUE;
+        City closestCity = null;
+        for(City city : citylist){
+            double d;
+            try {
+                d = Util.getDistance(providedLocation, city.location());
+            }catch (NullPointerException e){
+                d = Double.MAX_VALUE;
+            }
+            if(d < distance){
+                distance = d;
+                closestCity = city;
+            }
+        }
+        return closestCity;
+    }
+
     public City getCityByName(String name){
+        if(name.equals(context.getString(R.string.default_city))){
+            return this.getClosestCity();
+        }
         for(City city : this.citylist){
             if(city.name().equals(name)){
                 return city;

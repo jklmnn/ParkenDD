@@ -65,7 +65,12 @@ public class SettingsActivity extends PreferenceActivity{
             for(City ct : GlobalSettings.getGlobalSettings().getCitylist()){
                 citystrings.add(ct.name());
             }
-            String[] cities = citystrings.toArray(new String[citystrings.size()]);
+            String[] cities = new String[citystrings.size() + 1];
+            cities[0] = getString(R.string.default_city);
+            String[] ccache = citystrings.toArray(new String[citystrings.size()]);
+            for(int i = 0; i < citystrings.size(); i++) {
+                cities[i + 1] = ccache[i];
+            }
             citylist.setEntries(cities);
             citylist.setEntryValues(cities);
         }else{

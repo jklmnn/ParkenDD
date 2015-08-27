@@ -48,4 +48,5 @@
     <string name="Tiefgarage">underground car park</string>
     <string name="last_update">Last update</string>
     <string name="server_error">Server error</string>
+    <string name="setting_city_auto">Automatically</string>
 </resources>

@@ -48,4 +48,5 @@
     <string name="Tiefgarage">Tiefgarage</string>
     <string name="last_update">Letzte Aktualisierung</string>
     <string name="server_error">Serverfehler</string>
+    <string name="setting_city_auto">Automatisch</string>
 </resources>

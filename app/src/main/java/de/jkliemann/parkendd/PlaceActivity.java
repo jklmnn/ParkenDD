@@ -51,9 +51,6 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         if(intent.getAction() == null){
             String query = intent.getExtras().getString("query");
             try {
-                if(!query.contains(preferences.getString("city", getString(R.string.default_city)))){
-                    query = "Dresden " + query;
-                }
                 query = "geo:0,0?q=" + URLEncoder.encode(query, "UTF-8").replace("+", "%20");
                 data = Uri.parse(query);
             }catch (UnsupportedEncodingException e){
