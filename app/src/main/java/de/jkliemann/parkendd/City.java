@@ -1,5 +1,7 @@
 package de.jkliemann.parkendd;
 
+import android.location.Location;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,19 +17,26 @@ public class City {
     private String name;
     private String id;
     private String data_source;
+    private String data_url;
     private Date last_downloaded;
     private Date last_updated;
+    private Location location;
     private ArrayList<ParkingSpot> spots = null;
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-    public City(String id, String name){
+    public City(String id, String name, Location location){
         this.id = id;
         this.name = name;
+        this.location = location;
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     public void setData_source(String url){
         this.data_source = url;
+    }
+
+    public void setData_url(String url){
+        this.data_url = url;
     }
 
     public void setLast_downloaded(Object date){
@@ -72,6 +81,14 @@ public class City {
 
     public String data_source(){
         return data_source;
+    }
+
+    public String data_url(){
+        return data_url;
+    }
+
+    public Location location(){
+        return location;
     }
 
     public Date last_downloaded(){

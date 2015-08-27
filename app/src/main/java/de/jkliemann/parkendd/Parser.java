@@ -23,6 +23,13 @@ public class Parser {
 
     private static final String CITIES = "cities";
     private static final String VERSION = "api_version";
+    private static final String NAME = "name";
+    private static final String COORDS = "coords";
+    private static final String LAT = "lat";
+    private static final String LNG = "lng";
+    private static final String DATA_SOURCE = "source";
+    private static final String DATA_URL = "url";
+
 
     public static ArrayList<City> meta(String data) throws JSONException{
         ArrayList<City> cities = new ArrayList<>();
@@ -32,11 +39,29 @@ public class Parser {
         String[] vs = version.split("\\.");
         gs.setAPI(Integer.parseInt(vs[0]), Integer.parseInt(vs[1]));
         if(gs.getAPI_V_MAJOR() == 1){
-            JSONObject citystrings = global.getJSONObject(CITIES);
-            Iterator<String> city_ids = citystrings.keys();
+            JSONObject cityobjects = global.getJSONObject(CITIES);
+            Iterator<String> city_ids = cityobjects.keys();
             while(city_ids.hasNext()){
                 String id = city_ids.next();
-                cities.add(new City(citystrings.getString(id), id));
+                JSONObject co = cityobjects.getJSONObject(id);
+                String name = co.getString(NAME);
+                Location location;
+                try {
+                    JSONObject coord = co.getJSONObject(COORDS);
+                    double lat = coord.getDouble(LAT);
+                    double lon = coord.getDouble(LNG);
+                    location = new Location("gps");
+                    location.setLatitude(lat);
+                    location.setLongitude(lon);
+                } catch (JSONException e) {
+                    location = null;
+                }
+                String source = co.getString(DATA_SOURCE);
+                String url = co.getString(DATA_URL);
+                City c = new City(id, name, location);
+                c.setData_source(source);
+                c.setData_url(url);
+                cities.add(c);
             }
         }
         return cities;
@@ -59,17 +84,12 @@ public class Parser {
         return map;
     }
 
-    private static final String NAME = "name";
     private static final String LOTS = "lots";
     private static final String TOTAL = "total";
     private static final String FREE = "free";
     private static final String STATE = "state";
-    private static final String COORDS = "coords";
-    private static final String LAT = "lat";
-    private static final String LNG = "lng";
     private static final String FORECAST = "forecast";
     private static final String LOT_TYPE = "lot_type";
-    private static final String DATA_SOURCE = "data_source";
     private static final String LAST_DOWNLOADED = "last_downloaded";
     private static final String LAST_UPDATED = "last_updated";
     private static final String ID = "id";
@@ -81,7 +101,6 @@ public class Parser {
         JSONObject global = new JSONObject(data);
         String last_downloaded = global.getString(LAST_DOWNLOADED);
         String last_updated = global.getString(LAST_UPDATED);
-        String data_source = global.getString(DATA_SOURCE);
         JSONArray spotarray = global.getJSONArray(LOTS);
         for(int i = 0; i < spotarray.length(); i++){
             JSONObject lot = spotarray.getJSONObject(i);
@@ -126,7 +145,6 @@ public class Parser {
             spotlist.add(spot);
         }
         CITY.setSpots(spotlist);
-        CITY.setData_source(data_source);
         CITY.setLast_downloaded(last_downloaded);
         CITY.setLast_updated(last_updated);
         return CITY;
