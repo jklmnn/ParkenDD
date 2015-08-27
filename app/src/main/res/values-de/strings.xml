@@ -11,9 +11,9 @@
     <string name="header_general">Allgemein</string>
     <string name="header_network">Netzwerk</string>
     <string name="intent_error">Keine passende Anwendung gefunden.</string>
-    <string name="invalid_error">Ungültige Daten erhalten.</string>
+    <!--<string name="invalid_error">Ungültige Daten erhalten.</string>-->
     <string name="negative">Abbrechen</string>
-    <string name="network_error">Fehler beim holen der Daten.</string>
+    <!--<string name="network_error">Fehler beim holen der Daten.</string>-->
     <string name="nodata">Keine Daten</string>
     <string name="positive">Ok</string>
     <string name="server">Serverkontakt:</string>
@@ -23,9 +23,9 @@
     <string name="setting_reset">Zurücksetzen</string>
     <string name="setting_server">Server</string>
     <string name="title_activity_settings">Einstellungen</string>
-    <string name="url_error">Ungültige Adresse</string>
+    <!--<string name="url_error">Ungültige Adresse</string>-->
     <string name="action_forecast">Vorhersage</string>
-    <string name="location_error">Kein Standortzugriff.</string>
+    <!--<string name="location_error">Kein Standortzugriff.</string>-->
     <string name="setting_sorting">Sortieren nach</string>
     <string name="setting_sorting_default">Standard</string>
     <string name="setting_sorting_name">Name</string>
@@ -47,4 +47,5 @@
     <string name="Parkplatz">Parkplatz</string>
     <string name="Tiefgarage">Tiefgarage</string>
     <string name="last_update">Letzte Aktualisierung</string>
+    <string name="server_error">Serverfehler</string>
 </resources>

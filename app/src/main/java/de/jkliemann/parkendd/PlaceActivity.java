@@ -17,10 +17,12 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -120,7 +122,12 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
     }
 
     public void onExceptionThrown(Exception e){
-
+        if(e instanceof FileNotFoundException) {
+            Error.showLongErrorToast(this, getString(R.string.server_error));
+        }else if(e instanceof UnknownHostException){
+            Error.showLongErrorToast(this, getString(R.string.connection_error));
+        }
+        pg.setVisibility(View.INVISIBLE);
     }
 
     private void refresh(){

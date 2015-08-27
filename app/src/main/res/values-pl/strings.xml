@@ -27,9 +27,9 @@
 <string name="negative">Anuluj</string>
 
 <!-- errors -->
-<string name="network_error">Błąd przy pobieraniu danych.</string>
+<!--<string name="network_error">Błąd przy pobieraniu danych.</string>
 <string name="invalid_error">Otrzymano nieprawidłowe dane.</string>
-<string name="url_error">Nieprawidłowy adres</string>
+<string name="url_error">Nieprawidłowy adres</string>-->
 <string name="connection_error">Błąd połączenia</string>
 <string name="intent_error">Nieznaleźono odpowiedniej aplikacji.</string>
 
@@ -40,6 +40,6 @@
 <string name="setting_sorting_name">Imie</string>
 <string name="setting_sorting_location">Lokalizacja</string>
 <string name="setting_sorting_available">Wolne parkingi</string>
-<string name="location_error">Brak dostępu do lokalizacji.</string>
+<!--<string name="location_error">Brak dostępu do lokalizacji.</string>-->
     <string name="title_activity_settings">Ustawienia</string>
 </resources>

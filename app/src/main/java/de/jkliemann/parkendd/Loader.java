@@ -22,6 +22,8 @@ public class Loader extends AsyncTask<URL[], Void, String[]> {
 
     private final LoaderInterface LoaderFinished;
 
+    private Exception lastException = null;
+
     public Loader(LoaderInterface li){
         LoaderFinished = li;
     }
@@ -92,12 +94,17 @@ public class Loader extends AsyncTask<URL[], Void, String[]> {
                 connection.disconnect();
             } catch (IOException e) {
                 e.printStackTrace();
+                lastException = e;
             }
         }
         return data;
     }
 
     protected void onPostExecute(String[] data){
-        LoaderFinished.onLoaderFinished(data, this);
+        if(lastException == null) {
+            LoaderFinished.onLoaderFinished(data, this);
+        }else {
+            LoaderFinished.onExceptionThrown(lastException);
+        }
     }
 }

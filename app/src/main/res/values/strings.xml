@@ -48,10 +48,11 @@
     <string name="positive">Ok</string>
     <string name="negative">Cancel</string>
     <!--errors-->
-    <string name="network_error">Error on receiving data.</string>
+    <!--<string name="network_error">Error on receiving data.</string>
     <string name="invalid_error">Received invalid data.</string>
     <string name="location_error">Could not access location.</string>
-    <string name="url_error">Invalid URL</string>
+    <string name="url_error">Invalid URL</string>-->
+    <string name="server_error">Server error</string>
     <string name="connection_error">Connection error</string>
     <string name="intent_error">No suitable application found.</string>
     <string name="no_address_error">No address found.</string>

@@ -16,8 +16,10 @@ import android.widget.TimePicker;
 
 import org.json.JSONException;
 
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -153,7 +155,14 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
         updateList(timePicker.getCurrentHour());
     }
 
-    public void onExceptionThrown(Exception e){}
+    public void onExceptionThrown(Exception e){
+        if(e instanceof FileNotFoundException) {
+            Error.showLongErrorToast(this, getString(R.string.server_error));
+        }else if(e instanceof UnknownHostException){
+            Error.showLongErrorToast(this, getString(R.string.connection_error));
+        }
+        pg.setVisibility(View.INVISIBLE);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
