@@ -89,15 +89,19 @@ public class Loader extends AsyncTask<URL[], Void, String[]> {
                 while ((line = br.readLine()) != null) {
                     data[i] += line;
                 }
-                publishProgress();
                 br.close();
                 connection.disconnect();
             } catch (IOException e) {
                 e.printStackTrace();
                 lastException = e;
             }
+            updateProgress();
         }
         return data;
+    }
+
+    protected void updateProgress(){
+        LoaderFinished.onProgressUpdated();
     }
 
     protected void onPostExecute(String[] data){

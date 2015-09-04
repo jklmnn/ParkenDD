@@ -37,7 +37,9 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pg = (ProgressBar)findViewById(R.id.progressBar);
-        pg.setIndeterminate(true);
+        pg.setIndeterminate(false);
+        pg.setProgress(0);
+        pg.setMax(6);
         pg.setVisibility(View.VISIBLE);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         GlobalSettings gs = GlobalSettings.getGlobalSettings();
@@ -70,6 +72,7 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
                 return false;
             }
         });
+        onProgressUpdated();
     }
 
     public void onLoaderFinished(String data[], Loader loader){
@@ -96,6 +99,7 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
                 String locDate = dateFormat.format(city.last_updated());
                 String locTime = timeFormat.format(city.last_updated());
                 Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
+                onProgressUpdated();
             }catch (JSONException e){
                 e.printStackTrace();
             }
@@ -109,6 +113,11 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
             Error.showLongErrorToast(this, getString(R.string.connection_error));
         }
         this.pg.setVisibility(View.INVISIBLE);
+        this.pg.setProgress(0);
+    }
+
+    public void onProgressUpdated(){
+        pg.setProgress(pg.getProgress() + 1);
     }
 
     private void refresh(){
@@ -120,6 +129,7 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
             cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
             cityLoader = new Loader(this);
             cityLoader.execute(cityurl);
+            onProgressUpdated();
         }catch (MalformedURLException e){
             this.setTitle(getString(R.string.app_name));
             e.printStackTrace();
@@ -191,6 +201,7 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
         spotArray = preArray;
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
+        onProgressUpdated();
         pg.setVisibility(View.INVISIBLE);
     }
 
@@ -218,6 +229,8 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
             startActivity(about);
         }
         if(id == R.id.action_refresh){
+            pg.setMax(4);
+            pg.setProgress(0);
             pg.setVisibility(View.VISIBLE);
             this.refresh();
         }

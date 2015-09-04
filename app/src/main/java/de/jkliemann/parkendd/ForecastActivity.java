@@ -20,12 +20,14 @@ import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 
 public class ForecastActivity extends ActionBarActivity implements LoaderInterface{
@@ -53,11 +55,11 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
         okbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout);
+                RelativeLayout layout = (RelativeLayout) findViewById(R.id.RelativeLayout);
                 layout.setVisibility(View.VISIBLE);
                 RelativeLayout datePickerLayout = (RelativeLayout) _this.findViewById(R.id.datePickerLayout);
                 datePickerLayout.setVisibility(View.INVISIBLE);
-                DatePicker datePicker = (DatePicker)findViewById(R.id.datePicker);
+                DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
                 date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
                 loadDate();
             }
@@ -74,6 +76,11 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
         });
         Calendar cal = Calendar.getInstance();
         date = new Date(cal.get(Calendar.YEAR) - dateOffset, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        TimeZone tz = Calendar.getInstance().getTimeZone();
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
+        dateFormat.setTimeZone(tz);
+        String locDate = dateFormat.format(date);
+        setTitle(getString(R.string.title_activity_forecast) + " - " + locDate);
         City city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
         loadDate();
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
@@ -107,6 +114,9 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
         }catch (MalformedURLException e){
             e.printStackTrace();
         }
+        pg.setMax(urlList.length + 3);
+        pg.setProgress(1);
+        pg.setIndeterminate(false);
         forecastLoader = new Loader(this);
         forecastLoader.execute(urlList);
     }
@@ -153,6 +163,7 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
         }
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         updateList(timePicker.getCurrentHour());
+        onProgressUpdated();
     }
 
     public void onExceptionThrown(Exception e){
@@ -162,6 +173,10 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
             Error.showLongErrorToast(this, getString(R.string.connection_error));
         }
         pg.setVisibility(View.INVISIBLE);
+    }
+
+    public void onProgressUpdated(){
+        pg.setProgress(pg.getProgress() + 1);
     }
 
     @Override
@@ -248,6 +263,7 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
         spotArray = preArray;
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
+        onProgressUpdated();
         pg.setVisibility(View.INVISIBLE);
     }
 }

@@ -44,7 +44,8 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         setContentView(R.layout.activity_place);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         pg = (ProgressBar) findViewById(R.id.progressBar);
-        pg.setIndeterminate(true);
+        pg.setIndeterminate(false);
+        pg.setMax(6);
         pg.setVisibility(View.VISIBLE);
         Uri data = null;
         Intent intent = getIntent();
@@ -68,6 +69,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
             serverurl[0] = Loader.getMetaUrl(getString(R.string.serveraddress));
             metaLoader = new Loader(this);
             metaLoader.execute(serverurl);
+            onProgressUpdated();
         }catch (MalformedURLException e){
             e.printStackTrace();
         }
@@ -112,6 +114,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
                 String locDate = dateFormat.format(city.last_updated());
                 String locTime = timeFormat.format(city.last_updated());
                 Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
+                onProgressUpdated();
             }catch (JSONException e){
                 e.printStackTrace();
             }
@@ -127,6 +130,10 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         pg.setVisibility(View.INVISIBLE);
     }
 
+    public void onProgressUpdated(){
+        pg.setProgress(pg.getProgress() + 1);
+    }
+
     private void refresh(){
         URL[] cityurl = new URL[1];
         try{
@@ -134,6 +141,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
             cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
             cityLoader = new Loader(this);
             cityLoader.execute(cityurl);
+            onProgressUpdated();
         }catch (MalformedURLException e){
             e.printStackTrace();
         }
@@ -199,6 +207,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         spotArray = preArray;
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
+        onProgressUpdated();
         pg.setVisibility(View.INVISIBLE);
     }
 
@@ -227,6 +236,8 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         }
 
         if(id == R.id.action_refresh){
+            pg.setMax(4);
+            pg.setProgress(0);
             pg.setVisibility(View.VISIBLE);
             refresh();
         }
