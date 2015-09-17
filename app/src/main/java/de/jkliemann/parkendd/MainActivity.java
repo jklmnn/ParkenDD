@@ -133,6 +133,16 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
         }catch (MalformedURLException e){
             this.setTitle(getString(R.string.app_name));
             e.printStackTrace();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            URL[] serverurl = new URL[1];
+            try {
+                serverurl[0] = Loader.getMetaUrl(getString(R.string.serveraddress));
+                meta = new Loader(this);
+                meta.execute(serverurl);
+            }catch (MalformedURLException me){
+                me.printStackTrace();
+            }
         }
     }
 

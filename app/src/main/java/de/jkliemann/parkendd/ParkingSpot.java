@@ -4,6 +4,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -111,7 +112,7 @@ public class ParkingSpot implements Parcelable{
         Double b = (1 - ((double) this.free()) / ((double) this.count()));
         Double e = Math.sqrt(Math.pow(d, 2) + Math.pow(b, 2)) * (1 / (Math.pow(2 * (1 - b), 2) + 1));
         //<Parkhaus Mitte>
-        if(this.id().equals("dresdenparkhausmitte") && d < 2000 && b < 0.3){
+        if(this.id().equals("dresdenparkhausmitte") && d < 2000 && b < 0.4){
             e = (double)-1;
         }
         //</Parkhaus Mitte>
