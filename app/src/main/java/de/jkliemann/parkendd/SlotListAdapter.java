@@ -1,11 +1,13 @@
 package de.jkliemann.parkendd;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,6 +140,8 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
                 Uri geouri = child.geoUri();
                 try{
                     Intent map = new Intent(Intent.ACTION_VIEW, geouri);
+                    String city = GlobalSettings.getGlobalSettings().getCityByName(PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city))).name();
+                    ((ParkenDD) ((Activity) context).getApplication()).getTracker().trackEvent(city, child.name());
                     context.startActivity(map);
                 }catch (ActivityNotFoundException e){
                     e.printStackTrace();
