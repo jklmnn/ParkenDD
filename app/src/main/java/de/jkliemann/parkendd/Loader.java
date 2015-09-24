@@ -14,6 +14,7 @@ import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by jkliemann on 23.08.15.
@@ -48,6 +49,7 @@ public class Loader extends AsyncTask<URL[], Void, String[]> {
 
     public static URL getForecastUrl(String address, City city, ParkingSpot spot, Date date) throws MalformedURLException{
         DateFormat ISODateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        ISODateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         if(!address.substring(address.length() - 1).equals("/")){
             address += "/";
         }

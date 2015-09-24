@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * Created by jkliemann on 23.08.15.
@@ -67,10 +68,11 @@ public class Parser {
         return cities;
     }
 
-    private static final DateFormat ISODateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static final String DATA = "data";
 
     public static Map<Date, Integer> forecast(String data) throws JSONException, ParseException{
+        DateFormat ISODateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        ISODateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         JSONObject global = new JSONObject(data);
         JSONObject jsondata = global.getJSONObject(DATA);
         Iterator<String> dates = jsondata.keys();
