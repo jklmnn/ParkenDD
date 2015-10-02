@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_about">O aplikaci</string>
+    <!--<string name="action_about">O aplikaci</string>
     <string name="action_refresh">Aktualizovat</string>
     <string name="action_settings">Nastavení</string>
     <string name="alert_reset">Výchozí nastavení</string>
@@ -11,9 +11,9 @@
     <string name="header_general">Všeobecné</string>
     <string name="header_network">Síť</string>
     <string name="intent_error">Nenalezen žádný program.</string>
-    <!--<string name="invalid_error">Obdržena neplatná data.</string>-->
+    <string name="invalid_error">Obdržena neplatná data.</string>
     <string name="negative">Zrušit</string>
-    <!--<string name="network_error">Chyba při získávání dat.</string>-->
+    <string name="network_error">Chyba při získávání dat.</string>
     <string name="nodata">Žádná data</string>
     <string name="positive">Ok</string>
     <string name="server">Kontakt k serveru:</string>
@@ -23,11 +23,11 @@
     <string name="setting_reset">Zpět</string>
     <string name="setting_server">Server</string>
     <string name="title_activity_settings">Nastavení</string>
-    <!--<string name="url_error">Neplatná adresa</string>-->
+    <string name="url_error">Neplatná adresa</string>
     <string name="action_forecast">Prognóza</string>
-    <!--<string name="location_error">žádné umístění nalezeno</string><!-no location found-->
-    <string name="setting_sorting">seřazeno podle</string><!--sort by-->
+    <string name="location_error">žádné umístění nalezeno</string>
+    <string name="setting_sorting">seřazeno podle</string>
     <string name="setting_sorting_default">standardní</string>
     <string name="setting_sorting_name">název</string>
-    <string name="setting_sorting_location">místo</string>
+    <string name="setting_sorting_location">místo</string>-->
 </resources>
