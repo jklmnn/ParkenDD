@@ -81,7 +81,6 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
             try{
                 citylist = Parser.meta(data[0]);
                 GlobalSettings.getGlobalSettings().setCitylist(citylist);
-                refresh();
             }catch (JSONException e){
                 e.printStackTrace();
             }
@@ -91,6 +90,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
                 TextView tv = (TextView)findViewById(R.id.textView);
                 try{
                     tv.setText(loc.getExtras().getString("detail"));
+                    refresh();
                 }catch (NullPointerException e){
                     e.printStackTrace();
                     tv.setText(getString(R.string.no_address_error));
@@ -138,6 +138,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         URL[] cityurl = new URL[1];
         try{
             city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
+            setTitle(getString(R.string.app_name) + " - " + city.name());
             cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
             cityLoader = new Loader(this);
             cityLoader.execute(cityurl);
@@ -233,6 +234,11 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         if(id == R.id.action_forecast){
             Intent forecast = new Intent(this, ForecastActivity.class);
             startActivity(forecast);
+        }
+
+        if(id == R.id.action_about){
+            Intent about = new Intent(this, AboutActivity.class);
+            startActivity(about);
         }
 
         if(id == R.id.action_refresh){
