@@ -94,6 +94,8 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
                 }catch (NullPointerException e){
                     e.printStackTrace();
                     tv.setText(getString(R.string.no_address_error));
+                    pg.setProgress(0);
+                    pg.setVisibility(View.INVISIBLEs);
                     ListView spotView = (ListView)findViewById(R.id.spotListView);
                     spotView.setVisibility(View.INVISIBLE);
                 }
