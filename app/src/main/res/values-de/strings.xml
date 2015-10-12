@@ -27,7 +27,7 @@
     <string name="action_forecast">Vorhersage</string>
     <!--<string name="location_error">Kein Standortzugriff.</string>-->
     <string name="setting_sorting">Sortieren nach</string>
-    <string name="setting_sorting_default">Standard</string>
+    <string name="setting_sorting_default">Optimal</string>
     <string name="setting_sorting_name">Name</string>
     <string name="setting_sorting_location">Standort</string>
     <string name="setting_sorting_available">Freie Plätze</string>

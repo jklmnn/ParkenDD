@@ -14,7 +14,7 @@
     <string name="setting_server">Server</string>
     <string name="setting_city">City</string>
     <string name="setting_sorting">Sort by</string>
-    <string name="setting_sorting_default">Default</string>
+    <string name="setting_sorting_default">Optimal</string>
     <string name="setting_sorting_name">Name</string>
     <string name="setting_sorting_location">Location</string>
     <string name="setting_sorting_available">Available lots</string>
