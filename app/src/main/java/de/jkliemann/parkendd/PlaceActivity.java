@@ -95,7 +95,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
                     e.printStackTrace();
                     tv.setText(getString(R.string.no_address_error));
                     pg.setProgress(0);
-                    pg.setVisibility(View.INVISIBLEs);
+                    pg.setVisibility(View.INVISIBLE);
                     ListView spotView = (ListView)findViewById(R.id.spotListView);
                     spotView.setVisibility(View.INVISIBLE);
                 }
@@ -232,6 +232,11 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
 //        if (id == R.id.action_settings) {
 //            return true;
 //        }
+
+        if (id == R.id.action_settings) {
+            Intent settings = new Intent(this, SettingsActivity.class);
+            startActivity(settings);
+        }
 
         if(id == R.id.action_forecast){
             Intent forecast = new Intent(this, ForecastActivity.class);

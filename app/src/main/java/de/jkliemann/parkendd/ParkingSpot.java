@@ -181,7 +181,7 @@ public class ParkingSpot implements Parcelable{
     public Uri geoUri(){
         String location;
         if(lat != 0 && lon != 0){
-            location = "geo:0,0?q="+Double.toString(lat)+","+Double.toString(lon)+"("+name+")";
+            location = "geo:0,0?q="+Double.toString(lat)+","+Double.toString(lon);
         }else{
             location = "geo:0,0?q="+city+" " + name;
         }
