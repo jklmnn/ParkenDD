@@ -20,16 +20,15 @@ public class GlobalSettings {
     private Context context;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private String locationProvider;
     private int API_V_MAJOR;
     private int API_V_MINOR;
     private Location providedLocation = null;
+    private Boolean locationEnabled = false;
 
     private GlobalSettings(){
         citylist = null;
         locationManager = null;
         locationListener = null;
-        locationProvider = "network";
     }
 
     public static GlobalSettings getGlobalSettings(){
@@ -39,13 +38,16 @@ public class GlobalSettings {
         return mInstance;
     }
 
-    public void initLocation(Context context){
+    public Boolean locationEnabled(){
+        return locationEnabled;
+    }
+
+    public Boolean initLocation(Context context){
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
             }
 
             @Override
@@ -63,15 +65,35 @@ public class GlobalSettings {
 
             }
         };
-        if(!locationManager.isProviderEnabled(locationProvider)){
-            locationProvider = "gps";
+        try {
+            locationManager.requestLocationUpdates(getProvider(), (long) 60000, (float) 50, locationListener, Looper.getMainLooper());
+            locationEnabled = true;
+            return true;
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+            locationEnabled = false;
+            return false;
         }
-        locationManager.requestLocationUpdates(locationProvider, (long) 60000, (float) 50, locationListener, Looper.getMainLooper());
+    }
+
+    private String getProvider(){
+        if(locationManager.isProviderEnabled("gps")){
+            return "gps";
+        }
+        if(locationManager.isProviderEnabled("network")){
+            return "network";
+        }
+        return null;
     }
 
     public void setLocation(Location loc){
         if(loc == null){
-            providedLocation = locationManager.getLastKnownLocation(locationProvider);
+            try {
+                providedLocation = locationManager.getLastKnownLocation(getProvider());
+            }catch (IllegalArgumentException e){
+                e.printStackTrace();
+                providedLocation = null;
+            }
         }else{
             providedLocation = loc;
         }

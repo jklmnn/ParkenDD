@@ -121,6 +121,9 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
     }
 
     private void refresh(){
+        if(!GlobalSettings.getGlobalSettings().locationEnabled()){
+            GlobalSettings.getGlobalSettings().initLocation(this);
+        }
         GlobalSettings.getGlobalSettings().setLocation(null);
         URL[] cityurl = new URL[1];
         try{
