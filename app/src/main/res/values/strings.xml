@@ -2,7 +2,7 @@
 <resources>
     <!--Meta-->
     <string name="app_name" translatable="false">ParkenDD</string>
-    <string name="version" translatable="false">1.0.0</string>
+    <string name="version" translatable="false">1.0.0-beta2</string>
     <!--actions-->
     <string name="action_settings">Settings</string>
     <string name="action_forecast">Forecast</string>
@@ -73,4 +73,8 @@
     <string name="Tiefgarage">underground car park</string>
     <string name="Parkplatz">car park</string>
     <string name="Parkhaus">parking garage</string>
+    <string name="invalid_error">Received invalid data.</string>
+    <string name="location_error">Could not access location.</string>
+    <string name="network_error">Error on receiving data.</string>
+    <string name="url_error">Invalid URL.</string>
 </resources>
