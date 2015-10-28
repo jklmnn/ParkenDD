@@ -50,4 +50,6 @@
     <string name="server_error">Serverfehler</string>
     <string name="setting_city_auto">Automatisch</string>
     <string name="invalid_error">Ungültige Daten erhalten.</string>
+    <string name="active_support">Zeige nur unterstützte Städte an.</string>
+    <string name="alert_active_support">Bei der Nutzung von nicht unterstützten Städten können Fehler auftreten.</string>
 </resources>

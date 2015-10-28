@@ -49,4 +49,6 @@
     <string name="last_update">Last update</string>
     <string name="server_error">Server error</string>
     <string name="setting_city_auto">Automatically</string>
+    <string name="active_support">Use only supported cities.</string>
+    <string name="alert_active_support">Unsupported cities can not be guaranteed to work.</string>
 </resources>

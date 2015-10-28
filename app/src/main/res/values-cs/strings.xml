@@ -30,4 +30,8 @@
     <string name="setting_sorting_default">standardní</string>
     <string name="setting_sorting_name">název</string>
     <string name="setting_sorting_location">místo</string>
+    <string name="Parkhaus">parkoviště</string>
+    <string name="Parkplatz">parkovací</string>
+    <string name="Tiefgarage">podzemní parkoviště</string>
+    <string name="address">Adresa</string>
 </resources>

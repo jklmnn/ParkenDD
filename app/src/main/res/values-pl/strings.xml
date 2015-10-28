@@ -42,4 +42,8 @@
 <string name="setting_sorting_available">Wolne parkingi</string>
 <string name="location_error">Brak dostępu do lokalizacji.</string>
     <string name="title_activity_settings">Ustawienia</string>
+    <string name="Tiefgarage">podziemny parking</string>
+    <string name="Parkplatz">parkowanie</string>
+    <string name="Parkhaus">parking</string>
+    <string name="address">Adres</string>
 </resources>
