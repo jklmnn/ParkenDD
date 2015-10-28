@@ -85,6 +85,7 @@ public class SettingsActivity extends PreferenceActivity{
         sortList.setEntryValues(res.getStringArray(R.array.setting_sort_options));
         sortList.setEntries(res.getStringArray(R.array.setting_sort_options));
         bindPreferenceSummaryToValue(sortList);
+        bindPreferenceWarning(findPreference("active_support"));
         bindResetToDefault(findPreference("reset"));
     }
 
@@ -131,6 +132,30 @@ public class SettingsActivity extends PreferenceActivity{
         }
     };
 
+    private static Preference.OnPreferenceClickListener showWarning = new Preference.OnPreferenceClickListener(){
+        @Override
+        public boolean onPreferenceClick(Preference preference){
+            if(preference instanceof CheckBoxPreference){
+                if(((CheckBoxPreference) preference).isChecked()){
+                    supportWarning(preference.getContext(), preference.getPreferenceManager());
+                }
+            }
+            return true;
+        }
+
+        private void supportWarning(final Context context, final PreferenceManager preferenceManager){
+            AlertDialog.Builder warning = new AlertDialog.Builder(context);
+            warning.setMessage(context.getString(R.string.alert_active_support));
+            warning.setPositiveButton(context.getString(R.string.positive), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            warning.create().show();
+        }
+    };
+
     private static Preference.OnPreferenceClickListener setDefault = new Preference.OnPreferenceClickListener() {
 
         @Override
@@ -154,6 +179,8 @@ public class SettingsActivity extends PreferenceActivity{
                     hide_nodata.setChecked(false);
                     CheckBoxPreference hide_full = (CheckBoxPreference)preferenceManager.findPreference("hide_full");
                     hide_full.setChecked(true);
+                    CheckBoxPreference active_support = (CheckBoxPreference)preferenceManager.findPreference("active_support");
+                    active_support.setChecked(true);
                 }
             });
             resetDialog.setNegativeButton(context.getString(R.string.negative), new DialogInterface.OnClickListener() {
@@ -188,6 +215,10 @@ public class SettingsActivity extends PreferenceActivity{
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
+    }
+
+    private static void bindPreferenceWarning(Preference preference){
+        preference.setOnPreferenceClickListener(showWarning);
     }
 
     /**

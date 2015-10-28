@@ -20,6 +20,10 @@
         android:key="hide_full"
         android:title="@string/setting_hide_full"
         android:defaultValue="true"/>
+    <CheckBoxPreference
+        android:key="active_support"
+        android:title="@string/active_support"
+        android:defaultValue="true" />
     <Preference
         android:key="reset"
         android:title="@string/setting_reset" />

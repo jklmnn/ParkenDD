@@ -31,6 +31,7 @@
     <string name="setting_hide_nodata">Hide spots without data.</string>
     <string name="setting_hide_full">Hide full spots.</string>
     <string name="setting_city_auto">Automatically</string>
+    <string name="active_support">Use only supported cities.</string>
     <!--defaults-->
     <string name="serveraddress" translatable="false">http://api.parkendd.de/</string>
     <string name="default_city" translatable="false">@string/setting_city_auto</string>
@@ -45,6 +46,7 @@
     <string name="nodata">n/a</string>
     <!--alerts-->
     <string name="alert_reset">Reset to default?</string>
+    <string name="alert_active_support">Unsupported cities cannot be guaranteed to work.</string>
     <!--pos/neg button-->
     <string name="positive">Ok</string>
     <string name="negative">Cancel</string>

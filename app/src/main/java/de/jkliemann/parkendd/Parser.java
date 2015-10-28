@@ -57,9 +57,16 @@ public class Parser {
                 } catch (JSONException e) {
                     location = null;
                 }
+                boolean active = false;
+                try{
+                    active = co.getBoolean("active_support");
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
                 String source = co.getString(DATA_SOURCE);
                 String url = co.getString(DATA_URL);
                 City c = new City(id, name, location);
+                c.setActive(active);
                 c.setData_source(source);
                 c.setData_url(url);
                 cities.add(c);

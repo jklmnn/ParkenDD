@@ -21,6 +21,7 @@ public class City {
     private Date last_downloaded;
     private Date last_updated;
     private Location location;
+    private boolean active_support;
     private ArrayList<ParkingSpot> spots = null;
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -71,6 +72,10 @@ public class City {
         this.spots = spots;
     }
 
+    public void setActive(boolean ac){
+        active_support = ac;
+    }
+
     public String name(){
         return name;
     }
@@ -101,5 +106,9 @@ public class City {
 
     public ArrayList<ParkingSpot> spots(){
         return spots;
+    }
+
+    public boolean active_support(){
+        return active_support;
     }
 }
