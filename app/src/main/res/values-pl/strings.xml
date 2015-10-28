@@ -7,8 +7,6 @@
 <string name="of">"od"</string>
 <string name="closed">"Zamknięty"</string>
 <string name="connection_error">"Błąd połączenia"</string>
-
-<!-- Wszystkie* -->
 <string name="disclaimer">"Wszystkie informacje bez gwarancji!"</string>
 <string name="header_general">"Ogólnie"</string>
 <string name="header_network">"Sieć"</string>
@@ -54,3 +52,4 @@
 <string name="active_support">"Pokaż tylko wspierane miasta."</string>
 <string name="alert_active_support">"Możliwość wystąpienia błędów podczas użytkowania niewspieranych miast."</string>
 </resources>
+
