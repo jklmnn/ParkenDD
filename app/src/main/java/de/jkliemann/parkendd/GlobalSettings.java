@@ -105,7 +105,7 @@ public class GlobalSettings {
 
 
     public ArrayList<City> getCitylist(){
-        return citylist;
+        return getActiveCities();
     }
 
     public int getAPI_V_MAJOR(){
@@ -117,7 +117,7 @@ public class GlobalSettings {
     }
 
     public City getCityById(String id){
-        for(City city: this.citylist){
+        for(City city: getActiveCities()){
             if(city.id().equals(id)){
                 return city;
             }
@@ -131,7 +131,7 @@ public class GlobalSettings {
         }
         double distance = Double.MAX_VALUE;
         City closestCity = null;
-        for(City city : citylist){
+        for(City city : getActiveCities()){
             double d;
             try {
                 d = Util.getDistance(providedLocation, city.location());
@@ -150,7 +150,7 @@ public class GlobalSettings {
         if(name.equals(context.getString(R.string.default_city))){
             return this.getClosestCity();
         }
-        for(City city : this.citylist){
+        for(City city : this.getActiveCities()){
             if(city.name().equals(name)){
                 return city;
             }
@@ -167,5 +167,19 @@ public class GlobalSettings {
     public void setAPI(int maj, int min){
         this.API_V_MAJOR = maj;
         this.API_V_MINOR = min;
+    }
+
+    private ArrayList<City> getActiveCities(){
+        if(PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("active_support", true)) {
+            ArrayList<City> activeList = new ArrayList<>();
+            for(City city : this.citylist){
+                if(city.active_support()){
+                    activeList.add(city);
+                }
+            }
+            return activeList;
+        }else{
+            return this.citylist;
+        }
     }
 }

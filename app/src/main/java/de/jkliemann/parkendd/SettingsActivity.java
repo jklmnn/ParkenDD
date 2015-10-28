@@ -136,7 +136,7 @@ public class SettingsActivity extends PreferenceActivity{
         @Override
         public boolean onPreferenceClick(Preference preference){
             if(preference instanceof CheckBoxPreference){
-                if(((CheckBoxPreference) preference).isChecked()){
+                if(!((CheckBoxPreference) preference).isChecked()){
                     supportWarning(preference.getContext(), preference.getPreferenceManager());
                 }
             }
