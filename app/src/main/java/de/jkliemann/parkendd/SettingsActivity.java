@@ -136,8 +136,15 @@ public class SettingsActivity extends PreferenceActivity{
         @Override
         public boolean onPreferenceClick(Preference preference){
             if(preference instanceof CheckBoxPreference){
-                if(!((CheckBoxPreference) preference).isChecked()){
-                    supportWarning(preference.getContext(), preference.getPreferenceManager());
+                Context context = preference.getContext();
+                if(((CheckBoxPreference) preference).isChecked()) {
+                    ListPreference city = (ListPreference)preference.getPreferenceManager().findPreference("city");
+                    if(GlobalSettings.getGlobalSettings().getCityByName(city.getValue()) == null){
+                        city.setValue(context.getString(R.string.default_city));
+                        city.setSummary(context.getString(R.string.default_city));
+                    }
+                }else{
+                    supportWarning(context, preference.getPreferenceManager());
                 }
             }
             return true;
