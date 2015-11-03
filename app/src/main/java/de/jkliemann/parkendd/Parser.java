@@ -78,19 +78,25 @@ public class Parser {
     private static final String DATA = "data";
 
     public static Map<Date, Integer> forecast(String data) throws JSONException, ParseException{
+        String VERSION = "version";
         DateFormat ISODateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         ISODateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         JSONObject global = new JSONObject(data);
-        JSONObject jsondata = global.getJSONObject(DATA);
-        Iterator<String> dates = jsondata.keys();
-        Map<Date, Integer> map = new HashMap<>();
-        while(dates.hasNext()){
-            String datestring = dates.next();
-            Date date = ISODateFormat.parse(datestring);
-            Integer num = jsondata.getInt(datestring);
-            map.put(date, num);
+        String version = global.getString(VERSION);
+        if(version.equals("1.0")){
+            JSONObject jsondata = global.getJSONObject(DATA);
+            Iterator<String> dates = jsondata.keys();
+            Map<Date, Integer> map = new HashMap<>();
+            while (dates.hasNext()) {
+                String datestring = dates.next();
+                Date date = ISODateFormat.parse(datestring);
+                Integer num = jsondata.getInt(datestring);
+                map.put(date, num);
+            }
+            return map;
+        }else{
+            return new HashMap<>();
         }
-        return map;
     }
 
     private static final String LOTS = "lots";
