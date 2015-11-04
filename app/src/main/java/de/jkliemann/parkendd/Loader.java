@@ -86,6 +86,7 @@ public class Loader extends AsyncTask<URL[], Void, String[]> {
             HttpURLConnection connection;
             try {
                 connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("User-Agent", "ParkenDD for Android 1.0.0");
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = "";
                 while ((line = br.readLine()) != null) {

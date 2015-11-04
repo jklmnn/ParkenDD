@@ -84,6 +84,8 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
                 refresh();
             }catch (JSONException e){
                 e.printStackTrace();
+                this.pg.setVisibility(View.INVISIBLE);
+                this.pg.setProgress(0);
             }
         }
         if(loader.equals(cityLoader)){
@@ -102,6 +104,8 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
                 onProgressUpdated();
             }catch (JSONException e){
                 e.printStackTrace();
+                this.pg.setVisibility(View.INVISIBLE);
+                this.pg.setProgress(0);
             }
         }
     }
