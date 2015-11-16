@@ -255,7 +255,10 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
             Intent forecast = new Intent(this, ForecastActivity.class);
             startActivity(forecast);
         }
-
+        if(id == R.id.action_map){
+            Intent map = new Intent(this, MapActivity.class);
+            startActivity(map);
+        }
         return super.onOptionsItemSelected(item);
     }
 }

@@ -79,4 +79,5 @@
     <string name="location_error">Could not access location.</string>
     <string name="network_error">Error on receiving data.</string>
     <string name="url_error">Invalid URL.</string>
+    <string name="title_activity_map">MapActivity</string>
 </resources>

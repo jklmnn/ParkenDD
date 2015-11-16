@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.2'
     compile 'com.android.support:support-v4:21.0.2'
     compile 'org.piwik.sdk:piwik-sdk:0.0.2'
+    compile 'org.osmdroid:osmdroid-android:5.0.1@aar'
 }
