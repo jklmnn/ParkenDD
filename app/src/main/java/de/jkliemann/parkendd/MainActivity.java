@@ -261,4 +261,10 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        ((ParkenDD) getApplication()).getTracker().dispatch();
+    }
 }
