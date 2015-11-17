@@ -24,16 +24,23 @@ public class MapActivity extends ActionBarActivity {
         Location self = GlobalSettings.getGlobalSettings().getLastKnownLocation();
         setTitle(city.name());
         MapView map = (MapView)findViewById(R.id.osmap);
-        map.setTileSource(TileSourceFactory.MAPNIK);
+        map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
-        IMapController mapctl = map.getController();
+        final IMapController mapctl = map.getController();
         mapctl.setZoom(13);
-        mapctl.setCenter(new GeoPoint(self.getLatitude(), self.getLongitude()));
-        ItemizedIconOverlay<OverlayItem> spotOverlay = new ItemizedIconOverlay<OverlayItem>(this, createItemList(city.spots()),
+        try {
+            mapctl.setCenter(new GeoPoint(self.getLatitude(), self.getLongitude()));
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            mapctl.setCenter(new GeoPoint(city.location().getLatitude(), city.location().getLongitude()));
+        }
+        ItemizedIconOverlay<OverlayItem> spotOverlay = new ItemizedIconOverlay<>(this, createItemList(city.spots()),
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                        mapctl.setCenter(item.getPoint());
+
                         return false;
                     }
 
@@ -51,6 +58,7 @@ public class MapActivity extends ActionBarActivity {
         ArrayList<OverlayItem> itemList = new ArrayList<>();
         for(ParkingSpot spot : spotlist){
             String desc = "";
+            SpotIcon marker = new SpotIcon(spot.state(), (float)spot.free()/(float)spot.count());
             switch (spot.state()){
                 case "closed":
                     desc = getString(R.string.closed);
@@ -63,7 +71,9 @@ public class MapActivity extends ActionBarActivity {
                     break;
             }
             try {
-                itemList.add(new OverlayItem(spot.name(), desc, new GeoPoint(spot.location().getLatitude(), spot.location().getLongitude())));
+                OverlayItem olItem = new OverlayItem(spot.name(), desc, new GeoPoint(spot.location().getLatitude(), spot.location().getLongitude()));
+                olItem.setMarker(marker.getBitmapDrawable(this));
+                itemList.add(olItem);
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
