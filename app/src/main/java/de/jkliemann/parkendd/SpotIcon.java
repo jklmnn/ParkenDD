@@ -16,16 +16,14 @@ import android.graphics.drawable.Drawable;
  */
 public class SpotIcon extends Drawable {
 
-    private String state;
-    private float free;
+    ParkingSpot spot;
     private final Paint red;
     private final Paint green;
     private final Paint blue;
     private final Paint black;
 
-    public SpotIcon(String state, float free){
-        this.state = state;
-        this.free = free;
+    public SpotIcon(ParkingSpot spot){
+        this.spot = spot;
         red = new Paint();
         red.setColor(Color.argb(0xff, 0xef, 0x53, 0x50));
         green = new Paint();
@@ -39,7 +37,7 @@ public class SpotIcon extends Drawable {
     @Override
     public void draw(Canvas canvas){
         RectF oval = new RectF(0, 0, 50, 50);
-        switch (this.state) {
+        switch (this.spot.state()) {
             case "closed":
                 canvas.drawArc(oval, 0, 360, true, black);
                 break;
@@ -47,7 +45,7 @@ public class SpotIcon extends Drawable {
                 canvas.drawArc(oval, 0, 360, true, blue);
                 break;
             default:
-                float free = 360 * this.free;
+                float free = 360 * ((float)this.spot.free()/(float)this.spot.count());
                 canvas.drawArc(oval, (free / 2) * (-1) - 90, free, true, green);
                 canvas.drawArc(oval, (free / 2) - 90, 360 - free, true, red);
         }
@@ -79,5 +77,9 @@ public class SpotIcon extends Drawable {
         this.setBounds(0, 0, 50, 50);
         this.draw(canvas);
         return new BitmapDrawable(context.getResources(), bmp);
+    }
+
+    public ParkingSpot getSpot(){
+        return this.spot;
     }
 }

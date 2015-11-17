@@ -29,23 +29,31 @@ public class MapActivity extends ActionBarActivity {
         map.setMultiTouchControls(true);
         final IMapController mapctl = map.getController();
         mapctl.setZoom(13);
+        ArrayList<OverlayItem> itemList;
         try {
-            mapctl.setCenter(new GeoPoint(self.getLatitude(), self.getLongitude()));
+            GeoPoint selfLoc = new GeoPoint(self.getLatitude(), self.getLongitude());
+            mapctl.setCenter(selfLoc);
+            OverlayItem selfItem = new OverlayItem("Location", "", selfLoc);
+            itemList = createItemList(city.spots(), selfItem);
         }catch (NullPointerException e){
             e.printStackTrace();
             mapctl.setCenter(new GeoPoint(city.location().getLatitude(), city.location().getLongitude()));
+            itemList = createItemList(city.spots(), null);
         }
-        ItemizedIconOverlay<OverlayItem> spotOverlay = new ItemizedIconOverlay<>(this, createItemList(city.spots()),
+        ItemizedIconOverlay<OverlayItem> spotOverlay = new ItemizedIconOverlay<>(this, itemList,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
                         mapctl.setCenter(item.getPoint());
-
+                        SpotIcon icon = (SpotIcon)item.getDrawable();
+                        ParkingSpot spot = icon.getSpot();
                         return false;
                     }
 
                     @Override
                     public boolean onItemLongPress(int index, OverlayItem item) {
+                        SpotIcon icon = (SpotIcon)item.getDrawable();
+                        ParkingSpot spot = icon.getSpot();
                         return false;
                     }
                 }
@@ -54,11 +62,14 @@ public class MapActivity extends ActionBarActivity {
         map.invalidate();
     }
 
-    private ArrayList<OverlayItem> createItemList(ArrayList<ParkingSpot> spotlist){
+    private ArrayList<OverlayItem> createItemList(ArrayList<ParkingSpot> spotlist, OverlayItem self){
         ArrayList<OverlayItem> itemList = new ArrayList<>();
+        if(self != null) {
+            itemList.add(self);
+        }
         for(ParkingSpot spot : spotlist){
             String desc = "";
-            SpotIcon marker = new SpotIcon(spot.state(), (float)spot.free()/(float)spot.count());
+            SpotIcon marker = new SpotIcon(spot);
             switch (spot.state()){
                 case "closed":
                     desc = getString(R.string.closed);
@@ -73,6 +84,7 @@ public class MapActivity extends ActionBarActivity {
             try {
                 OverlayItem olItem = new OverlayItem(spot.name(), desc, new GeoPoint(spot.location().getLatitude(), spot.location().getLongitude()));
                 olItem.setMarker(marker.getBitmapDrawable(this));
+                olItem.setMarkerHotspot(OverlayItem.HotspotPlace.CENTER);
                 itemList.add(olItem);
             }catch (NullPointerException e){
                 e.printStackTrace();
