@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 public class MapActivity extends ActionBarActivity {
 
+    private ItemizedIconOverlay<OverlayItem> popupOverlay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +26,7 @@ public class MapActivity extends ActionBarActivity {
         City city  = GlobalSettings.getGlobalSettings().getCityByName(PreferenceManager.getDefaultSharedPreferences(this).getString("city", getString(R.string.default_city)));
         Location self = GlobalSettings.getGlobalSettings().getLastKnownLocation();
         setTitle(city.name());
-        MapView map = (MapView)findViewById(R.id.osmap);
+        final MapView map = (MapView)findViewById(R.id.osmap);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -37,39 +39,7 @@ public class MapActivity extends ActionBarActivity {
                         mapctl.setCenter(item.getPoint());
                         SpotIconBitmap icon = (SpotIconBitmap) item.getDrawable();
                         ParkingSpot spot = icon.getSpot();
-                        TextView name = (TextView) findViewById(R.id.detailNameView);
-                        name.setText(spot.name());
-                        ((TextView) findViewById(R.id.detailCountValue)).setText(String.valueOf(spot.count()));
-                        ((TextView) findViewById(R.id.detailFreeValue)).setText(String.valueOf(spot.free()));
-                        String state;
-                        switch (spot.state()) {
-                            case "closed":
-                                state = getString(R.string.closed);
-                                break;
-                            case "nodata":
-                                state = getString(R.string.nodata);
-                                break;
-                            default:
-                                state = getString(R.string.open);
-                                break;
-                        }
-                        String type;
-                        switch (spot.type()) {
-                            case "Tiefgarage":
-                                type = getString(R.string.Tiefgarage);
-                                break;
-                            case "Parkplatz":
-                                type = getString(R.string.Parkplatz);
-                                break;
-                            case "Parkhaus":
-                                type = getString(R.string.Parkhaus);
-                                break;
-                            default:
-                                type = getString(R.string.nodata);
-                                break;
-                        }
-                        ((TextView) findViewById(R.id.detailStateValue)).setText(state);
-                        ((TextView) findViewById(R.id.detailTypeValue)).setText(type);
+                        setPopup(map, spot, (GeoPoint)item.getPoint());
                         return false;
                     }
 
@@ -134,6 +104,43 @@ public class MapActivity extends ActionBarActivity {
             }
         }
         return itemList;
+    }
+
+    private void setPopup(MapView mapv, ParkingSpot spot, GeoPoint point){
+        final MapView map = mapv;
+        if(popupOverlay != null) {
+            map.getOverlays().remove(popupOverlay);
+        }
+        OverlayItem popup = new OverlayItem(spot.name(), spot.state(), point);
+        String val;
+        switch (spot.state()){
+            case "closed":
+                val = getString(R.string.closed);
+                break;
+            case "nodata":
+                val = getString(R.string.nodata);
+                break;
+            default:
+                val = String.valueOf(spot.free()) + " " + getString(R.string.of) + " " + String.valueOf(spot.count());
+                break;
+        }
+        SlotPopup marker = new SlotPopup(spot.name() + " - " + val);
+        popup.setMarker(marker.getBitmapDrawable(this));
+        ArrayList<OverlayItem> popupList = new ArrayList<>();
+        popupList.add(popup);
+        popupOverlay = new ItemizedIconOverlay<>(this, popupList, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+            @Override
+            public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                map.getOverlays().remove(popupOverlay);
+                return false;
+            }
+
+            @Override
+            public boolean onItemLongPress(int index, OverlayItem item) {
+                return false;
+            }
+        });
+        map.getOverlays().add(popupOverlay);
     }
 
 }
