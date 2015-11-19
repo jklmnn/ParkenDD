@@ -30,30 +30,19 @@ public class MapActivity extends ActionBarActivity {
         map.setMultiTouchControls(true);
         final IMapController mapctl = map.getController();
         mapctl.setZoom(13);
-        ArrayList<OverlayItem> itemList;
-        try {
-            GeoPoint selfLoc = new GeoPoint(self.getLatitude(), self.getLongitude());
-            mapctl.setCenter(selfLoc);
-            OverlayItem selfItem = new OverlayItem("Location", "", selfLoc);
-            itemList = createItemList(city.spots(), selfItem);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-            mapctl.setCenter(new GeoPoint(city.location().getLatitude(), city.location().getLongitude()));
-            itemList = createItemList(city.spots(), null);
-        }
-        ItemizedIconOverlay<OverlayItem> spotOverlay = new ItemizedIconOverlay<>(this, itemList,
+        ItemizedIconOverlay<OverlayItem> spotOverlay = new ItemizedIconOverlay<>(this, createItemList(city.spots()),
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
                         mapctl.setCenter(item.getPoint());
-                        SpotIconBitmap icon = (SpotIconBitmap)item.getDrawable();
+                        SpotIconBitmap icon = (SpotIconBitmap) item.getDrawable();
                         ParkingSpot spot = icon.getSpot();
-                        TextView name = (TextView)findViewById(R.id.detailNameView);
+                        TextView name = (TextView) findViewById(R.id.detailNameView);
                         name.setText(spot.name());
-                        ((TextView)findViewById(R.id.detailCountValue)).setText(String.valueOf(spot.count()));
-                        ((TextView)findViewById(R.id.detailFreeValue)).setText(String.valueOf(spot.free()));
+                        ((TextView) findViewById(R.id.detailCountValue)).setText(String.valueOf(spot.count()));
+                        ((TextView) findViewById(R.id.detailFreeValue)).setText(String.valueOf(spot.free()));
                         String state;
-                        switch (spot.state()){
+                        switch (spot.state()) {
                             case "closed":
                                 state = getString(R.string.closed);
                                 break;
@@ -65,7 +54,7 @@ public class MapActivity extends ActionBarActivity {
                                 break;
                         }
                         String type;
-                        switch (spot.type()){
+                        switch (spot.type()) {
                             case "Tiefgarage":
                                 type = getString(R.string.Tiefgarage);
                                 break;
@@ -79,8 +68,8 @@ public class MapActivity extends ActionBarActivity {
                                 type = getString(R.string.nodata);
                                 break;
                         }
-                        ((TextView)findViewById(R.id.detailStateValue)).setText(state);
-                        ((TextView)findViewById(R.id.detailTypeValue)).setText(type);
+                        ((TextView) findViewById(R.id.detailStateValue)).setText(state);
+                        ((TextView) findViewById(R.id.detailTypeValue)).setText(type);
                         return false;
                     }
 
@@ -93,14 +82,34 @@ public class MapActivity extends ActionBarActivity {
                 }
         );
         map.getOverlays().add(spotOverlay);
+        try {
+            GeoPoint selfLoc = new GeoPoint(self.getLatitude(), self.getLongitude());
+            mapctl.setCenter(selfLoc);
+            OverlayItem selfItem = new OverlayItem("Location", "", selfLoc);
+            ArrayList<OverlayItem> selfList = new ArrayList<>();
+            selfList.add(selfItem);
+            ItemizedIconOverlay<OverlayItem> selfOverlay = new ItemizedIconOverlay<>(this, selfList, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                @Override
+                public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                    mapctl.setCenter(item.getPoint());
+                    return false;
+                }
+
+                @Override
+                public boolean onItemLongPress(int index, OverlayItem item) {
+                    return false;
+                }
+            });
+            map.getOverlays().add(selfOverlay);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            mapctl.setCenter(new GeoPoint(city.location().getLatitude(), city.location().getLongitude()));
+        }
         map.invalidate();
     }
 
-    private ArrayList<OverlayItem> createItemList(ArrayList<ParkingSpot> spotlist, OverlayItem self){
+    private ArrayList<OverlayItem> createItemList(ArrayList<ParkingSpot> spotlist){
         ArrayList<OverlayItem> itemList = new ArrayList<>();
-        if(self != null) {
-            itemList.add(self);
-        }
         for(ParkingSpot spot : spotlist){
             String desc = "";
             SpotIcon marker = new SpotIcon(spot);
