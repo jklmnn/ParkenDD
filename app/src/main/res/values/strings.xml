@@ -44,6 +44,7 @@
     <!--slotstates-->
     <string name="closed">closed</string>
     <string name="nodata">n/a</string>
+    <string name="open">open</string>
     <!--alerts-->
     <string name="alert_reset">Reset to default?</string>
     <string name="alert_active_support">Unsupported cities can not be guaranteed to work.</string>
@@ -68,6 +69,7 @@
     <string name="count">Count</string>
     <string name="distance">Distance</string>
     <string name="type">Type</string>
+    <string name="state">State</string>
     <string name="map">Map</string>
     <string name="title_activity_place">PlaceActivity</string>
     <string name="address">Address</string>

@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.TextView;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -45,14 +46,47 @@ public class MapActivity extends ActionBarActivity {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
                         mapctl.setCenter(item.getPoint());
-                        SpotIcon icon = (SpotIcon)item.getDrawable();
+                        SpotIconBitmap icon = (SpotIconBitmap)item.getDrawable();
                         ParkingSpot spot = icon.getSpot();
+                        TextView name = (TextView)findViewById(R.id.detailNameView);
+                        name.setText(spot.name());
+                        ((TextView)findViewById(R.id.detailCountValue)).setText(String.valueOf(spot.count()));
+                        ((TextView)findViewById(R.id.detailFreeValue)).setText(String.valueOf(spot.free()));
+                        String state;
+                        switch (spot.state()){
+                            case "closed":
+                                state = getString(R.string.closed);
+                                break;
+                            case "nodata":
+                                state = getString(R.string.nodata);
+                                break;
+                            default:
+                                state = getString(R.string.open);
+                                break;
+                        }
+                        String type;
+                        switch (spot.type()){
+                            case "Tiefgarage":
+                                type = getString(R.string.Tiefgarage);
+                                break;
+                            case "Parkplatz":
+                                type = getString(R.string.Parkplatz);
+                                break;
+                            case "Parkhaus":
+                                type = getString(R.string.Parkhaus);
+                                break;
+                            default:
+                                type = getString(R.string.nodata);
+                                break;
+                        }
+                        ((TextView)findViewById(R.id.detailStateValue)).setText(state);
+                        ((TextView)findViewById(R.id.detailTypeValue)).setText(type);
                         return false;
                     }
 
                     @Override
                     public boolean onItemLongPress(int index, OverlayItem item) {
-                        SpotIcon icon = (SpotIcon)item.getDrawable();
+                        SpotIconBitmap icon = (SpotIconBitmap)item.getDrawable();
                         ParkingSpot spot = icon.getSpot();
                         return false;
                     }

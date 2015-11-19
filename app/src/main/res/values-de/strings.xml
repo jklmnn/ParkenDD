@@ -52,4 +52,6 @@
     <string name="invalid_error">Ungültige Daten erhalten.</string>
     <string name="active_support">Zeige nur unterstützte Städte an.</string>
     <string name="alert_active_support">Bei der Nutzung von nicht unterstützten Städten können Fehler auftreten.</string>
+    <string name="state">Status</string>
+    <string name="open">geöffnet</string>
 </resources>

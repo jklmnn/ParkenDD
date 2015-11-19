@@ -76,7 +76,9 @@ public class SpotIcon extends Drawable {
         Canvas canvas = new Canvas(bmp);
         this.setBounds(0, 0, 50, 50);
         this.draw(canvas);
-        return new BitmapDrawable(context.getResources(), bmp);
+        SpotIconBitmap bmpd =  new SpotIconBitmap(context.getResources(), bmp);
+        bmpd.setSpot(this.spot);
+        return bmpd;
     }
 
     public ParkingSpot getSpot(){

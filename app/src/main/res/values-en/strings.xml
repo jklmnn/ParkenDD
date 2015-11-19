@@ -51,4 +51,6 @@
     <string name="setting_city_auto">Automatically</string>
     <string name="active_support">Use only supported cities.</string>
     <string name="alert_active_support">Unsupported cities can not be guaranteed to work.</string>
+    <string name="state">State</string>
+    <string name="open">open</string>
 </resources>
