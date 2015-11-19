@@ -4,7 +4,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.widget.TextView;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -31,7 +30,7 @@ public class MapActivity extends ActionBarActivity {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         final IMapController mapctl = map.getController();
-        mapctl.setZoom(13);
+        mapctl.setZoom(15);
         ItemizedIconOverlay<OverlayItem> spotOverlay = new ItemizedIconOverlay<>(this, createItemList(city.spots()),
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
@@ -62,6 +61,7 @@ public class MapActivity extends ActionBarActivity {
                 @Override
                 public boolean onItemSingleTapUp(int index, OverlayItem item) {
                     mapctl.setCenter(item.getPoint());
+                    unsetPopup(map);
                     return false;
                 }
 
@@ -82,7 +82,7 @@ public class MapActivity extends ActionBarActivity {
         ArrayList<OverlayItem> itemList = new ArrayList<>();
         for(ParkingSpot spot : spotlist){
             String desc = "";
-            SpotIcon marker = new SpotIcon(spot);
+            SpotIcon marker = new SpotIcon(spot, this);
             switch (spot.state()){
                 case "closed":
                     desc = getString(R.string.closed);
@@ -96,7 +96,7 @@ public class MapActivity extends ActionBarActivity {
             }
             try {
                 OverlayItem olItem = new OverlayItem(spot.name(), desc, new GeoPoint(spot.location().getLatitude(), spot.location().getLongitude()));
-                olItem.setMarker(marker.getBitmapDrawable(this));
+                olItem.setMarker(marker.getBitmapDrawable());
                 olItem.setMarkerHotspot(OverlayItem.HotspotPlace.CENTER);
                 itemList.add(olItem);
             }catch (NullPointerException e){
@@ -124,8 +124,8 @@ public class MapActivity extends ActionBarActivity {
                 val = String.valueOf(spot.free()) + " " + getString(R.string.of) + " " + String.valueOf(spot.count());
                 break;
         }
-        SlotPopup marker = new SlotPopup(spot.name() + " - " + val);
-        popup.setMarker(marker.getBitmapDrawable(this));
+        SlotPopup marker = new SlotPopup(spot.name() + " - " + val, this);
+        popup.setMarker(marker.getBitmapDrawable());
         ArrayList<OverlayItem> popupList = new ArrayList<>();
         popupList.add(popup);
         popupOverlay = new ItemizedIconOverlay<>(this, popupList, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
@@ -141,6 +141,13 @@ public class MapActivity extends ActionBarActivity {
             }
         });
         map.getOverlays().add(popupOverlay);
+    }
+
+    private void unsetPopup(MapView map){
+        if(popupOverlay != null) {
+            map.getOverlays().remove(popupOverlay);
+            popupOverlay = null;
+        }
     }
 
 }

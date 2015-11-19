@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "de.jkliemann.parkendd"
         minSdkVersion 14
-        targetSdkVersion 21
-        versionCode 21
-        versionName "1.0.0"
+        targetSdkVersion 22
+        versionCode 22
+        versionName "1.1.0"
     }
     buildTypes {
         release {
@@ -24,8 +24,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:21.0.2'
-    compile 'com.android.support:support-v4:21.0.2'
-    compile 'org.piwik.sdk:piwik-sdk:0.0.2'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:support-v4:22.2.1'
+    compile 'org.piwik.sdk:piwik-sdk:0.0.3'
     compile 'org.osmdroid:osmdroid-android:5.0.1@aar'
 }

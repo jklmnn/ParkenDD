@@ -8,7 +8,6 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 /**
@@ -21,8 +20,10 @@ public class SpotIcon extends Drawable {
     private final Paint green;
     private final Paint blue;
     private final Paint black;
+    private Context context;
+    private int size;
 
-    public SpotIcon(ParkingSpot spot){
+    public SpotIcon(ParkingSpot spot, Context context){
         this.spot = spot;
         red = new Paint();
         red.setColor(Color.argb(0xff, 0xef, 0x53, 0x50));
@@ -32,11 +33,13 @@ public class SpotIcon extends Drawable {
         blue.setColor(Color.argb(0xff, 0x42, 0xa5, 0xf5));
         black = new Paint();
         black.setColor(Color.argb(0xff, 0x00, 0x00, 0x00));
+        this.context = context;
+        size = (int)context.getResources().getDisplayMetrics().density * 20;
     }
 
     @Override
     public void draw(Canvas canvas){
-        RectF oval = new RectF(0, 0, 50, 50);
+        RectF oval = new RectF(0, 0, size, size);
         switch (this.spot.state()) {
             case "closed":
                 canvas.drawArc(oval, 0, 360, true, black);
@@ -46,6 +49,9 @@ public class SpotIcon extends Drawable {
                 break;
             default:
                 float free = 360 * ((float)this.spot.free()/(float)this.spot.count());
+                if(free > 360){
+                    free = 360;
+                }
                 canvas.drawArc(oval, (free / 2) * (-1) - 90, free, true, green);
                 canvas.drawArc(oval, (free / 2) - 90, 360 - free, true, red);
         }
@@ -71,10 +77,10 @@ public class SpotIcon extends Drawable {
         return PixelFormat.TRANSLUCENT;
     }
 
-    public Drawable getBitmapDrawable(Context context){
-        Bitmap bmp = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
+    public Drawable getBitmapDrawable(){
+        Bitmap bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);
-        this.setBounds(0, 0, 50, 50);
+        this.setBounds(0, 0, size, size);
         this.draw(canvas);
         SpotIconBitmap bmpd =  new SpotIconBitmap(context.getResources(), bmp);
         bmpd.setSpot(this.spot);
