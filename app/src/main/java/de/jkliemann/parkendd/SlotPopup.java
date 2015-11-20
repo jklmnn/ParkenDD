@@ -17,32 +17,35 @@ import android.graphics.drawable.Drawable;
  */
 public class SlotPopup extends Drawable {
 
-    private String text;
+    private String name;
+    private String value;
     private Context context;
     private int density;
 
-    public SlotPopup(String text, Context context){
-        this.text = text;
+    public SlotPopup(String text, String value, Context context){
+        this.name = text;
+        this.value = value;
         this.context = context;
         density = (int)this.context.getResources().getDisplayMetrics().density;
     }
 
-    private Bitmap textAsBitmap(String text) {
+    private Bitmap textAsBitmap() {
         Paint paint = new Paint();
         paint.setTextSize(14 * this.density); //24
         paint.setColor(Color.BLACK);
         paint.setTextAlign(Paint.Align.LEFT);
         float baseline = -paint.ascent(); // ascent() is negative
-        int width = (int) (paint.measureText(text) + 0.5f + 4 * this.density); // round
-        int height = (int) (baseline + paint.descent() + 0.5f + 13 * this.density);
+        int width = (int) (Math.max(paint.measureText(name), paint.measureText(value)) + 0.5f + 4 * this.density); // round
+        int height = (int) (2 * baseline + paint.descent() + 0.5f + 14 * this.density);
         Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(image);
         Paint rpaint = new Paint();
         rpaint.setColor(Color.WHITE);
         Rect rect = new Rect(0, 0, width, height - 9 * this.density);
         RectF rectf = new RectF(rect);
-        canvas.drawRoundRect(rectf, (float)4 * this.density, (float)4 * this.density, rpaint);
-        canvas.drawText(text, (float)2 * this.density, baseline + (float)2 * this.density, paint);
+        canvas.drawRoundRect(rectf, (float) 4 * this.density, (float) 4 * this.density, rpaint);
+        canvas.drawText(name, (width - paint.measureText(name))/2, baseline + (float)2 * this.density, paint);
+        canvas.drawText(value, (width - paint.measureText(value))/2 - this.density, 2 * baseline + (float) 4 * this.density, paint);
         return image;
     }
 
@@ -71,7 +74,7 @@ public class SlotPopup extends Drawable {
     }
 
     public Drawable getBitmapDrawable(){
-        Bitmap bmp = textAsBitmap(this.text);
+        Bitmap bmp = textAsBitmap();
         BitmapDrawable bmpd =  new BitmapDrawable(this.context.getResources(), bmp);
         return bmpd;
     }

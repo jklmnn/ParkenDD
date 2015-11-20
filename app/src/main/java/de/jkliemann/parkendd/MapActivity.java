@@ -124,7 +124,7 @@ public class MapActivity extends ActionBarActivity {
                 val = String.valueOf(spot.free()) + " " + getString(R.string.of) + " " + String.valueOf(spot.count());
                 break;
         }
-        SlotPopup marker = new SlotPopup(spot.name() + " - " + val, this);
+        SlotPopup marker = new SlotPopup(spot.name(), val, this);
         popup.setMarker(marker.getBitmapDrawable());
         ArrayList<OverlayItem> popupList = new ArrayList<>();
         popupList.add(popup);
