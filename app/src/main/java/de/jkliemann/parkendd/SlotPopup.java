@@ -37,7 +37,7 @@ public class SlotPopup extends Drawable {
         float baseline = -paint.ascent(); // ascent() is negative
         int width = (int) (Math.max(paint.measureText(name), paint.measureText(value)) + 0.5f + 4 * this.density); // round
         int height = (int) (2 * baseline + paint.descent() + 0.5f + 14 * this.density);
-        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Bitmap image = Bitmap.createBitmap(width, height + this.density, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(image);
         Paint rpaint = new Paint();
         rpaint.setColor(Color.WHITE);

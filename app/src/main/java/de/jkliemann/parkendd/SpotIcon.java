@@ -52,8 +52,8 @@ public class SpotIcon extends Drawable {
                 if(free > 360){
                     free = 360;
                 }
-                canvas.drawArc(oval, (free / 2) * (-1) - 90, free, true, green);
-                canvas.drawArc(oval, (free / 2) - 90, 360 - free, true, red);
+                canvas.drawArc(oval,- 90, free, true, green);
+                canvas.drawArc(oval, free - 90, 360 - free, true, red);
         }
     }
 
