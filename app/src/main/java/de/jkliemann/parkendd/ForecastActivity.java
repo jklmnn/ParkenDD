@@ -39,6 +39,7 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
     ProgressBar pg;
     ParkingSpot[] spotList;
     Loader forecastLoader;
+    DateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
                 DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
                 date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
                 loadDate();
+                String locDate = dateFormat.format(date);
+                setTitle(getString(R.string.title_activity_forecast) + " - " + locDate);
             }
         });
         Button cancelbutton = (Button)findViewById(R.id.cancelbutton);
@@ -77,7 +80,7 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
         Calendar cal = Calendar.getInstance();
         date = new Date(cal.get(Calendar.YEAR) - dateOffset, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         TimeZone tz = Calendar.getInstance().getTimeZone();
-        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
+        dateFormat = android.text.format.DateFormat.getDateFormat(this);
         dateFormat.setTimeZone(tz);
         String locDate = dateFormat.format(date);
         setTitle(getString(R.string.title_activity_forecast) + " - " + locDate);
