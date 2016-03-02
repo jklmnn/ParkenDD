@@ -40,6 +40,7 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
     ParkingSpot[] spotList;
     Loader forecastLoader;
     DateFormat dateFormat;
+    City city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
                 date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
                 loadDate();
                 String locDate = dateFormat.format(date);
-                setTitle(getString(R.string.title_activity_forecast) + " - " + locDate);
+                setTitle(city.name() + " - " + locDate);
             }
         });
         Button cancelbutton = (Button)findViewById(R.id.cancelbutton);
@@ -83,8 +84,8 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
         dateFormat = android.text.format.DateFormat.getDateFormat(this);
         dateFormat.setTimeZone(tz);
         String locDate = dateFormat.format(date);
-        setTitle(getString(R.string.title_activity_forecast) + " - " + locDate);
-        City city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
+        city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
+        setTitle(city.name() + " - " + locDate);
         loadDate();
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);

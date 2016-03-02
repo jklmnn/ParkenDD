@@ -22,8 +22,14 @@ public class MapActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        City city  = GlobalSettings.getGlobalSettings().getCityByName(PreferenceManager.getDefaultSharedPreferences(this).getString("city", getString(R.string.default_city)));
-        Location self = GlobalSettings.getGlobalSettings().getLastKnownLocation();
+        String citystring = PreferenceManager.getDefaultSharedPreferences(this).getString("city", getString(R.string.default_city));
+        City city  = GlobalSettings.getGlobalSettings().getCityByName(citystring);
+        Location self;
+        if(citystring.equals(getString(R.string.setting_city_auto))){
+            self = GlobalSettings.getGlobalSettings().getLastKnownLocation();
+        }else{
+            self = city.location();
+        }
         setTitle(city.name());
         final MapView map = (MapView)findViewById(R.id.osmap);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
