@@ -53,4 +53,5 @@
     <string name="alert_active_support">Unsupported cities can not be guaranteed to work.</string>
     <string name="state">State</string>
     <string name="open">open</string>
+    <string name="map_icon_size">Map icon size</string>
 </resources>

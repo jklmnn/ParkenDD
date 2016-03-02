@@ -32,6 +32,7 @@
     <string name="setting_hide_full">Hide full spots.</string>
     <string name="setting_city_auto">Automatically</string>
     <string name="active_support">Use only supported cities.</string>
+    <string name="map_icon_size">Map icon size</string>
     <!--defaults-->
     <string name="serveraddress" translatable="false">http://api.parkendd.de/</string>
     <string name="default_city" translatable="false">@string/setting_city_auto</string>

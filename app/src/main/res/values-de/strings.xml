@@ -54,4 +54,5 @@
     <string name="alert_active_support">Bei der Nutzung von nicht unterstützten Städten können Fehler auftreten.</string>
     <string name="state">Status</string>
     <string name="open">geöffnet</string>
+    <string name="map_icon_size">Kartensymbolgröße</string>
 </resources>
