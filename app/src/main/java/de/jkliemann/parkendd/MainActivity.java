@@ -35,6 +35,7 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((ParkenDD) getApplication()).getTracker().trackAppDownload();
         setContentView(R.layout.activity_main);
         pg = (ProgressBar)findViewById(R.id.progressBar);
         pg.setIndeterminate(false);
