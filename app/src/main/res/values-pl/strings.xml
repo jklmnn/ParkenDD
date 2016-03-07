@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
 <string name="action_about">"O tej aplikacji"</string>
 <string name="action_refresh">"Aktualizować"</string>
 <string name="action_settings">"Ustawienia"</string>
