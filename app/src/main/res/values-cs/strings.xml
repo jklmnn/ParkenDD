@@ -11,7 +11,6 @@
     <string name="header_general">Všeobecné</string>
     <string name="header_network">Síť</string>
     <string name="intent_error">Nenalezen žádný program.</string>
-    <string name="invalid_error">Obdržena neplatná data.</string>
     <string name="negative">Zrušit</string>
     <string name="network_error">Chyba při získávání dat.</string>
     <string name="nodata">Žádná data</string>
@@ -38,7 +37,6 @@
     <string name="setting_hide_closed">Skrýt zavřené</string>
     <string name="setting_hide_full">Skrýt plné</string>
     <string name="setting_hide_nodata">Skrýt parkoviště bez dat</string>
-    <string name="no_adress_error">Adresa nenalezena</string>
     <string name="type">Druh</string>
     <string name="license">Licence v této aplikaci použitých knihoven jsou k prohlédnutí zde</string>
     <string name="address">Adresa</string>
@@ -53,4 +51,5 @@
     <string name="state">Stav</string>
     <string name="open">Otevřeno</string>
     <string name="map_icon_size">Velikost ikonek na mapě</string>
+    <string name="no_address_error">Adresa nenalezena</string>
 </resources>
