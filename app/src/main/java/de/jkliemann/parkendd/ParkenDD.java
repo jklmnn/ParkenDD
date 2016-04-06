@@ -18,7 +18,7 @@ public class ParkenDD extends Application {
             return piwik;
         }
         try{
-            piwik = Piwik.getInstance(this).newTracker("http://jkliemann.de/analytics/piwik.php", 3);
+            piwik = Piwik.getInstance(this).newTracker("https://jkliemann.de/analytics/piwik.php", 3);
         }catch (MalformedURLException e){
             e.printStackTrace();
             return null;
