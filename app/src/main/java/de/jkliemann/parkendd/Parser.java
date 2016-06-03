@@ -111,6 +111,17 @@ public class Parser {
     private static final String ADDRESS = "address";
     private static final String REGION = "region";
 
+    private static String getJsonString(JSONObject obj, String key){
+        String value;
+        try{
+            value = (obj.getString(key) != "null") ? obj.getString(key) : "";
+        }catch (JSONException e){
+            value = "";
+            e.printStackTrace();
+        }
+        return value;
+    }
+
     public static City city(String data, City CITY) throws JSONException, NullPointerException{
         ArrayList<ParkingSpot> spotlist = new ArrayList<>();
         JSONObject global = new JSONObject(data);
@@ -123,24 +134,9 @@ public class Parser {
             String state = lot.getString(STATE);
             String city = CITY.name();
             String id = lot.getString(ID);
-            String type = "";
-            String adr = "";
-            String region = "";
-            try{
-                type = lot.getString(LOT_TYPE);
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-            try{
-                adr = lot.getString(ADDRESS);
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-            try {
-                region = lot.getString(REGION);
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
+            String type = getJsonString(lot, LOT_TYPE);
+            String adr = getJsonString(lot, ADDRESS);
+            String region = getJsonString(lot, REGION);
             int total = lot.getInt(TOTAL);
             int free = lot.getInt(FREE);
             double lat, lon;
