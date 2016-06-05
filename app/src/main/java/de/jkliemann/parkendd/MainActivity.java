@@ -3,8 +3,13 @@ package de.jkliemann.parkendd;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class MainActivity extends ActionBarActivity implements LoaderInterface{
+public class MainActivity extends AppCompatActivity implements LoaderInterface, NavigationView.OnNavigationItemSelectedListener{
 
     SharedPreferences preferences;
     private final MainActivity _this = this;
@@ -37,6 +42,21 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
         super.onCreate(savedInstanceState);
         ((ParkenDD) getApplication()).getTracker().trackAppDownload();
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.open, R.string.closed);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+
         pg = (ProgressBar)findViewById(R.id.progressBar);
         pg.setIndeterminate(false);
         pg.setProgress(0);
@@ -74,6 +94,17 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
             }
         });
         onProgressUpdated();
+        updateMenu(navigationView);
+    }
+
+    private void updateMenu(NavigationView nv){
+        Menu menu = nv.getMenu();
+        int id = 0;
+        for(City city : GlobalSettings.getGlobalSettings().getCitylist()){
+            id++;
+            MenuItem item = menu.add(0, id, 0, city.name());
+            item.setCheckable(true);
+        }
     }
 
     public void onLoaderFinished(String data[], Loader loader){
@@ -133,7 +164,7 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
         URL[] cityurl = new URL[1];
         try{
             city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
-            this.setTitle(getString(R.string.app_name) + " - " + city.name());
+            this.setTitle(city.name());
             cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
             cityLoader = new Loader(this);
             cityLoader.execute(cityurl);
@@ -261,6 +292,31 @@ public class MainActivity extends ActionBarActivity implements LoaderInterface{
             startActivity(map);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        /*if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }*/
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
