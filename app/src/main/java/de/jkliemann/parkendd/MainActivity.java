@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
     private Loader meta;
     private Loader cityLoader;
     private City city;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
@@ -94,16 +95,19 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
             }
         });
         onProgressUpdated();
-        updateMenu(navigationView);
     }
 
-    private void updateMenu(NavigationView nv){
-        Menu menu = nv.getMenu();
+    private void updateMenu(){
+        Menu menu = navigationView.getMenu();
         int id = 0;
-        for(City city : GlobalSettings.getGlobalSettings().getCitylist()){
-            id++;
-            MenuItem item = menu.add(0, id, 0, city.name());
-            item.setCheckable(true);
+        try {
+            for (City city : GlobalSettings.getGlobalSettings().getCitylist()) {
+                id++;
+                MenuItem item = menu.add(0, id, 0, city.name());
+                item.setCheckable(true);
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
     }
 
@@ -113,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
             try{
                 citylist = Parser.meta(data[0]);
                 GlobalSettings.getGlobalSettings().setCitylist(citylist);
+                updateMenu();
                 refresh();
             }catch (JSONException e){
                 e.printStackTrace();
