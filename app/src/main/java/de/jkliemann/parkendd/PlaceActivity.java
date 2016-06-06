@@ -86,7 +86,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
             }
             try{
                 Location loc = Parser.nominatim(data[1]);
-                GlobalSettings.getGlobalSettings().setLocation(loc);
+                ((ParkenDD)getApplication()).setLocation(loc);
                 TextView tv = (TextView)findViewById(R.id.textView);
                 try{
                     tv.setText(loc.getExtras().getString("detail"));

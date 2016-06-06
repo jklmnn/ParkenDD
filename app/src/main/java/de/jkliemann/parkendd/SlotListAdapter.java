@@ -1,6 +1,7 @@
 package de.jkliemann.parkendd;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +25,6 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
 
     private final Context context;
     private final ParkingSpot[] spots;
-    private final GlobalSettings gs;
     private final Location currentLocation;
     private final int red = Color.argb(0xaa, 0xef, 0x53, 0x50);
     private final int green = Color.argb(0xaa, 0x66, 0xbb, 0x6a);
@@ -44,8 +44,7 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
     public SlotListAdapter(Context context, ParkingSpot[] spots){
         this.context = context;
         this.spots = spots;
-        this.gs = GlobalSettings.getGlobalSettings();
-        currentLocation = gs.getLastKnownLocation();
+        currentLocation = ((ParkenDD) ((Activity)context).getApplication()).location();
     }
 
     @Override

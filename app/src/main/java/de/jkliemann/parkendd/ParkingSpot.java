@@ -45,6 +45,7 @@ public class ParkingSpot implements Parcelable{
             }else if(p2.location() == null && p1.location() != null){
                 return -1;
             }
+            //TODO: context for application
             GlobalSettings gs = GlobalSettings.getGlobalSettings();
             Location currentLocation = gs.getLastKnownLocation();
             Double d1 = new Double(Util.getDistance(p1.location(), currentLocation));

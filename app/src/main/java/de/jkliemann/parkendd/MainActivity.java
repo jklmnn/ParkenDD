@@ -103,7 +103,14 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         try {
             for (City city : GlobalSettings.getGlobalSettings().getCitylist()) {
                 id++;
-                MenuItem item = menu.add(0, id, 0, city.name());
+                MenuItem item;
+                try {
+                    String dst = "(" + Util.getViewDistance(Util.getDistance(city.location(), ((ParkenDD) getApplication()).location())) + ")";
+                    item = menu.add(0, id, 0, city.name() + " " + dst);
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                    item = menu.add(0, id, 0, city.name());
+                }
                 item.setCheckable(true);
                 ((ParkenDD)getApplication()).addCityPair(id, city);
             }
@@ -163,10 +170,10 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
     }
 
     private void refresh(){
-        if(!GlobalSettings.getGlobalSettings().locationEnabled()){
-            GlobalSettings.getGlobalSettings().initLocation(this);
+        if(!((ParkenDD)getApplication()).locationEnabled()){
+            ((ParkenDD)getApplication()).initLocation();
         }
-        GlobalSettings.getGlobalSettings().setLocation(null);
+        ((ParkenDD)getApplication()).setLocation(null);
         URL[] cityurl = new URL[1];
         try{
             city = ((ParkenDD)getApplication()).currentCity();
@@ -307,6 +314,8 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         int id = item.getItemId();
 
         ((ParkenDD) getApplication()).setCurrentCity(id);
+
+        refresh();
 
         /*if (id == R.id.nav_camera) {
             // Handle the camera action
