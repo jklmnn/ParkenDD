@@ -49,7 +49,6 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
         pg = (ProgressBar)findViewById(R.id.progressBar2);
         pg.setVisibility(View.VISIBLE);
         pg.setIndeterminate(true);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         RelativeLayout datePickerLayout = (RelativeLayout)findViewById(R.id.datePickerLayout);
         datePickerLayout.setVisibility(View.INVISIBLE);
         Button okbutton = (Button)findViewById(R.id.okbutton);
@@ -83,7 +82,7 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
         dateFormat = android.text.format.DateFormat.getDateFormat(this);
         dateFormat.setTimeZone(tz);
         String locDate = dateFormat.format(date);
-        city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
+        city = ((ParkenDD)getApplication()).currentCity();
         setTitle(city.name() + " - " + locDate);
         loadDate();
         TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
@@ -100,7 +99,7 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
     private void loadDate(){
         pg.setProgress(0);
         pg.setVisibility(View.VISIBLE);
-        City city = GlobalSettings.getGlobalSettings().getCityByName(PreferenceManager.getDefaultSharedPreferences(this).getString("city", getString(R.string.default_city)));
+        City city = ((ParkenDD)getApplication()).currentCity();
         ArrayList<ParkingSpot> spots = city.spots();
         ArrayList<ParkingSpot> forecastSpots = new ArrayList<>();
         for(ParkingSpot spot : spots){

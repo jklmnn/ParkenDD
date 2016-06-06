@@ -139,7 +139,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
     private void refresh(){
         URL[] cityurl = new URL[1];
         try{
-            city = GlobalSettings.getGlobalSettings().getCityByName(preferences.getString("city", getString(R.string.default_city)));
+            city = ((ParkenDD)getApplication()).currentCity();
             setTitle(getString(R.string.app_name) + " - " + city.name());
             cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
             cityLoader = new Loader(this);

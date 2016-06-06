@@ -23,7 +23,7 @@ public class MapActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         String citystring = PreferenceManager.getDefaultSharedPreferences(this).getString("city", getString(R.string.default_city));
-        City city  = GlobalSettings.getGlobalSettings().getCityByName(citystring);
+        City city  = ((ParkenDD)getApplication()).currentCity();
         Location self;
         if(citystring.equals(getString(R.string.setting_city_auto))){
             self = GlobalSettings.getGlobalSettings().getLastKnownLocation();

@@ -140,7 +140,7 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
                 Uri geouri = child.geoUri();
                 try{
                     Intent map = new Intent(Intent.ACTION_VIEW, geouri);
-                    String city = GlobalSettings.getGlobalSettings().getCityByName(PreferenceManager.getDefaultSharedPreferences(context).getString("city", context.getString(R.string.default_city))).name();
+                    String city = ((ParkenDD) ((Activity)context).getApplication()).currentCity().name();
                     ((ParkenDD) ((Activity) context).getApplication()).getTracker().trackEvent(city, child.name());
                     context.startActivity(map);
                 }catch (ActivityNotFoundException e){

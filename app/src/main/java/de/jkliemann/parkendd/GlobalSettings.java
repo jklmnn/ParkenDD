@@ -125,7 +125,7 @@ public class GlobalSettings {
         return null;
     }
 
-    private City getClosestCity(){
+    public City getClosestCity(){
         if(providedLocation == null){
             return getCityByName("Dresden");
         }
