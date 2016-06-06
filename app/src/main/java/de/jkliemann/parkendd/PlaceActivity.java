@@ -80,7 +80,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
             ArrayList<City> citylist;
             try{
                 citylist = Parser.meta(data[0]);
-                GlobalSettings.getGlobalSettings().setCitylist(citylist);
+                ((ParkenDD)getApplication()).updateCities(citylist);
             }catch (JSONException e){
                 e.printStackTrace();
             }

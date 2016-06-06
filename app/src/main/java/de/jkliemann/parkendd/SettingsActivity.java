@@ -14,7 +14,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import java.util.ArrayList;
 
 
 /**
@@ -58,9 +57,6 @@ public class SettingsActivity extends PreferenceActivity{
         fakeHeader.setTitle(R.string.header_general);
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_general);
-        ListPreference citylist = (ListPreference)findPreference("city");
-        populateCities(citylist, this);
-        bindPreferenceSummaryToValue(citylist);
         ListPreference sortList = (ListPreference)findPreference("sorting");
         Resources res = getResources();
         sortList.setEntryValues(res.getStringArray(R.array.setting_sort_options));
@@ -118,18 +114,9 @@ public class SettingsActivity extends PreferenceActivity{
         @Override
         public boolean onPreferenceClick(Preference preference){
             Context context = preference.getContext();
-            ListPreference city = (ListPreference)preference.getPreferenceManager().findPreference("city");
             if(preference instanceof CheckBoxPreference){
-                if(((CheckBoxPreference) preference).isChecked()) {
-                    if(GlobalSettings.getGlobalSettings().getCityByName(city.getValue()) == null){
-                        city.setValue(context.getString(R.string.default_city));
-                        city.setSummary(context.getString(R.string.default_city));
-                    }
-                }else{
-                    supportWarning(context, preference.getPreferenceManager());
-                }
+                supportWarning(context, preference.getPreferenceManager());
             }
-            populateCities(city, context);
             return true;
         }
 
@@ -146,36 +133,6 @@ public class SettingsActivity extends PreferenceActivity{
         }
     };
 
-    private static void populateCities(ListPreference citylist, Context context){
-        try {
-
-            if(GlobalSettings.getGlobalSettings().getCitylist().size() > 0) {
-                ArrayList<String> citystrings = new ArrayList<>();
-                for (City ct : GlobalSettings.getGlobalSettings().getCitylist()) {
-                    citystrings.add(ct.name());
-                }
-                String[] cities = new String[citystrings.size() + 1];
-                cities[0] = context.getString(R.string.default_city);
-                String[] ccache = citystrings.toArray(new String[citystrings.size()]);
-                for (int i = 0; i < citystrings.size(); i++) {
-                    cities[i + 1] = ccache[i];
-                }
-                citylist.setEntries(cities);
-                citylist.setEntryValues(cities);
-            } else {
-                String[] def = new String[1];
-                def[0] = context.getString(R.string.default_city);
-                citylist.setEntryValues(def);
-                citylist.setEntries(def);
-            }
-        }catch (NullPointerException e){
-            e.printStackTrace();
-            String[] def = new String[1];
-            def[0] = context.getString(R.string.default_city);
-            citylist.setEntryValues(def);
-            citylist.setEntries(def);
-        }
-    }
 
     private static Preference.OnPreferenceClickListener setDefault = new Preference.OnPreferenceClickListener() {
 
@@ -191,9 +148,6 @@ public class SettingsActivity extends PreferenceActivity{
             resetDialog.setPositiveButton(context.getString(R.string.positive), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ListPreference city = (ListPreference) preferenceManager.findPreference("city");
-                    city.setValue(context.getString(R.string.default_city));
-                    city.setSummary(context.getString(R.string.default_city));
                     CheckBoxPreference hide_closed = (CheckBoxPreference) preferenceManager.findPreference("hide_closed");
                     hide_closed.setChecked(true);
                     CheckBoxPreference hide_nodata = (CheckBoxPreference) preferenceManager.findPreference("hide_nodata");
@@ -202,7 +156,6 @@ public class SettingsActivity extends PreferenceActivity{
                     hide_full.setChecked(true);
                     CheckBoxPreference active_support = (CheckBoxPreference) preferenceManager.findPreference("active_support");
                     active_support.setChecked(true);
-                    populateCities(city, context);
                 }
             });
             resetDialog.setNegativeButton(context.getString(R.string.negative), new DialogInterface.OnClickListener() {

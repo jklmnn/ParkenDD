@@ -2,7 +2,6 @@ package de.jkliemann.parkendd;
 
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 
 import org.osmdroid.api.IMapController;
@@ -49,8 +48,6 @@ public class MapActivity extends ActionBarActivity {
 
                     @Override
                     public boolean onItemLongPress(int index, OverlayItem item) {
-                        SpotIconBitmap icon = (SpotIconBitmap)item.getDrawable();
-                        ParkingSpot spot = icon.getSpot();
                         return false;
                     }
                 }

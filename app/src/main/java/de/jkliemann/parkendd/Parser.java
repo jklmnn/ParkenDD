@@ -34,7 +34,7 @@ public class Parser {
 
     public static ArrayList<City> meta(String data) throws JSONException{
         ArrayList<City> cities = new ArrayList<>();
-        GlobalSettings gs = GlobalSettings.getGlobalSettings();
+        ParkenDD gs = ((ParkenDD) ParkenDD.applicationContext());
         JSONObject global = new JSONObject(data);
         String version = global.getString(VERSION);
         String[] vs = version.split("\\.");

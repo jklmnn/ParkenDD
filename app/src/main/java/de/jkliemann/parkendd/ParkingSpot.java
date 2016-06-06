@@ -4,7 +4,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -45,9 +44,7 @@ public class ParkingSpot implements Parcelable{
             }else if(p2.location() == null && p1.location() != null){
                 return -1;
             }
-            //TODO: context for application
-            GlobalSettings gs = GlobalSettings.getGlobalSettings();
-            Location currentLocation = gs.getLastKnownLocation();
+            Location currentLocation = ((ParkenDD) ParkenDD.applicationContext()).location();
             Double d1 = new Double(Util.getDistance(p1.location(), currentLocation));
             Double d2 = new Double(Util.getDistance(p2.location(), currentLocation));
             return d1.compareTo(d2);
@@ -101,8 +98,7 @@ public class ParkingSpot implements Parcelable{
     }
 
     private Double rating(){
-        GlobalSettings gs = GlobalSettings.getGlobalSettings();
-        Location currentLocation = gs.getLastKnownLocation();
+        Location currentLocation = ((ParkenDD) ParkenDD.applicationContext()).location();
         Double d;
         try{
             d = new Double(Util.getDistance(this.location(), currentLocation));

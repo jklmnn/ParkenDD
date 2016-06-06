@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         pg.setMax(6);
         pg.setVisibility(View.VISIBLE);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        GlobalSettings gs = GlobalSettings.getGlobalSettings();
-        gs.initLocation(this);
         URL[] serverurl = new URL[1];
         try {
             serverurl[0] = Loader.getMetaUrl(getString(R.string.serveraddress));
@@ -97,11 +95,11 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         onProgressUpdated();
     }
 
-    private void updateMenu(){
+    private void updateMenu(ArrayList<City> citylist){
         Menu menu = navigationView.getMenu();
         int id = 0;
         try {
-            for (City city : GlobalSettings.getGlobalSettings().getCitylist()) {
+            for (City city : citylist) {
                 id++;
                 MenuItem item;
                 try {
@@ -124,8 +122,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
             ArrayList<City> citylist;
             try{
                 citylist = Parser.meta(data[0]);
-                GlobalSettings.getGlobalSettings().setCitylist(citylist);
-                updateMenu();
+                updateMenu(((ParkenDD) getApplication()).getActiveCities(citylist));
                 refresh();
             }catch (JSONException e){
                 e.printStackTrace();

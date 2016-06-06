@@ -7,11 +7,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 
 import org.piwik.sdk.Piwik;
 import org.piwik.sdk.Tracker;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +29,9 @@ public class ParkenDD extends Application {
     private Boolean locationEnabled;
     private Location providedLocation;
     private Boolean autoCity;
+    private int API_V_MAJOR;
+    private int API_V_MINOR;
+    private static Context context;
 
     public Boolean initLocation(){
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -88,8 +93,9 @@ public class ParkenDD extends Application {
     public void onCreate(){
         cmap = new HashMap<>();
         initLocation();
-        super.onCreate();
         setLocation(null);
+        ParkenDD.context = getApplicationContext();
+        super.onCreate();
     }
 
     synchronized Tracker getTracker(){
@@ -109,9 +115,48 @@ public class ParkenDD extends Application {
         cmap.put(id, city);
     }
 
+    public void updateCities(ArrayList<City> citylist){
+        for(City city : citylist){
+            if(!cmap.containsValue(city)){
+                cmap.put(cmap.size(), city);
+            }
+        }
+    }
+
+    private City getCityByName(String name){
+        for(City city : cmap.values()){
+            if(city.name().equals(name)){
+                return city;
+            }
+        }
+        return null;
+    }
+
+    public City getClosestCity(){
+        if(providedLocation == null){
+            return getCityByName("Dresden");
+        }
+        double distance = Double.MAX_VALUE;
+        City closestCity = null;
+        for(City city : getActiveCities(new ArrayList<>(cmap.values()))){
+            double d;
+            try {
+                d = Util.getDistance(providedLocation, city.location());
+            }catch (NullPointerException e){
+                d = Double.MAX_VALUE;
+            }
+            if(d < distance){
+                distance = d;
+                closestCity = city;
+            }
+        }
+        return closestCity;
+    }
+
+
     public City getCityById(int id){
         if(id == 0){
-            return GlobalSettings.getGlobalSettings().getClosestCity();
+            return getClosestCity();
         }else{
             return cmap.get(id);
         }
@@ -144,5 +189,36 @@ public class ParkenDD extends Application {
 
     public Boolean autoCity(){
         return autoCity;
+    }
+
+    public static Context applicationContext(){
+        return ParkenDD.context;
+    }
+
+    public ArrayList<City> getActiveCities(ArrayList<City> citylist){
+        if(PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("active_support", true)) {
+            ArrayList<City> activeList = new ArrayList<>();
+            for(City city : citylist){
+                if(city.active_support()){
+                    activeList.add(city);
+                }
+            }
+            return activeList;
+        }else{
+            return citylist;
+        }
+    }
+
+    public int getAPI_V_MAJOR(){
+        return API_V_MAJOR;
+    }
+
+    public int getAPI_V_MINOR(){
+        return API_V_MINOR;
+    }
+
+    public void setAPI(int maj, int min){
+        this.API_V_MAJOR = maj;
+        this.API_V_MINOR = min;
     }
 }
