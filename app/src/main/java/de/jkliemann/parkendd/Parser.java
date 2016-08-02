@@ -161,48 +161,57 @@ public class Parser {
         return CITY;
     }
 
-    public static Location nominatim(String data) throws JSONException{
+    public static Location[] nominatim(String data) throws JSONException{
         JSONArray osm = new JSONArray(data);
-        Location loc = null;
-        if(osm.length() > 0){
-            JSONObject jsondata = osm.getJSONObject(0);
-            double lat = jsondata.getDouble("lat");
-            double lon = jsondata.getDouble("lon");
-            loc = new Location("gps");
-            loc.setLatitude(lat);
-            loc.setLongitude(lon);
-            JSONObject address = jsondata.getJSONObject("address");
-            String name = "";
-            try{
-                name += address.getString("road") + " ";
+        Location[] aloc = new Location[osm.length()];
+        for(int i = 0; i < osm.length(); i++) {
+            Location loc = null;
+            if (osm.length() > 0) {
+                JSONObject jsondata = osm.getJSONObject(i);
+                double lat = jsondata.getDouble("lat");
+                double lon = jsondata.getDouble("lon");
+                loc = new Location("gps");
+                loc.setLatitude(lat);
+                loc.setLongitude(lon);
+                JSONObject address = jsondata.getJSONObject("address");
+                String name = "";
                 try{
-                    name += address.getString("house_number");
-                }catch (JSONException e){
-                    e.printStackTrace();
+                    name=jsondata.getString("display_name");
+                }catch (JSONException je) {
+                    je.printStackTrace();
+                    try {
+                        name += address.getString("road") + " ";
+                        try {
+                            name += address.getString("house_number");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        name += "\n";
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        name += address.getString("postcode") + " ";
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        name += address.getString("city");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        try {
+                            name += address.getString("town");
+                        } catch (JSONException e2) {
+                            e2.printStackTrace();
+                        }
+                    }
                 }
-                name += "\n";
-            }catch (JSONException e){
-                e.printStackTrace();
+                Bundle extra = new Bundle();
+                extra.putString("detail", name);
+                loc.setExtras(extra);
+                aloc[i] = loc;
             }
-            try{
-                name += address.getString("postcode") + " ";
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-            try {
-                name += address.getString("city");
-            }catch (JSONException e){
-                e.printStackTrace();
-                try {
-                    name += address.getString("town");
-                }catch (JSONException e2){
-                    e2.printStackTrace();
-                }
-            }
-            Bundle extra = new Bundle();
-            extra.putString("detail", name);
-            loc.setExtras(extra);
         }
-        return loc;
+        return aloc;
     }
 }

@@ -8,18 +8,15 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Pair;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -36,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class PlaceActivity extends AppCompatActivity implements LoaderInterface, NavigationView.OnNavigationItemSelectedListener{
@@ -66,6 +65,7 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.open, R.string.closed);
         drawer.setDrawerListener(toggle);
+        drawer.openDrawer(Gravity.LEFT);
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -110,11 +110,15 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
                 e.printStackTrace();
             }
             try{
-                Location loc = Parser.nominatim(data[1]);
-                ((ParkenDD)getApplication()).setLocation(loc);
+                Location[] loc = Parser.nominatim(data[1]);
                 Menu menu = navigationView.getMenu();
-                menu.add(0, 0, 0, loc.getExtras().getString("detail"));
-                addressMap.put(0, loc);
+                for(int i = 0; i < loc.length; i++) {
+                    Logger l = Logger.getLogger("DETAIL");
+
+                    l.log(Level.INFO, loc[i].getExtras().getString("detail"));
+                    menu.add(0, i, 0, loc[i].getExtras().getString("detail"));
+                    addressMap.put(i, loc[i]);
+                }
                 /*TextView tv = (TextView)findViewById(R.id.textView);
                 try{
                     tv.setText(loc.getExtras().getString("detail"));
@@ -127,6 +131,7 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
                     ListView spotView = (ListView)findViewById(R.id.spotListView);
                     spotView.setVisibility(View.INVISIBLE);
                 }*/
+
             }catch (JSONException e){
                 e.printStackTrace();
             }
@@ -297,7 +302,7 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        ((ParkenDD) getApplication()).setCurrentCity(id);
+        ((ParkenDD)getApplication()).setLocation(addressMap.get(id));
 
         refresh();
 
