@@ -5,8 +5,16 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,27 +34,43 @@ import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 
-public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
+public class PlaceActivity extends AppCompatActivity implements LoaderInterface, NavigationView.OnNavigationItemSelectedListener{
 
     private SharedPreferences preferences;
     private ProgressBar pg;
     private Loader metaLoader;
     private Loader cityLoader;
     private City city;
+    private HashMap<Integer, Location> addressMap;
+    NavigationView navigationView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
+        findViewById(R.id.searchView).setVisibility(View.INVISIBLE);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         pg = (ProgressBar) findViewById(R.id.progressBar);
         pg.setIndeterminate(false);
         pg.setMax(6);
         pg.setVisibility(View.VISIBLE);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.open, R.string.closed);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         Uri data = null;
         Intent intent = getIntent();
         if(intent.getAction() == null){
@@ -73,6 +97,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         }catch (MalformedURLException e){
             e.printStackTrace();
         }
+        addressMap = new HashMap<>();
     }
 
     public void onLoaderFinished(String data[], Loader loader){
@@ -87,7 +112,10 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
             try{
                 Location loc = Parser.nominatim(data[1]);
                 ((ParkenDD)getApplication()).setLocation(loc);
-                TextView tv = (TextView)findViewById(R.id.textView);
+                Menu menu = navigationView.getMenu();
+                menu.add(0, 0, 0, loc.getExtras().getString("detail"));
+                addressMap.put(0, loc);
+                /*TextView tv = (TextView)findViewById(R.id.textView);
                 try{
                     tv.setText(loc.getExtras().getString("detail"));
                     refresh();
@@ -98,7 +126,7 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
                     pg.setVisibility(View.INVISIBLE);
                     ListView spotView = (ListView)findViewById(R.id.spotListView);
                     spotView.setVisibility(View.INVISIBLE);
-                }
+                }*/
             }catch (JSONException e){
                 e.printStackTrace();
             }
@@ -261,5 +289,34 @@ public class PlaceActivity extends ActionBarActivity implements LoaderInterface{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        ((ParkenDD) getApplication()).setCurrentCity(id);
+
+        refresh();
+
+        /*if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }*/
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
