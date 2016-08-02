@@ -166,6 +166,8 @@ public class ParkenDD extends Application {
         this.currentCity = this.getCityById(id);
         if(id == 0){
             autoCity = true;
+        }else{
+            autoCity = false;
         }
     }
 
@@ -173,8 +175,6 @@ public class ParkenDD extends Application {
         if(currentCity == null){
             setCurrentCity(0);
             autoCity = true;
-        }else{
-            autoCity = false;
         }
         return currentCity;
     }
