@@ -115,8 +115,8 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
                 for(int i = 0; i < loc.length; i++) {
                     Logger l = Logger.getLogger("DETAIL");
 
-                    l.log(Level.INFO, loc[i].getExtras().getString("detail"));
-                    menu.add(0, i, 0, loc[i].getExtras().getString("detail"));
+                    l.log(Level.INFO, loc[i].getExtras().getString("item_detail"));
+                    menu.add(0, i, 0, loc[i].getExtras().getString("item_detail"));
                     addressMap.put(i, loc[i]);
                 }
                 /*TextView tv = (TextView)findViewById(R.id.textView);

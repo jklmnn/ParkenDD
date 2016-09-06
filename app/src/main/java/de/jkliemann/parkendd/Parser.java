@@ -175,39 +175,39 @@ public class Parser {
                 loc.setLongitude(lon);
                 JSONObject address = jsondata.getJSONObject("address");
                 String name = "";
-                try{
-                    name=jsondata.getString("display_name");
-                }catch (JSONException je) {
-                    je.printStackTrace();
+                String item_name = "";
+                try {
+                    name += address.getString("road") + " ";
+                    item_name += address.getString("road") + ", ";
                     try {
-                        name += address.getString("road") + " ";
-                        try {
-                            name += address.getString("house_number");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        name += "\n";
+                        name += address.getString("house_number");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    name += "\n";
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    name += address.getString("postcode") + " ";
+                    item_name += address.getString("postcode") + " ";
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    name += address.getString("city");
+                    item_name += address.getString("city");
+                } catch (JSONException e) {
+                    e.printStackTrace();
                     try {
-                        name += address.getString("postcode") + " ";
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        name += address.getString("city");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        try {
-                            name += address.getString("town");
-                        } catch (JSONException e2) {
-                            e2.printStackTrace();
-                        }
+                        name += address.getString("town");
+                    } catch (JSONException e2) {
+                        e2.printStackTrace();
                     }
                 }
                 Bundle extra = new Bundle();
                 extra.putString("detail", name);
+                extra.putString("item_detail", item_name);
                 loc.setExtras(extra);
                 aloc[i] = loc;
             }
