@@ -23,7 +23,7 @@
             android:id="@+id/timePicker"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:timePickerMode="spinner" />
+            android:timePickerMode="spinner"/>
 
         <ExpandableListView
             android:layout_width="match_parent"
@@ -48,8 +48,9 @@
             android:id="@+id/datePicker"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:datePickerMode="spinner"
-            android:calendarViewShown="false"/>
+            android:datePickerMode="calendar"
+            android:calendarViewShown="true"
+            android:spinnersShown="false"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
