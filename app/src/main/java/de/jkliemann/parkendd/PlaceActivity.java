@@ -115,19 +115,11 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
                     menu.add(0, i, 0, loc[i].getExtras().getString("item_detail"));
                     addressMap.put(i, loc[i]);
                 }
-                /*TextView tv = (TextView)findViewById(R.id.textView);
-                try{
-                    tv.setText(loc.getExtras().getString("detail"));
+                if(loc.length > 0) {
+                    ((ParkenDD) getApplication()).setLocation(addressMap.get(0));
+                    ((TextView) findViewById(R.id.comment)).setText(addressMap.get(0).getExtras().getString("detail"));
                     refresh();
-                }catch (NullPointerException e){
-                    e.printStackTrace();
-                    tv.setText(getString(R.string.no_address_error));
-                    pg.setProgress(0);
-                    pg.setVisibility(View.INVISIBLE);
-                    ListView spotView = (ListView)findViewById(R.id.spotListView);
-                    spotView.setVisibility(View.INVISIBLE);
-                }*/
-
+                }
             }catch (JSONException e){
                 e.printStackTrace();
             }
