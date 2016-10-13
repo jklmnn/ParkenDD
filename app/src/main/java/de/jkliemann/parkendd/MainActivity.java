@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import org.json.JSONException;
 
@@ -27,6 +28,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity implements LoaderInterface, NavigationView.OnNavigationItemSelectedListener{
 
@@ -174,7 +176,16 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         URL[] cityurl = new URL[1];
         try{
             city = ((ParkenDD)getApplication()).currentCity();
+            String comment = "";
+            if(!city.contributor().equals("")){
+                comment += city.contributor();
+                if(!city.license().equals("")){
+                    comment += " - " + city.license();
+                }
+            }
             this.setTitle(city.name());
+            ((TextView)findViewById(R.id.comment)).setText(comment);
+            ((TextView)findViewById(R.id.title)).setText(getString(R.string.app_name) + " - " + city.name());
             cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
             cityLoader = new Loader(this);
             cityLoader.execute(cityurl);

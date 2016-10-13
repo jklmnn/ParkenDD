@@ -66,6 +66,21 @@ public class Parser {
                 String source = co.getString(DATA_SOURCE);
                 String url = co.getString(DATA_URL);
                 City c = new City(id, name, location);
+                try{
+                    JSONObject attribution = co.getJSONObject("attribution");
+                    try {
+                        c.setLicense(attribution.getString("license"));
+                    }catch (JSONException je){
+                        je.printStackTrace();
+                    }
+                    try {
+                        c.setContributor(attribution.getString("contributor"));
+                    }catch (JSONException je){
+                        je.printStackTrace();
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
                 c.setActive(active);
                 c.setData_source(source);
                 c.setData_url(url);

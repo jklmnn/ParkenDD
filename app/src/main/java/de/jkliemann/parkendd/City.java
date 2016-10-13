@@ -18,6 +18,8 @@ public class City {
     private String id;
     private String data_source;
     private String data_url;
+    private String contributor;
+    private String license;
     private Date last_downloaded;
     private Date last_updated;
     private Location location;
@@ -25,10 +27,12 @@ public class City {
     private ArrayList<ParkingSpot> spots = null;
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-    public City(String id, String name, Location location){
+    public City(String id, String name, Location location) {
         this.id = id;
         this.name = name;
         this.location = location;
+        this.contributor = "";
+        this.license = "";
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
@@ -38,6 +42,14 @@ public class City {
 
     public void setData_url(String url){
         this.data_url = url;
+    }
+
+    public void setContributor(String contr){
+        this.contributor = contr;
+    }
+
+    public void setLicense(String lic){
+        this.license = lic;
     }
 
     public void setLast_downloaded(Object date){
@@ -90,6 +102,14 @@ public class City {
 
     public String data_url(){
         return data_url;
+    }
+
+    public String contributor(){
+        return this.contributor;
+    }
+
+    public String license(){
+        return this.license;
     }
 
     public Location location(){
