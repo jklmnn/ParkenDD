@@ -28,7 +28,6 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
-import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity implements LoaderInterface, NavigationView.OnNavigationItemSelectedListener{
 

@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class PlaceActivity extends AppCompatActivity implements LoaderInterface, NavigationView.OnNavigationItemSelectedListener{
@@ -109,16 +107,19 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
                 Location[] loc = Parser.nominatim(data[1]);
                 Menu menu = navigationView.getMenu();
                 for(int i = 0; i < loc.length; i++) {
-                    Logger l = Logger.getLogger("DETAIL");
-
-                    l.log(Level.INFO, loc[i].getExtras().getString("item_detail"));
-                    menu.add(0, i, 0, loc[i].getExtras().getString("item_detail"));
-                    addressMap.put(i, loc[i]);
+                    try {
+                        menu.add(0, i, 0, loc[i].getExtras().getString("item_detail"));
+                        addressMap.put(i, loc[i]);
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
                 }
                 if(loc.length > 0) {
                     ((ParkenDD) getApplication()).setLocation(addressMap.get(0));
                     ((TextView) findViewById(R.id.comment)).setText(addressMap.get(0).getExtras().getString("detail"));
                     refresh();
+                }else{
+                    menu.add(0, 0, 0, getString(R.string.no_address_error));
                 }
             }catch (JSONException e){
                 e.printStackTrace();
@@ -290,9 +291,13 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        ((ParkenDD)getApplication()).setLocation(addressMap.get(id));
-        ((TextView)findViewById(R.id.comment)).setText(addressMap.get(id).getExtras().getString("detail"));
-        refresh();
+        try {
+            ((ParkenDD) getApplication()).setLocation(addressMap.get(id));
+            ((TextView) findViewById(R.id.comment)).setText(addressMap.get(id).getExtras().getString("detail"));
+            refresh();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
         /*if (id == R.id.nav_camera) {
             // Handle the camera action

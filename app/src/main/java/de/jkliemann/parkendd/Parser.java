@@ -191,6 +191,7 @@ public class Parser {
                 JSONObject address = jsondata.getJSONObject("address");
                 String name = "";
                 String item_name = "";
+                boolean missing = false;
                 try {
                     name += address.getString("road") + " ";
                     item_name += address.getString("road") + ", ";
@@ -201,18 +202,21 @@ public class Parser {
                     }
                     name += "\n";
                 } catch (JSONException e) {
+                    missing = true;
                     e.printStackTrace();
                 }
                 try {
                     name += address.getString("postcode") + " ";
                     item_name += address.getString("postcode") + " ";
                 } catch (JSONException e) {
+                    missing = true;
                     e.printStackTrace();
                 }
                 try {
                     name += address.getString("city");
                     item_name += address.getString("city");
                 } catch (JSONException e) {
+                    missing = true;
                     e.printStackTrace();
                     try {
                         name += address.getString("town");
@@ -220,11 +224,15 @@ public class Parser {
                         e2.printStackTrace();
                     }
                 }
-                Bundle extra = new Bundle();
-                extra.putString("detail", name);
-                extra.putString("item_detail", item_name);
-                loc.setExtras(extra);
-                aloc[i] = loc;
+                if(!missing) {
+                    Bundle extra = new Bundle();
+                    extra.putString("detail", name);
+                    extra.putString("item_detail", item_name);
+                    loc.setExtras(extra);
+                    aloc[i] = loc;
+                }else {
+                    aloc[i] = null;
+                }
             }
         }
         return aloc;
