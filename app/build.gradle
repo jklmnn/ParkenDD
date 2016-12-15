@@ -8,8 +8,8 @@ android {
         applicationId "de.jkliemann.parkendd"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 24
-        versionName "1.1.2"
+        versionCode 25
+        versionName "1.2.0"
     }
     buildTypes {
         release {

@@ -65,14 +65,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         pg.setMax(6);
         pg.setVisibility(View.VISIBLE);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        URL[] serverurl = new URL[1];
-        try {
-            serverurl[0] = Loader.getMetaUrl(getString(R.string.serveraddress));
-            meta = new Loader(this);
-            meta.execute(serverurl);
-        }catch (MalformedURLException e){
-            e.printStackTrace();
-        }
+        reloadIndex();
         SearchView search = (SearchView)findViewById(R.id.searchView);
         search.setSubmitButtonEnabled(true);
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -98,7 +91,11 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
 
     private void updateMenu(ArrayList<City> citylist){
         Menu menu = navigationView.getMenu();
-        int id = 0;
+        menu.clear();
+        MenuItem auto;
+        auto = menu.add(0, 0, 0, getString(R.string.setting_city_auto));
+        auto.setCheckable(true);
+        int id = 1;
         try {
             for (City city : citylist) {
                 id++;
@@ -114,6 +111,17 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
                 ((ParkenDD)getApplication()).addCityPair(id, city);
             }
         }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void reloadIndex(){
+        URL[] serverurl = new URL[1];
+        try {
+            serverurl[0] = Loader.getMetaUrl(getString(R.string.serveraddress));
+            meta = new Loader(this);
+            meta.execute(serverurl);
+        }catch (MalformedURLException e){
             e.printStackTrace();
         }
     }
@@ -301,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
             pg.setMax(4);
             pg.setProgress(0);
             pg.setVisibility(View.VISIBLE);
-            this.refresh();
+            reloadIndex();
         }
         if(id == R.id.action_forecast){
             Intent forecast = new Intent(this, ForecastActivity.class);
@@ -321,6 +329,10 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         int id = item.getItemId();
 
         ((ParkenDD) getApplication()).setCurrentCity(id);
+
+        pg.setMax(4);
+        pg.setProgress(0);
+        pg.setVisibility(View.VISIBLE);
 
         refresh();
 

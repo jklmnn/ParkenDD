@@ -121,15 +121,17 @@ public class SettingsActivity extends PreferenceActivity{
         }
 
         private void supportWarning(final Context context, final PreferenceManager preferenceManager){
-            AlertDialog.Builder warning = new AlertDialog.Builder(context);
-            warning.setMessage(context.getString(R.string.alert_active_support));
-            warning.setPositiveButton(context.getString(R.string.positive), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            if(!preferenceManager.getSharedPreferences().getBoolean("active_support", true)) {
+                AlertDialog.Builder warning = new AlertDialog.Builder(context);
+                warning.setMessage(context.getString(R.string.alert_active_support));
+                warning.setPositiveButton(context.getString(R.string.positive), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                }
-            });
-            warning.create().show();
+                    }
+                });
+                warning.create().show();
+            }
         }
     };
 
