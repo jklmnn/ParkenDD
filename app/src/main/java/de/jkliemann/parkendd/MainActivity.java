@@ -186,8 +186,13 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
             String comment = "";
             if(!city.contributor().equals("")){
                 comment += city.contributor();
-                if(!city.license().equals("")){
-                    comment += " - " + city.license();
+                String license = city.license();
+                if(!license.equals("")){
+                    if(license.contains("http")){
+                        comment += " - " + license.split("http")[0].trim();
+                    }else {
+                        comment += " - " + license;
+                    }
                 }
             }
             this.setTitle(city.name());
