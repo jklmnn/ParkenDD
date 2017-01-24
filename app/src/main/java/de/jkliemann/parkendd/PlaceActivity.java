@@ -115,9 +115,13 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
                     }
                 }
                 if(loc.length > 0) {
-                    ((ParkenDD) getApplication()).setLocation(addressMap.get(0));
-                    ((TextView) findViewById(R.id.comment)).setText(addressMap.get(0).getExtras().getString("detail"));
-                    refresh();
+                    try {
+                        ((ParkenDD) getApplication()).setLocation(addressMap.get(0));
+                        ((TextView) findViewById(R.id.comment)).setText(addressMap.get(0).getExtras().getString("detail"));
+                        refresh();
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
                 }else{
                     menu.add(0, 0, 0, getString(R.string.no_address_error));
                 }
