@@ -38,7 +38,7 @@
     <string name="default_city" translatable="false">@string/setting_city_auto</string>
     <!--about-->
     <string name="app_url" translatable="false">https://parkendd.de/</string>
-    <string name="disclaimer">No responsiblity is taken for the correctness of this information!</string>
+    <string name="disclaimer">No responsibility is taken for the correctness of this information!</string>
     <string name="license_url" translatable="false">https://github.com/jklmnn/ParkenDD</string>
     <string name="license">The licenses of this app and used libraries can be viewed here.</string>
     <string name="server">Contact to server:</string>
