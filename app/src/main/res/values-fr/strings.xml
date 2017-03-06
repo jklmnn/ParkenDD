@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
-    <!--Meta-->
-    <string name="app_name" translatable="false">ParkenDD</string>
-    <string name="version" translatable="false">1.2.1</string>
     <!--actions-->
     <string name="action_settings">Réglages</string>
     <string name="action_forecast">Prévision</string>
@@ -33,13 +30,8 @@
     <string name="setting_city_auto">Automatique</string>
     <string name="active_support">Afficher uniquement les villes supportées</string>
     <string name="map_icon_size">Taille de l\'icône de la carte</string>
-    <!--defaults-->
-    <string name="serveraddress" translatable="false">https://api.parkendd.de/</string>
-    <string name="default_city" translatable="false">@string/setting_city_auto</string>
     <!--about-->
-    <string name="app_url" translatable="false">https://parkendd.de/</string>
-    <string name="disclaimer">Nous déclinons toute responsabilité quant a l'exactitude des données fournies</string>
-    <string name="license_url" translatable="false">https://github.com/jklmnn/ParkenDD</string>
+    <string name="disclaimer">Nous déclinons toute responsabilité quant a l\'exactitude des données fournies</string>
     <string name="license">Les CGU de cette application et des librairies utilisées peuvent être visualisées ici.</string>
     <string name="server">Contact au serveur :</string>
     <!--slotstates-->
@@ -59,7 +51,6 @@
     <string name="last_update">Dernière mise à jour</string>
     <!--view-->
     <string name="of">de</string>
-    <string name="title_activity_forecast" translatable="false">@string/action_forecast</string>
     <string name="title_activity_details">Détails</string>
     <string name="title_activity_settings">Réglages</string>
     <string name="available">Disponible</string>
@@ -68,15 +59,13 @@
     <string name="type">Type</string>
     <string name="state">État</string>
     <string name="map">Carte</string>
-    <string name="title_activity_place" translatable="false">PlaceActivity</string>
     <string name="address">Adresse</string>
     <!--parking types-->
     <string name="Tiefgarage">parking souterrain</string>
     <string name="Parkplatz">parking</string>
     <string name="Parkhaus">parking couvert à étages</string>
     <string name="invalid_error">Données reçues invalides</string>
-    <string name="location_error">Impossible d\'accéder à l'emplacement</string>
+    <string name="location_error">Impossible d\'accéder à l\'emplacement</string>
     <string name="network_error">Erreur lors de la réception des données</string>
     <string name="url_error">URL invalide</string>
-    <string name="title_activity_map" translatable="false">MapActivity</string>
 </resources>
