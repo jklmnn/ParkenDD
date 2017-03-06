@@ -1,7 +1,8 @@
 ParkenDD
 ========
 
-Android App for parking spots in Dresden.
+Android App for parking spots in Dresden.  
+If you want to contribute a translation be free to do so on [poeditor.com](https://poeditor.com/join/project/eu2wqvnR4z).
 
 <a href="https://f-droid.org/repository/browse/?fdid=de.jkliemann.parkendd" target="_blank">
 <img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"/></a>
