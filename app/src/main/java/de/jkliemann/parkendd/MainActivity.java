@@ -38,12 +38,15 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
     private Loader cityLoader;
     private City city;
     private NavigationView navigationView;
+    private MenuItem map_action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((ParkenDD) getApplication()).getTracker().trackAppDownload();
         setContentView(R.layout.activity_main);
+
+        //navigationView.getMenu().getItem(R.id.action_map).setEnabled(false);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -152,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
                 String locDate = dateFormat.format(city.last_updated());
                 String locTime = timeFormat.format(city.last_updated());
                 Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
+                map_action.setEnabled(true);
                 onProgressUpdated();
             }catch (JSONException e){
                 e.printStackTrace();
@@ -291,6 +295,8 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        map_action = menu.findItem(R.id.action_map);
+        map_action.setEnabled(false);
         return true;
     }
 
@@ -311,6 +317,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
             startActivity(about);
         }
         if(id == R.id.action_refresh){
+            map_action.setEnabled(false);
             pg.setMax(4);
             pg.setProgress(0);
             pg.setVisibility(View.VISIBLE);
