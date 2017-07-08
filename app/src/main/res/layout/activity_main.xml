@@ -20,6 +20,7 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/menu_cities"
+        app:theme="@style/ThemeOverlay.AppCompat.navTheme"
         />
 
 </android.support.v4.widget.DrawerLayout>

@@ -98,10 +98,10 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         MenuItem auto;
         auto = menu.add(0, 0, 0, getString(R.string.setting_city_auto));
         auto.setCheckable(true);
+        auto.setChecked(true);
         int id = 1;
         try {
             for (City city : citylist) {
-                id++;
                 MenuItem item;
                 try {
                     String dst = "(" + Util.getViewDistance(Util.getDistance(city.location(), ((ParkenDD) getApplication()).location())) + ")";
@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
                 }
                 item.setCheckable(true);
                 ((ParkenDD)getApplication()).addCityPair(id, city);
+                id++;
             }
         }catch (NullPointerException e){
             e.printStackTrace();
@@ -361,6 +362,17 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         } else if (id == R.id.nav_send) {
 
         }*/
+
+        // Update of the items' selected states
+        Menu menu = navigationView.getMenu();
+        for(int i = 0; i < menu.size() ; i++)
+        {
+            MenuItem iterItem = menu.getItem(i);
+            if(i == id)
+                iterItem.setChecked(true);
+            else
+                iterItem.setChecked(false);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
