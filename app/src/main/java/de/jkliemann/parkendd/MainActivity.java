@@ -11,11 +11,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
+import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -51,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface{
 
         setUpNavigationDrawer();
         setupProgressBar();
-        setupSearchBar();
         setUpRefreshLayout();
 
         onProgressUpdated();
@@ -63,29 +64,6 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface{
         progressBar.setProgress(0);
         progressBar.setMax(6);
         progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void setupSearchBar() {
-        SearchView search = (SearchView)findViewById(R.id.searchView);
-        search.setSubmitButtonEnabled(true);
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                Intent place = new Intent(_this, PlaceActivity.class);
-                Bundle extra = new Bundle();
-                extra.putString("query", s);
-                place.putExtras(extra);
-                startActivity(place);
-                SearchView search = (SearchView) _this.findViewById(R.id.searchView);
-                search.setIconified(true);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
     }
 
     private void setUpNavigationDrawer() {
@@ -136,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface{
         });
     }
 
+    // Swipe to refresh
     private void setUpRefreshLayout() {
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_spots);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
@@ -331,6 +310,37 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface{
         spotView.setAdapter(adapter);
         onProgressUpdated();
         progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        setupSearchView(menu);
+
+        return true;
+    }
+
+    private void setupSearchView(Menu menu) {
+        SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Intent place = new Intent(_this, PlaceActivity.class);
+                Bundle extra = new Bundle();
+                extra.putString("query", s);
+                place.putExtras(extra);
+                startActivity(place);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
     @Override
