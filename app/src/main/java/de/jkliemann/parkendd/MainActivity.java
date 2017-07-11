@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
 
     SharedPreferences preferences;
     private final MainActivity _this = this;
-    private ProgressBar pg;
+    private ProgressBar progressBar;
     private Loader meta;
     private Loader cityLoader;
     private City city;
@@ -46,29 +46,24 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         ((ParkenDD) getApplication()).getTracker().trackAppDownload();
         setContentView(R.layout.activity_main);
 
-        //navigationView.getMenu().getItem(R.id.action_map).setEnabled(false);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.open, R.string.closed);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-
-        pg = (ProgressBar)findViewById(R.id.progressBar);
-        pg.setIndeterminate(false);
-        pg.setProgress(0);
-        pg.setMax(6);
-        pg.setVisibility(View.VISIBLE);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        setUpNavigationDrawer();
+        setupProgressBar();
         reloadIndex();
+        setupSearchBar();
+
+        onProgressUpdated();
+    }
+
+    private void setupProgressBar() {
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        progressBar.setIndeterminate(false);
+        progressBar.setProgress(0);
+        progressBar.setMax(6);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void setupSearchBar() {
         SearchView search = (SearchView)findViewById(R.id.searchView);
         search.setSubmitButtonEnabled(true);
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -89,12 +84,30 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
                 return false;
             }
         });
-        onProgressUpdated();
     }
 
+    private void setUpNavigationDrawer() {
+        //navigationView.getMenu().getItem(R.id.action_map).setEnabled(false);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.open, R.string.closed);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+
     private void updateMenu(ArrayList<City> citylist){
+
         Menu menu = navigationView.getMenu();
         menu.clear();
+
         MenuItem auto;
         auto = menu.add(0, 0, 0, getString(R.string.setting_city_auto));
         auto.setCheckable(true);
@@ -117,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         }catch (NullPointerException e){
             e.printStackTrace();
         }
+
     }
 
     private void reloadIndex(){
@@ -139,8 +153,8 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
                 refresh();
             }catch (JSONException e){
                 e.printStackTrace();
-                this.pg.setVisibility(View.INVISIBLE);
-                this.pg.setProgress(0);
+                this.progressBar.setVisibility(View.INVISIBLE);
+                this.progressBar.setProgress(0);
             }
         }
         if(loader.equals(cityLoader)){
@@ -160,8 +174,8 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
                 onProgressUpdated();
             }catch (JSONException e){
                 e.printStackTrace();
-                this.pg.setVisibility(View.INVISIBLE);
-                this.pg.setProgress(0);
+                this.progressBar.setVisibility(View.INVISIBLE);
+                this.progressBar.setProgress(0);
             }
         }
     }
@@ -172,12 +186,12 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         }else if(e instanceof UnknownHostException){
             Error.showLongErrorToast(this, getString(R.string.connection_error));
         }
-        this.pg.setVisibility(View.INVISIBLE);
-        this.pg.setProgress(0);
+        this.progressBar.setVisibility(View.INVISIBLE);
+        this.progressBar.setProgress(0);
     }
 
     public void onProgressUpdated(){
-        pg.setProgress(pg.getProgress() + 1);
+        progressBar.setProgress(progressBar.getProgress() + 1);
     }
 
     private void refresh(){
@@ -289,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         SlotListAdapter adapter = new SlotListAdapter(this, spotArray);
         spotView.setAdapter(adapter);
         onProgressUpdated();
-        pg.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -319,9 +333,9 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         }
         if(id == R.id.action_refresh){
             map_action.setEnabled(false);
-            pg.setMax(4);
-            pg.setProgress(0);
-            pg.setVisibility(View.VISIBLE);
+            progressBar.setMax(4);
+            progressBar.setProgress(0);
+            progressBar.setVisibility(View.VISIBLE);
             reloadIndex();
         }
         if(id == R.id.action_forecast){
@@ -343,25 +357,11 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
 
         ((ParkenDD) getApplication()).setCurrentCity(id);
 
-        pg.setMax(4);
-        pg.setProgress(0);
-        pg.setVisibility(View.VISIBLE);
+        progressBar.setMax(4);
+        progressBar.setProgress(0);
+        progressBar.setVisibility(View.VISIBLE);
 
         refresh();
-
-        /*if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
 
         // Update of the items' selected states
         Menu menu = navigationView.getMenu();
