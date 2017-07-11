@@ -106,26 +106,27 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface{
                 int id = menuItem.getItemId();
 
                 menuItem.setChecked(true);
+                switch (id)
+                {
+                    case R.id.action_settings:
+                        Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
+                        startActivity(settings);
+                        break;
+                    case R.id.action_cities:
+                        // TODO : Activity to choose cities
+                        break;
+                    case R.id.action_spots:
+                        // TODO : implement spots/map/prevision as fragments
+                        break;
+                    case R.id.action_forecast:
+                        Intent forecast = new Intent(getApplicationContext(), ForecastActivity.class);
+                        startActivity(forecast);
+                        break;
+                    case R.id.action_map:
+                        Intent map = new Intent(getApplicationContext(), MapActivity.class);
+                        startActivity(map);
+                        break;
 
-                if (id == R.id.action_settings) {
-                    Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
-                    startActivity(settings);
-                }
-                else if(id == R.id.action_cities){
-                    // TODO : Activity to choose cities
-                }
-
-                else if(id == R.id.action_spots){
-                    // TODO : implement spots/map/prevision as fragments
-                }
-
-                else if(id == R.id.action_forecast){
-                    Intent forecast = new Intent(getApplicationContext(), ForecastActivity.class);
-                    startActivity(forecast);
-                }
-                else if(id == R.id.action_map){
-                    Intent map = new Intent(getApplicationContext(), MapActivity.class);
-                    startActivity(map);
                 }
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface{
 
     private void setUpRefreshLayout() {
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_spots);
-
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
