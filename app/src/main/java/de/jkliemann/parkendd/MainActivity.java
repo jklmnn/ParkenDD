@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface{
                 timeFormat.setTimeZone(tz);
                 String locDate = dateFormat.format(city.last_updated());
                 String locTime = timeFormat.format(city.last_updated());
-                Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
+                displaySnackBarMessage(getString(R.string.last_update) + ": " + locDate + " " + locTime);
                 onProgressUpdated();
             }catch (JSONException e){
                 e.printStackTrace();
@@ -187,9 +188,9 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface{
 
     public void onExceptionThrown(Exception e){
         if(e instanceof FileNotFoundException) {
-            Error.showLongErrorToast(this, getString(R.string.server_error));
+            displaySnackBarMessage(getString(R.string.server_error));;
         }else if(e instanceof UnknownHostException){
-            Error.showLongErrorToast(this, getString(R.string.connection_error));
+            displaySnackBarMessage(getString(R.string.connection_error));
         }
         this.progressBar.setVisibility(View.INVISIBLE);
         this.progressBar.setProgress(0);
@@ -341,6 +342,12 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface{
                 return false;
             }
         });
+    }
+
+    private void displaySnackBarMessage(String message) {
+        Snackbar snackbar = Snackbar.make(swipeRefreshLayout, message, Snackbar.LENGTH_LONG);
+
+        snackbar.show();
     }
 
     @Override
