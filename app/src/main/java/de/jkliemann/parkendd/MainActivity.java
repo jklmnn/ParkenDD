@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class MainActivity extends AppCompatActivity implements LoaderInterface, NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements LoaderInterface{
 
     SharedPreferences preferences;
     private final MainActivity _this = this;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
     private Loader cityLoader;
     private City city;
     private NavigationView navigationView;
-    private MenuItem map_action;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +47,12 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         setContentView(R.layout.activity_main);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        reloadIndex();
+
         setUpNavigationDrawer();
         setupProgressBar();
-        reloadIndex();
         setupSearchBar();
+        setUpRefreshLayout();
 
         onProgressUpdated();
     }
@@ -87,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
     }
 
     private void setUpNavigationDrawer() {
-        //navigationView.getMenu().getItem(R.id.action_map).setEnabled(false);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -98,39 +98,64 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+
+                menuItem.setChecked(true);
+
+                if (id == R.id.action_settings) {
+                    Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
+                    startActivity(settings);
+                }
+                else if(id == R.id.action_cities){
+                    // TODO : Activity to choose cities
+                }
+
+                else if(id == R.id.action_spots){
+                    // TODO : implement spots/map/prevision as fragments
+                }
+
+                else if(id == R.id.action_forecast){
+                    Intent forecast = new Intent(getApplicationContext(), ForecastActivity.class);
+                    startActivity(forecast);
+                }
+                else if(id == R.id.action_map){
+                    Intent map = new Intent(getApplicationContext(), MapActivity.class);
+                    startActivity(map);
+                }
+
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
     }
 
+    private void setUpRefreshLayout() {
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_spots);
 
-    private void updateMenu(ArrayList<City> citylist){
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+    }
 
-        Menu menu = navigationView.getMenu();
-        menu.clear();
-
-        MenuItem auto;
-        auto = menu.add(0, 0, 0, getString(R.string.setting_city_auto));
-        auto.setCheckable(true);
-        auto.setChecked(true);
+    private void updateCities(ArrayList<City> citylist){
         int id = 1;
         try {
             for (City city : citylist) {
-                MenuItem item;
-                try {
-                    String dst = "(" + Util.getViewDistance(Util.getDistance(city.location(), ((ParkenDD) getApplication()).location())) + ")";
-                    item = menu.add(0, id, 0, city.name() + " " + dst);
-                }catch (NullPointerException e){
-                    e.printStackTrace();
-                    item = menu.add(0, id, 0, city.name());
-                }
-                item.setCheckable(true);
                 ((ParkenDD)getApplication()).addCityPair(id, city);
                 id++;
             }
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-
     }
 
     private void reloadIndex(){
@@ -149,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
             ArrayList<City> citylist;
             try{
                 citylist = Parser.meta(data[0]);
-                updateMenu(((ParkenDD) getApplication()).getActiveCities(citylist));
+                updateCities(((ParkenDD) getApplication()).getActiveCities(citylist));
                 refresh();
             }catch (JSONException e){
                 e.printStackTrace();
@@ -170,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
                 String locDate = dateFormat.format(city.last_updated());
                 String locTime = timeFormat.format(city.last_updated());
                 Error.showLongErrorToast(this, getString(R.string.last_update) + ": " + locDate + " " + locTime);
-                map_action.setEnabled(true);
                 onProgressUpdated();
             }catch (JSONException e){
                 e.printStackTrace();
@@ -178,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
                 this.progressBar.setProgress(0);
             }
         }
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     public void onExceptionThrown(Exception e){
@@ -198,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         if(!((ParkenDD)getApplication()).locationEnabled()){
             ((ParkenDD)getApplication()).initLocation();
         }
+
         ((ParkenDD)getApplication()).setLocation(null);
         URL[] cityurl = new URL[1];
         try{
@@ -304,79 +330,6 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         spotView.setAdapter(adapter);
         onProgressUpdated();
         progressBar.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        map_action = menu.findItem(R.id.action_map);
-        map_action.setEnabled(false);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent settings = new Intent(this, SettingsActivity.class);
-            startActivity(settings);
-        }
-        if(id == R.id.action_about){
-            Intent about = new Intent(this, AboutActivity.class);
-            startActivity(about);
-        }
-        if(id == R.id.action_refresh){
-            map_action.setEnabled(false);
-            progressBar.setMax(4);
-            progressBar.setProgress(0);
-            progressBar.setVisibility(View.VISIBLE);
-            reloadIndex();
-        }
-        if(id == R.id.action_forecast){
-            Intent forecast = new Intent(this, ForecastActivity.class);
-            startActivity(forecast);
-        }
-        if(id == R.id.action_map){
-            Intent map = new Intent(this, MapActivity.class);
-            startActivity(map);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        ((ParkenDD) getApplication()).setCurrentCity(id);
-
-        progressBar.setMax(4);
-        progressBar.setProgress(0);
-        progressBar.setVisibility(View.VISIBLE);
-
-        refresh();
-
-        // Update of the items' selected states
-        Menu menu = navigationView.getMenu();
-        for(int i = 0; i < menu.size() ; i++)
-        {
-            MenuItem iterItem = menu.getItem(i);
-            if(i == id)
-                iterItem.setChecked(true);
-            else
-                iterItem.setChecked(false);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override

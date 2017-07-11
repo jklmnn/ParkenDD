@@ -53,12 +53,17 @@
             android:queryHint="@string/address"
             android:gravity="center"/>
 
-        <ExpandableListView
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_spots"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spotListView"
-            android:layout_below="@+id/searchView"
-            android:layout_centerHorizontal="true"/>
+            android:layout_height="match_parent">
+            <ExpandableListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spotListView"
+                android:layout_below="@+id/searchView"
+                android:layout_centerHorizontal="true"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

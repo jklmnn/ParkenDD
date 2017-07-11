@@ -8,6 +8,8 @@
     <string name="action_forecast">Forecast</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_about">About the app</string>
+    <string name="action_spots">Parking spots</string>
+    <string name="action_cities">Cities</string>
     <!--settings-->
     <string name="header_general">General</string>
     <string name="header_network">Network</string>
