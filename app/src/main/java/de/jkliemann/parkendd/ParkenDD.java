@@ -98,7 +98,7 @@ public class ParkenDD extends Application {
         super.onCreate();
     }
 
-    synchronized Tracker getTracker(){
+    public synchronized Tracker getTracker(){
         if(piwik != null){
             return piwik;
         }

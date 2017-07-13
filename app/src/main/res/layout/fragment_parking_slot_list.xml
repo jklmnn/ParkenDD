@@ -1,0 +1,21 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="de.jkliemann.parkendd.Views.LocalParkingSlotListFragment">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_spots"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <ExpandableListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spotListView"
+        android:layout_below="@+id/searchView"
+        android:layout_centerHorizontal="true"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</FrameLayout>

@@ -43,17 +43,12 @@
             android:layout_marginBottom="-10dp"
             android:layout_marginTop="-6dp" />
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_spots"
+
+        <!-- Framelayout to display Fragments -->
+        <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ExpandableListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spotListView"
-                android:layout_below="@+id/searchView"
-                android:layout_centerHorizontal="true"/>
-        </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
