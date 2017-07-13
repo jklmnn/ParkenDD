@@ -1,8 +1,10 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Views.Drawables;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+
+import de.jkliemann.parkendd.Model.ParkingSpot;
 
 /**
  * Created by jkliemann on 19.11.15.

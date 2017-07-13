@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Utilities;
 
 import android.content.Context;
 import android.widget.Toast;

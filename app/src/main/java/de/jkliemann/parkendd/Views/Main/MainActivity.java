@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Views.Main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,7 +26,12 @@ import android.widget.ProgressBar;
 import java.io.FileNotFoundException;
 import java.net.UnknownHostException;
 
-import de.jkliemann.parkendd.Views.LocalParkingSlotListFragment;
+import de.jkliemann.parkendd.Model.City;
+import de.jkliemann.parkendd.Web.Loader;
+import de.jkliemann.parkendd.ParkenDD;
+import de.jkliemann.parkendd.R;
+import de.jkliemann.parkendd.Views.ForecastActivity;
+import de.jkliemann.parkendd.Views.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity implements LocalParkingSlotListFragment.OnFragmentInteractionListener {
 

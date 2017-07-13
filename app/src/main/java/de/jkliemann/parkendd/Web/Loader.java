@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Web;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +15,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+
+import de.jkliemann.parkendd.Model.City;
+import de.jkliemann.parkendd.Model.ParkingSpot;
 
 /**
  * Created by jkliemann on 23.08.15.

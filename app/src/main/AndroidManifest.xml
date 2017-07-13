@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".Views.Main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,15 +26,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name=".Views.AboutActivity"
             android:label="@string/action_about" >
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Views.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name=".PlaceActivity"
+            android:name=".Views.Main.PlaceActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -46,11 +46,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ForecastActivity"
+            android:name=".Views.ForecastActivity"
             android:label="@string/title_activity_forecast" >
         </activity>
         <activity
-            android:name=".MapActivity"
+            android:name=".Views.Main.MapActivity"
             android:label="@string/title_activity_map" >
         </activity>
     </application>

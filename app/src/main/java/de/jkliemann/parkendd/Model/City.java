@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Model;
 
 import android.location.Location;
 

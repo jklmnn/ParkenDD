@@ -1,10 +1,12 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Views;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import de.jkliemann.parkendd.R;
 
 
 public class AboutActivity extends ActionBarActivity {

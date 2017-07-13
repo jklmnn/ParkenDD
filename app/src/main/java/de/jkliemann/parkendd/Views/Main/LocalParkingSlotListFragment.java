@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd.Views;
+package de.jkliemann.parkendd.Views.Main;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -23,15 +23,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import de.jkliemann.parkendd.City;
-import de.jkliemann.parkendd.Loader;
-import de.jkliemann.parkendd.LoaderInterface;
-import de.jkliemann.parkendd.MainActivity;
+import de.jkliemann.parkendd.Model.City;
+import de.jkliemann.parkendd.Web.Loader;
+import de.jkliemann.parkendd.Web.LoaderInterface;
 import de.jkliemann.parkendd.ParkenDD;
-import de.jkliemann.parkendd.ParkingSpot;
-import de.jkliemann.parkendd.Parser;
+import de.jkliemann.parkendd.Model.ParkingSpot;
+import de.jkliemann.parkendd.Web.Parser;
 import de.jkliemann.parkendd.R;
-import de.jkliemann.parkendd.SlotListAdapter;
+import de.jkliemann.parkendd.Views.SlotListAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

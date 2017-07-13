@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Model;
 
 import android.location.Location;
 import android.net.Uri;
@@ -7,6 +7,9 @@ import android.os.Parcelable;
 
 import java.util.Arrays;
 import java.util.Comparator;
+
+import de.jkliemann.parkendd.ParkenDD;
+import de.jkliemann.parkendd.Utilities.Util;
 
 /**
  * Created by jkliemann on 10.12.14.

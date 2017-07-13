@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Web;
 
 /**
  * Created by jkliemann on 23.08.15.

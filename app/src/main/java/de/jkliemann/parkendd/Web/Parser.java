@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Web;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -16,6 +16,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
+
+import de.jkliemann.parkendd.Model.City;
+import de.jkliemann.parkendd.Model.ParkingSpot;
+import de.jkliemann.parkendd.ParkenDD;
 
 /**
  * Created by jkliemann on 23.08.15.

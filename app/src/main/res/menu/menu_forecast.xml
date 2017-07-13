@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="de.jkliemann.parkendd.ForecastActivity">
+    tools:context="de.jkliemann.parkendd.Views.ForecastActivity">
     <item android:id="@+id/action_datePicker" android:icon="@drawable/ic_fa_calendar"
         android:orderInCategory="100" app:showAsAction="always"
         android:title="@string/action_forecast"/>

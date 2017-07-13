@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Views.Main;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -12,6 +12,14 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
+
+import de.jkliemann.parkendd.Model.City;
+import de.jkliemann.parkendd.ParkenDD;
+import de.jkliemann.parkendd.Model.ParkingSpot;
+import de.jkliemann.parkendd.R;
+import de.jkliemann.parkendd.Views.Drawables.SlotPopup;
+import de.jkliemann.parkendd.Views.Drawables.SpotIcon;
+import de.jkliemann.parkendd.Views.Drawables.SpotIconBitmap;
 
 public class MapActivity extends ActionBarActivity {
 

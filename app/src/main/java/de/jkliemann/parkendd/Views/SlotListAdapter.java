@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Views;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -17,6 +17,12 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import de.jkliemann.parkendd.Model.ParkingSpot;
+import de.jkliemann.parkendd.ParkenDD;
+import de.jkliemann.parkendd.R;
+import de.jkliemann.parkendd.Utilities.Error;
+import de.jkliemann.parkendd.Utilities.Util;
 
 
 public class SlotListAdapter extends BaseExpandableListAdapter {

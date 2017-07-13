@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Views.Main;
 
 import android.content.Intent;
 import android.location.Location;
@@ -32,6 +32,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.TimeZone;
+
+import de.jkliemann.parkendd.Model.City;
+import de.jkliemann.parkendd.Utilities.Error;
+import de.jkliemann.parkendd.Web.Loader;
+import de.jkliemann.parkendd.Web.LoaderInterface;
+import de.jkliemann.parkendd.ParkenDD;
+import de.jkliemann.parkendd.Model.ParkingSpot;
+import de.jkliemann.parkendd.Web.Parser;
+import de.jkliemann.parkendd.R;
+import de.jkliemann.parkendd.Views.AboutActivity;
+import de.jkliemann.parkendd.Views.ForecastActivity;
+import de.jkliemann.parkendd.Views.SettingsActivity;
+import de.jkliemann.parkendd.Views.SlotListAdapter;
 
 
 public class PlaceActivity extends AppCompatActivity implements LoaderInterface, NavigationView.OnNavigationItemSelectedListener{

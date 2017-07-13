@@ -1,4 +1,4 @@
-package de.jkliemann.parkendd;
+package de.jkliemann.parkendd.Views;
 
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -28,8 +28,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import de.jkliemann.parkendd.Model.City;
+import de.jkliemann.parkendd.Utilities.Error;
+import de.jkliemann.parkendd.Web.Loader;
+import de.jkliemann.parkendd.Web.LoaderInterface;
+import de.jkliemann.parkendd.ParkenDD;
+import de.jkliemann.parkendd.Model.ParkingSpot;
+import de.jkliemann.parkendd.Web.Parser;
+import de.jkliemann.parkendd.R;
 
-public class ForecastActivity extends ActionBarActivity implements LoaderInterface{
+
+public class ForecastActivity extends ActionBarActivity implements LoaderInterface {
 
     private final ForecastActivity _this = this;
     private static final int dateOffset = 1900;
