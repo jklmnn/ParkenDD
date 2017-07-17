@@ -46,8 +46,6 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         ((ParkenDD) getApplication()).getTracker().trackAppDownload();
         setContentView(R.layout.activity_main);
 
-        //navigationView.getMenu().getItem(R.id.action_map).setEnabled(false);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
