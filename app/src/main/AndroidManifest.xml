@@ -49,10 +49,6 @@
             android:name=".Views.ForecastActivity"
             android:label="@string/title_activity_forecast" >
         </activity>
-        <activity
-            android:name=".Views.Main.MapActivity"
-            android:label="@string/title_activity_map" >
-        </activity>
     </application>
 
 </manifest>

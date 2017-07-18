@@ -26,23 +26,22 @@ import android.widget.ProgressBar;
 import java.io.FileNotFoundException;
 import java.net.UnknownHostException;
 
-import de.jkliemann.parkendd.Model.City;
-import de.jkliemann.parkendd.Web.Loader;
 import de.jkliemann.parkendd.ParkenDD;
 import de.jkliemann.parkendd.R;
 import de.jkliemann.parkendd.Views.ForecastActivity;
 import de.jkliemann.parkendd.Views.SettingsActivity;
 
-public class MainActivity extends AppCompatActivity implements LocalParkingSlotListFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements LocalParkingSlotListFragment.OnFragmentInteractionListener,
+    MapFragment.OnFragmentInteractionListener{
 
     SharedPreferences preferences;
     private final MainActivity _this = this;
     public ProgressBar progressBar;
-    private Loader meta;
-    private Loader cityLoader;
-    private City city;
+
     private NavigationView navigationView;
+
     private FrameLayout fragmentLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,15 +93,14 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
                         // TODO : Activity to choose cities
                         break;
                     case R.id.action_spots:
-                        // TODO : implement spots/map/prevision as fragments
+                        setFragment(LocalParkingSlotListFragment.newInstance());
                         break;
                     case R.id.action_forecast:
                         Intent forecast = new Intent(getApplicationContext(), ForecastActivity.class);
                         startActivity(forecast);
                         break;
                     case R.id.action_map:
-                        Intent map = new Intent(getApplicationContext(), MapActivity.class);
-                        startActivity(map);
+                        setFragment(MapFragment.newInstance());
                         break;
 
                 }

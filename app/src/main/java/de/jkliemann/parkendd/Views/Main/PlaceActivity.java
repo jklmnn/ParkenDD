@@ -273,8 +273,8 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
 //        }
 
         if(id == R.id.action_map){
-            Intent map = new Intent(this, MapActivity.class);
-            startActivity(map);
+            //Intent map = new Intent(this, MapActivity.class);
+            //startActivity(map);
         }
 
         if (id == R.id.action_settings) {
