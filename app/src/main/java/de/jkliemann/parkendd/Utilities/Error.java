@@ -1,6 +1,8 @@
 package de.jkliemann.parkendd.Utilities;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.widget.Toast;
 
 
@@ -13,6 +15,12 @@ public class Error {
         Toast errorToast = Toast.makeText(context, errorMessage, Toast.LENGTH_LONG);
         errorToast.show();
         return;
+    }
+
+    public static void displaySnackBarMessage(View view, String message) {
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+
+        snackbar.show();
     }
 
     public static void showShortErrorToast(Context context, String errorMessage){

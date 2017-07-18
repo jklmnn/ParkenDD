@@ -31,16 +31,22 @@ import de.jkliemann.parkendd.R;
 import de.jkliemann.parkendd.Views.ForecastActivity;
 import de.jkliemann.parkendd.Views.SettingsActivity;
 
+import de.jkliemann.parkendd.Utilities.Error;
+
 public class MainActivity extends AppCompatActivity implements LocalParkingSlotListFragment.OnFragmentInteractionListener,
-    MapFragment.OnFragmentInteractionListener{
+    MapFragment.OnFragmentInteractionListener, RemoteParkingSlotListFragment.OnFragmentInteractionListener{
 
     SharedPreferences preferences;
     private final MainActivity _this = this;
     public ProgressBar progressBar;
 
     private NavigationView navigationView;
+    private final int NAV_INDEX_SPOTS = 2;
+    private final int NAV_INDEX_MAP = 3;
+    private final int NAV_INDEX_FORECAST = 4;
 
     private FrameLayout fragmentLayout;
+    private Fragment currentlyDisplayedFragment;
 
 
     @Override
@@ -115,9 +121,9 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
 
     public void onExceptionThrown(Exception e){
         if(e instanceof FileNotFoundException) {
-            displaySnackBarMessage(getString(R.string.server_error));;
+            Error.displaySnackBarMessage(fragmentLayout, getString(R.string.server_error));;
         }else if(e instanceof UnknownHostException){
-            displaySnackBarMessage(getString(R.string.connection_error));
+            Error.displaySnackBarMessage(fragmentLayout, getString(R.string.connection_error));
         }
         this.progressBar.setVisibility(View.INVISIBLE);
         this.progressBar.setProgress(0);
@@ -134,16 +140,15 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
     }
 
     private void setupSearchView(Menu menu) {
-        SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        final SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Intent place = new Intent(_this, PlaceActivity.class);
-                Bundle extra = new Bundle();
-                extra.putString("query", s);
-                place.putExtras(extra);
-                startActivity(place);
+                setFragment(RemoteParkingSlotListFragment.newInstance(s));
+                search.setQuery("", false);
+                search.clearFocus();
+                search.onActionViewCollapsed();
                 return true;
             }
 
@@ -154,18 +159,31 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
         });
     }
 
-    private void displaySnackBarMessage(String message) {
-        Snackbar snackbar = Snackbar.make(fragmentLayout, message, Snackbar.LENGTH_LONG);
+    protected void setFragment(Fragment fragment) {
 
-        snackbar.show();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.replace(R.id.fragment_container, fragment)
+                .commit();
+
+        currentlyDisplayedFragment = fragment;
     }
 
-    protected void setFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction =
-                fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        // We try to go back to the main fragment (local parking spots)
+        else if (currentlyDisplayedFragment.getClass() != LocalParkingSlotListFragment.class) {
+            setFragment(LocalParkingSlotListFragment.newInstance());
+            navigationView.getMenu().getItem(NAV_INDEX_SPOTS).setChecked(true);
+        }
+        else {
+            moveTaskToBack(true);
+        }
     }
 
     @Override

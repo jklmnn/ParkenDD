@@ -2,6 +2,7 @@ package de.jkliemann.parkendd.Views.Main;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,15 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
 import org.json.JSONException;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 import de.jkliemann.parkendd.Model.City;
@@ -35,28 +41,34 @@ import de.jkliemann.parkendd.Web.Parser;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LocalParkingSlotListFragment.OnFragmentInteractionListener} interface
+ * {@link RemoteParkingSlotListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LocalParkingSlotListFragment#newInstance} factory method to
+ * Use the {@link RemoteParkingSlotListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LocalParkingSlotListFragment extends Fragment implements LoaderInterface {
+public class RemoteParkingSlotListFragment extends Fragment implements LoaderInterface {
 
     SharedPreferences preferences;
     private Loader meta;
     private Loader cityLoader;
     private City city;
-
+    private HashMap<Integer, Location> addressMap;
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private String query;
+    private String initialRequest;
 
     private OnFragmentInteractionListener mListener;
 
-    public LocalParkingSlotListFragment() {
+    public RemoteParkingSlotListFragment() {
         // Required empty public constructor
     }
 
-    public static LocalParkingSlotListFragment newInstance() {
-        LocalParkingSlotListFragment fragment = new LocalParkingSlotListFragment();
+
+    public static RemoteParkingSlotListFragment newInstance(String mQuery) {
+        RemoteParkingSlotListFragment fragment = new RemoteParkingSlotListFragment();
+        fragment.initialRequest = mQuery;
+        fragment.query = mQuery;
 
         return fragment;
     }
@@ -78,8 +90,7 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
         super.onCreate(savedInstanceState);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
 
-        ((ParkenDD) getActivity().getApplication()).getTracker().trackAppDownload();
-        reloadIndex();
+        doSearch();
     }
 
     @Override
@@ -91,6 +102,7 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
         onProgressUpdated();
         return view;
     }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -109,25 +121,86 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
         mListener = null;
     }
 
-    private void reloadIndex(){
-        URL[] serverurl = new URL[1];
-        try {
-            serverurl[0] = Loader.getMetaUrl(getString(R.string.serveraddress));
-            meta = new Loader(this);
-            meta.execute(serverurl);
-        }catch (MalformedURLException e){
-            e.printStackTrace();
+    @Override
+    public void onExceptionThrown(Exception e) {
+        if(e instanceof FileNotFoundException) {
+            Error.displaySnackBarMessage(swipeRefreshLayout, getString(R.string.server_error));
+        }else if(e instanceof UnknownHostException){
+            Error.displaySnackBarMessage(swipeRefreshLayout, getString(R.string.connection_error));
         }
+        ((MainActivity) getActivity()).progressBar.setVisibility(View.INVISIBLE);
     }
 
-    private void updateCities(ArrayList<City> citylist){
-        int id = 1;
-        try {
-            for (City city : citylist) {
-                ((ParkenDD) getActivity().getApplication()).addCityPair(id, city);
-                id++;
+    @Override
+    public void onLoaderFinished(String[] data, Loader loader) {
+        if(loader.equals(meta)){
+            ArrayList<City> citylist;
+            try{
+                citylist = Parser.meta(data[0]);
+                ((ParkenDD)getActivity().getApplication()).updateCities(citylist);
+            }catch (JSONException e){
+                e.printStackTrace();
             }
-        }catch (NullPointerException e){
+            try{
+                Location[] loc = Parser.nominatim(data[1]);
+                for(int i = 0; i < loc.length; i++) {
+                    try {
+                        addressMap.put(i, loc[i]);
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
+                }
+
+                if(loc.length > 0) {
+                    try {
+                        ((ParkenDD) getActivity().getApplication()).setLocation(addressMap.get(0));
+                        refresh();
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
+                }else{
+                    // TODO : handle error
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        if(loader.equals(cityLoader)){
+            try{
+                city = Parser.city(data[0], city);
+                setList(city);
+                ((ParkenDD) getActivity().getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
+                TimeZone tz = Calendar.getInstance().getTimeZone();
+                DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(getActivity());
+                dateFormat.setTimeZone(tz);
+                DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(getActivity());
+                timeFormat.setTimeZone(tz);
+                String locDate = dateFormat.format(city.last_updated());
+                String locTime = timeFormat.format(city.last_updated());
+                Error.displaySnackBarMessage(swipeRefreshLayout, getString(R.string.last_update) + ": " + locDate + " " + locTime);
+                onProgressUpdated();
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onProgressUpdated() {
+        ((MainActivity) getActivity()).progressBar.setProgress(((MainActivity) getActivity()).progressBar.getProgress() + 1);
+    }
+
+    private void refresh(){
+        URL[] cityurl = new URL[1];
+        try{
+            city = ((ParkenDD) getActivity().getApplication()).currentCity();
+            getActivity().setTitle(city.name() + ": " + initialRequest);
+            cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
+            cityLoader = new Loader(this);
+            cityLoader.execute(cityurl);
+            onProgressUpdated();
+        }catch (MalformedURLException e){
             e.printStackTrace();
         }
     }
@@ -141,13 +214,7 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
         Boolean hide_full = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hide_full", true);
         final ParkingSpot[] spotArray;
         ParkingSpot[] preArray;
-        ArrayList<ParkingSpot> spots;
-        try {
-            spots = CITY.spots();
-        }catch (NullPointerException e){
-            spots = new ArrayList<>();
-            e.printStackTrace();
-        }
+        ArrayList<ParkingSpot> spots = CITY.spots();
         ArrayList<ParkingSpot> cachelist = new ArrayList<>();
         for(ParkingSpot spot : spots){
             if(hide_closed && spot.state().equals("closed")){
@@ -198,100 +265,28 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
         SlotListAdapter adapter = new SlotListAdapter(getActivity(), spotArray);
         spotView.setAdapter(adapter);
         onProgressUpdated();
-        ((MainActivity)getActivity()).progressBar.setVisibility(View.INVISIBLE);
+        ((MainActivity) getActivity()).progressBar.setVisibility(View.INVISIBLE);
     }
 
-    private void refresh(){
-        if(!((ParkenDD) getActivity().getApplication()).locationEnabled()){
-            ((ParkenDD) getActivity().getApplication()).initLocation();
+    private void doSearch() {
+        Uri data = null;
+        try {
+            query = "geo:0,0?q=" + URLEncoder.encode(query, "UTF-8").replace("+", "%20");
+            data = Uri.parse(query);
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
         }
-
-        ((ParkenDD) getActivity().getApplication()).setLocation(null);
-        URL[] cityurl = new URL[1];
-        try{
-            city = ((ParkenDD) getActivity().getApplication()).currentCity();
-            String comment = "";
-            if(!city.contributor().equals("")){
-                comment += city.contributor();
-                String license = city.license();
-                if(!license.equals("")){
-                    if(license.contains("http")){
-                        comment += " - " + license.split("http")[0].trim();
-                    }else {
-                        comment += " - " + license;
-                    }
-                }
-            }
-            getActivity().setTitle(city.name());
-            ((TextView) getActivity().findViewById(R.id.comment)).setText(comment);
-            ((TextView)getActivity().findViewById(R.id.title)).setText(getString(R.string.app_name) + " - " + city.name());
-            cityurl[0] = Loader.getCityUrl(getString(R.string.serveraddress), city);
-            cityLoader = new Loader(this);
-            cityLoader.execute(cityurl);
+        URL[] serverurl = new URL[2];
+        try {
+            serverurl[1] = Loader.getNominatimURL(data);
+            serverurl[0] = Loader.getMetaUrl(getString(R.string.serveraddress));
+            meta = new Loader(this);
+            meta.execute(serverurl);
             onProgressUpdated();
         }catch (MalformedURLException e){
-            getActivity().setTitle(getString(R.string.app_name));
             e.printStackTrace();
-        }catch (NullPointerException e){
-            e.printStackTrace();
-            URL[] serverurl = new URL[1];
-            try {
-                serverurl[0] = Loader.getMetaUrl(getString(R.string.serveraddress));
-                meta = new Loader(this);
-                meta.execute(serverurl);
-            }catch (MalformedURLException me){
-                me.printStackTrace();
-            }
         }
-    }
-
-
-
-    @Override
-    public void onExceptionThrown(Exception e) {
-
-    }
-
-    @Override
-    public void onLoaderFinished(String[] data, Loader loader) {
-        if(loader.equals(meta)){
-            ArrayList<City> citylist;
-            try{
-                citylist = Parser.meta(data[0]);
-                updateCities(((ParkenDD) getActivity().getApplication()).getActiveCities(citylist));
-                refresh();
-            }catch (JSONException e){
-                e.printStackTrace();
-                ((MainActivity)getActivity()).progressBar.setVisibility(View.INVISIBLE);
-                ((MainActivity)getActivity()).progressBar.setProgress(0);
-            }
-        }
-        if(loader.equals(cityLoader)){
-            try{
-                city = Parser.city(data[0], city);
-                setList(city);
-                ((ParkenDD) getActivity().getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
-                TimeZone tz = Calendar.getInstance().getTimeZone();
-                DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(getActivity());
-                dateFormat.setTimeZone(tz);
-                DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(getActivity());
-                timeFormat.setTimeZone(tz);
-                String locDate = dateFormat.format(city.last_updated());
-                String locTime = timeFormat.format(city.last_updated());
-                Error.displaySnackBarMessage(swipeRefreshLayout, getString(R.string.last_update) + ": " + locDate + " " + locTime);
-                onProgressUpdated();
-            }catch (JSONException e){
-                e.printStackTrace();
-                ((MainActivity)getActivity()).progressBar.setVisibility(View.INVISIBLE);
-                ((MainActivity)getActivity()).progressBar.setProgress(0);
-            }
-        }
-        swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void onProgressUpdated() {
-        ((MainActivity) getActivity()).progressBar.setProgress(((MainActivity) getActivity()).progressBar.getProgress() + 1);
+        addressMap = new HashMap<>();
     }
 
     private void resetProgressBar() {
