@@ -149,27 +149,29 @@ public class MapFragment extends Fragment {
 
     private ArrayList<OverlayItem> createItemList(ArrayList<ParkingSpot> spotlist){
         ArrayList<OverlayItem> itemList = new ArrayList<>();
-        for(ParkingSpot spot : spotlist){
-            String desc = "";
-            SpotIcon marker = new SpotIcon(spot, getActivity());
-            switch (spot.state()){
-                case "closed":
-                    desc = getString(R.string.closed);
-                    break;
-                case "nodata":
-                    desc = getString(R.string.nodata);
-                    break;
-                default:
-                    desc = String.valueOf(spot.free()) + " " + getString(R.string.of)  + " " + String.valueOf(spot.count());
-                    break;
-            }
-            try {
-                OverlayItem olItem = new OverlayItem(spot.name(), desc, new GeoPoint(spot.location().getLatitude(), spot.location().getLongitude()));
-                olItem.setMarker(marker.getBitmapDrawable());
-                olItem.setMarkerHotspot(OverlayItem.HotspotPlace.CENTER);
-                itemList.add(olItem);
-            }catch (NullPointerException e){
-                e.printStackTrace();
+        if(spotlist != null) {
+            for(ParkingSpot spot : spotlist){
+                String desc = "";
+                SpotIcon marker = new SpotIcon(spot, getActivity());
+                switch (spot.state()){
+                    case "closed":
+                        desc = getString(R.string.closed);
+                        break;
+                    case "nodata":
+                        desc = getString(R.string.nodata);
+                        break;
+                    default:
+                        desc = String.valueOf(spot.free()) + " " + getString(R.string.of)  + " " + String.valueOf(spot.count());
+                        break;
+                }
+                try {
+                    OverlayItem olItem = new OverlayItem(spot.name(), desc, new GeoPoint(spot.location().getLatitude(), spot.location().getLongitude()));
+                    olItem.setMarker(marker.getBitmapDrawable());
+                    olItem.setMarkerHotspot(OverlayItem.HotspotPlace.CENTER);
+                    itemList.add(olItem);
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
             }
         }
         return itemList;

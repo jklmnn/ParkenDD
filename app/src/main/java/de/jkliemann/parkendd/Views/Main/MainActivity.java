@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -28,13 +27,11 @@ import java.net.UnknownHostException;
 
 import de.jkliemann.parkendd.ParkenDD;
 import de.jkliemann.parkendd.R;
-import de.jkliemann.parkendd.Views.ForecastActivity;
+import de.jkliemann.parkendd.Utilities.Error;
 import de.jkliemann.parkendd.Views.SettingsActivity;
 
-import de.jkliemann.parkendd.Utilities.Error;
-
 public class MainActivity extends AppCompatActivity implements LocalParkingSlotListFragment.OnFragmentInteractionListener,
-    MapFragment.OnFragmentInteractionListener, RemoteParkingSlotListFragment.OnFragmentInteractionListener{
+    MapFragment.OnFragmentInteractionListener,RemoteParkingSlotListFragment.OnFragmentInteractionListener, ForecastFragment.OnFragmentInteractionListener{
 
     SharedPreferences preferences;
     private final MainActivity _this = this;
@@ -102,8 +99,7 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
                         setFragment(LocalParkingSlotListFragment.newInstance());
                         break;
                     case R.id.action_forecast:
-                        Intent forecast = new Intent(getApplicationContext(), ForecastActivity.class);
-                        startActivity(forecast);
+                        setFragment(ForecastFragment.newInstance());
                         break;
                     case R.id.action_map:
                         setFragment(MapFragment.newInstance());
@@ -131,6 +127,10 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if(menu != null)
+        {
+            menu.clear();
+        }
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 

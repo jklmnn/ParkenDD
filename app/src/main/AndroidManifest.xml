@@ -33,10 +33,6 @@
             android:name=".Views.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-        <activity
-            android:name=".Views.ForecastActivity"
-            android:label="@string/title_activity_forecast" >
-        </activity>
     </application>
 
 </manifest>

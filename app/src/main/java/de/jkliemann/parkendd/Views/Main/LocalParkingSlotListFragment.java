@@ -254,44 +254,49 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
 
     @Override
     public void onLoaderFinished(String[] data, Loader loader) {
-        if(loader.equals(meta)){
-            ArrayList<City> citylist;
-            try{
-                citylist = Parser.meta(data[0]);
-                updateCities(((ParkenDD) getActivity().getApplication()).getActiveCities(citylist));
-                refresh();
-            }catch (JSONException e){
-                e.printStackTrace();
-                ((MainActivity)getActivity()).progressBar.setVisibility(View.INVISIBLE);
-                ((MainActivity)getActivity()).progressBar.setProgress(0);
+        if(getActivity() != null && ((MainActivity) getActivity()).progressBar != null)
+        {
+            if(loader.equals(meta)){
+                ArrayList<City> citylist;
+                try{
+                    citylist = Parser.meta(data[0]);
+                    updateCities(((ParkenDD) getActivity().getApplication()).getActiveCities(citylist));
+                    refresh();
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    ((MainActivity)getActivity()).progressBar.setVisibility(View.INVISIBLE);
+                    ((MainActivity)getActivity()).progressBar.setProgress(0);
+                }
+            }
+            if(loader.equals(cityLoader)){
+                try{
+                    city = Parser.city(data[0], city);
+                    setList(city);
+                    ((ParkenDD) getActivity().getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
+                    TimeZone tz = Calendar.getInstance().getTimeZone();
+                    DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(getActivity());
+                    dateFormat.setTimeZone(tz);
+                    DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(getActivity());
+                    timeFormat.setTimeZone(tz);
+                    String locDate = dateFormat.format(city.last_updated());
+                    String locTime = timeFormat.format(city.last_updated());
+                    Error.displaySnackBarMessage(swipeRefreshLayout, getString(R.string.last_update) + ": " + locDate + " " + locTime);
+                    onProgressUpdated();
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    ((MainActivity)getActivity()).progressBar.setVisibility(View.INVISIBLE);
+                    ((MainActivity)getActivity()).progressBar.setProgress(0);
+                }
             }
         }
-        if(loader.equals(cityLoader)){
-            try{
-                city = Parser.city(data[0], city);
-                setList(city);
-                ((ParkenDD) getActivity().getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
-                TimeZone tz = Calendar.getInstance().getTimeZone();
-                DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(getActivity());
-                dateFormat.setTimeZone(tz);
-                DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(getActivity());
-                timeFormat.setTimeZone(tz);
-                String locDate = dateFormat.format(city.last_updated());
-                String locTime = timeFormat.format(city.last_updated());
-                Error.displaySnackBarMessage(swipeRefreshLayout, getString(R.string.last_update) + ": " + locDate + " " + locTime);
-                onProgressUpdated();
-            }catch (JSONException e){
-                e.printStackTrace();
-                ((MainActivity)getActivity()).progressBar.setVisibility(View.INVISIBLE);
-                ((MainActivity)getActivity()).progressBar.setProgress(0);
-            }
-        }
+
         swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onProgressUpdated() {
-        ((MainActivity) getActivity()).progressBar.setProgress(((MainActivity) getActivity()).progressBar.getProgress() + 1);
+        if(getActivity() != null && ((MainActivity) getActivity()).progressBar != null)
+            ((MainActivity) getActivity()).progressBar.setProgress(((MainActivity) getActivity()).progressBar.getProgress() + 1);
     }
 
     private void resetProgressBar() {
