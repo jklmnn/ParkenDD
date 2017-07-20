@@ -4,7 +4,7 @@
     <string name="action_settings">Réglages</string>
     <string name="action_forecast">Prévision</string>
     <string name="action_refresh">Rafraîchir</string>
-    <string name="action_about">À Propos</string>
+    <string name="settings_about">À Propos</string>
     <!--settings-->
     <string name="header_general">Général</string>
     <string name="header_network">Réseau</string>

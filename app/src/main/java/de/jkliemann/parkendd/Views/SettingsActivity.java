@@ -56,8 +56,6 @@ public class SettingsActivity extends PreferenceActivity{
 
         addPreferencesFromResource(R.xml.pref_container);
         PreferenceCategory fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.header_general);
-        getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_general);
         ListPreference sortList = (ListPreference)findPreference("sorting");
         Resources res = getResources();

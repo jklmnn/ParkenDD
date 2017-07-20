@@ -27,7 +27,11 @@
         </activity>
         <activity
             android:name=".Views.AboutActivity"
-            android:label="@string/action_about" >
+            android:label="@string/settings_about" >
+            <intent-filter>
+                <action android:name=".Views.AboutActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Views.SettingsActivity"

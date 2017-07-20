@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
-    <string name="action_about">Über die App</string>
+    <string name="settings_about">Über die App</string>
     <string name="action_refresh">Aktualisieren</string>
     <string name="action_settings">Einstellungen</string>
     <string name="alert_reset">Einstellungen zurücksetzen?</string>
