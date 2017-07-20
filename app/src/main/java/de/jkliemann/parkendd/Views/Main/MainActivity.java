@@ -28,7 +28,7 @@ import java.net.UnknownHostException;
 import de.jkliemann.parkendd.ParkenDD;
 import de.jkliemann.parkendd.R;
 import de.jkliemann.parkendd.Utilities.Error;
-import de.jkliemann.parkendd.Views.SettingsActivity;
+import de.jkliemann.parkendd.Views.Preferences.PreferencesActivity;
 
 public class MainActivity extends AppCompatActivity implements LocalParkingSlotListFragment.OnFragmentInteractionListener,
     MapFragment.OnFragmentInteractionListener,RemoteParkingSlotListFragment.OnFragmentInteractionListener, ForecastFragment.OnFragmentInteractionListener{
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
                 switch (id)
                 {
                     case R.id.action_settings:
-                        Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
+                        Intent settings = new Intent(getApplicationContext(), PreferencesActivity.class);
                         startActivity(settings);
                         break;
                     case R.id.action_cities:
