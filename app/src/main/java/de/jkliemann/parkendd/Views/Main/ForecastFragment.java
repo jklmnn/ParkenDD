@@ -147,7 +147,7 @@ public class ForecastFragment extends Fragment implements LoaderInterface, View.
             spotmap.put(spotList[i], dateMap);
         }
 
-        updateList(timePicker.getCurrentHour(), mView);
+        updateList(timePicker.getCurrentHour());
         onProgressUpdated();
     }
 
@@ -189,7 +189,7 @@ public class ForecastFragment extends Fragment implements LoaderInterface, View.
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                updateList(hourOfDay, view);
+                updateList(hourOfDay);
             }
         });
     }
@@ -200,9 +200,11 @@ public class ForecastFragment extends Fragment implements LoaderInterface, View.
         City city = ((ParkenDD)getActivity().getApplication()).currentCity();
         ArrayList<ParkingSpot> spots = city.spots();
         ArrayList<ParkingSpot> forecastSpots = new ArrayList<>();
-        for(ParkingSpot spot : spots){
-            if(spot.forecast()){
-                forecastSpots.add(spot);
+        if(spots != null) {
+            for(ParkingSpot spot : spots){
+                if(spot.forecast()){
+                    forecastSpots.add(spot);
+                }
             }
         }
         spotList = forecastSpots.toArray(new ParkingSpot[forecastSpots.size()]);
@@ -221,7 +223,7 @@ public class ForecastFragment extends Fragment implements LoaderInterface, View.
         forecastLoader.execute(urlList);
     }
 
-    private void updateList(int hour, View view){
+    private void updateList(int hour){
         ArrayList<ParkingSpot> spotList = new ArrayList<>();
         try {
             date.setHours(hour);
@@ -240,14 +242,14 @@ public class ForecastFragment extends Fragment implements LoaderInterface, View.
                 }
                 spotList.add(spot);
             }
-            setList(spotList, view);
+            setList(spotList);
         }catch (NullPointerException e){
             e.printStackTrace();
         }
     }
 
-    private void setList(ArrayList<ParkingSpot> spots, View view){
-        ExpandableListView spotView = (ExpandableListView)view.findViewById(R.id.listView);
+    private void setList(ArrayList<ParkingSpot> spots){
+        ExpandableListView spotView = (ExpandableListView)mView.findViewById(R.id.listView);
         String sortOptions[] = getResources().getStringArray(R.array.setting_sort_options);
         String sortPreference = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("sorting", sortOptions[0]);
         Boolean hide_closed = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hide_closed", true);
@@ -341,7 +343,7 @@ public class ForecastFragment extends Fragment implements LoaderInterface, View.
             case R.id.okbutton :
                 relativeLayout.setVisibility(View.VISIBLE);
                 datePickerLayout.setVisibility(View.INVISIBLE);
-                DatePicker datePicker = (DatePicker) view.findViewById(R.id.datePicker);
+                DatePicker datePicker = (DatePicker) datePickerLayout.findViewById(R.id.datePicker);
                 date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
                 loadDate();
                 String locDate = dateFormat.format(date);

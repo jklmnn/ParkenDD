@@ -112,6 +112,22 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
                 return true;
             }
         });
+        toggleSensibleNavigationDrawerItems(false);
+    }
+
+    /**
+     * Toggles on/off navigation items which depend on the loading of the cities.
+     * @param active
+     */
+    public void toggleSensibleNavigationDrawerItems(boolean active) {
+        Menu menu = navigationView.getMenu();
+        for (int i = 0 ; i <menu.size() ; i++)
+        {
+            if(i == NAV_INDEX_MAP || i == NAV_INDEX_FORECAST)
+                menu.getItem(i).setVisible(active);
+        }
+
+
     }
 
 

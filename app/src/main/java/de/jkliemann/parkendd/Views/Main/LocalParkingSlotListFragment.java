@@ -280,8 +280,11 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
                     timeFormat.setTimeZone(tz);
                     String locDate = dateFormat.format(city.last_updated());
                     String locTime = timeFormat.format(city.last_updated());
+
                     Error.displaySnackBarMessage(swipeRefreshLayout, getString(R.string.last_update) + ": " + locDate + " " + locTime);
                     onProgressUpdated();
+                    if(getActivity() != null)
+                        ((MainActivity) getActivity()).toggleSensibleNavigationDrawerItems(true);
                 }catch (JSONException e){
                     e.printStackTrace();
                     ((MainActivity)getActivity()).progressBar.setVisibility(View.INVISIBLE);
@@ -291,6 +294,7 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
         }
 
         swipeRefreshLayout.setRefreshing(false);
+
     }
 
     @Override
