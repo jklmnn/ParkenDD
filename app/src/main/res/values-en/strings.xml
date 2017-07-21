@@ -58,4 +58,5 @@
     <string name="cities_activity_title">Available cities</string>
     <string name="settings_header_display">Display</string>
     <string name="settings_header_information">Information</string>
+    <string name="settings_activity_title">Settings</string>
 </resources>

@@ -35,12 +35,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Views.Preferences.PreferencesActivity">
+        <activity android:name=".Views.Preferences.PreferencesActivity"
+            android:label="@string/settings_activity_title">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Views.Main.MainActivity" />
         </activity>
-        <activity android:name=".Views.Cities.CitiesActivity">
+        <activity android:name=".Views.Cities.CitiesActivity"
+            android:label="@string/cities_activity_title">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Views.Main.MainActivity" />

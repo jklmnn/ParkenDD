@@ -29,7 +29,6 @@ public class CitiesActivity extends AppCompatActivity implements CityFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cities);
-        setTitle(R.string.cities_activity_title);
         reloadIndex();
     }
 

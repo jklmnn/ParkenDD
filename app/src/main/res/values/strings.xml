@@ -11,6 +11,7 @@
     <string name="action_cities">Cities</string>
     <string name="action_search">Search</string>
     <!--settings-->
+    <string name="settings_activity_title">Settings</string>
     <string name="header_general">General</string>
     <string name="header_network">Network</string>
     <string name="setting_server">Server</string>

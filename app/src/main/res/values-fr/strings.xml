@@ -10,7 +10,7 @@
     <string name="header_network">Réseau</string>
     <string name="setting_server">Serveur</string>
     <string name="setting_city">Ville</string>
-    <string name="setting_sorting">Affichage</string>
+    <string name="setting_sorting">Tri des parkings</string>
     <string name="setting_sorting_default">Optimal</string>
     <string name="setting_sorting_name">Nom</string>
     <string name="setting_sorting_location">Emplacement</string>
@@ -75,4 +75,5 @@
     <string name="cities_activity_title">Villes disponibles</string>
     <string name="settings_header_display">Affichage</string>
     <string name="settings_header_information">Informations</string>
+    <string name="settings_activity_title">Paramètres</string>
 </resources>
