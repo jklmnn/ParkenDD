@@ -28,6 +28,7 @@ import java.net.UnknownHostException;
 import de.jkliemann.parkendd.ParkenDD;
 import de.jkliemann.parkendd.R;
 import de.jkliemann.parkendd.Utilities.Error;
+import de.jkliemann.parkendd.Views.Cities.CitiesActivity;
 import de.jkliemann.parkendd.Views.Preferences.PreferencesActivity;
 
 public class MainActivity extends AppCompatActivity implements LocalParkingSlotListFragment.OnFragmentInteractionListener,
@@ -93,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
                         startActivity(settings);
                         break;
                     case R.id.action_cities:
-                        // TODO : Activity to choose cities
+                        Intent citiesIntent = new Intent(getApplicationContext(), CitiesActivity.class);
+                        startActivity(citiesIntent);
                         break;
                     case R.id.action_spots:
                         setFragment(LocalParkingSlotListFragment.newInstance());

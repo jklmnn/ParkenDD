@@ -40,6 +40,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Views.Main.MainActivity" />
         </activity>
+        <activity android:name=".Views.Cities.CitiesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Views.Main.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

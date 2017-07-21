@@ -174,6 +174,11 @@ public class ParkenDD extends Application {
         }
     }
 
+    public void setCurrentCity(City city) {
+        this.currentCity = this.getCityByName(city.name());
+        autoCity = false;
+    }
+
     public City currentCity(){
         if(currentCity == null){
             setCurrentCity(0);

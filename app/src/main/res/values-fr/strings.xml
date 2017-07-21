@@ -68,4 +68,11 @@
     <string name="location_error">Impossible d\'accéder à l\'emplacement</string>
     <string name="network_error">Erreur lors de la réception des données</string>
     <string name="url_error">URL invalide</string>
+    <string name="action_cities">Villes</string>
+    <string name="action_search">Recherche</string>
+    <string name="action_spots">Parkings</string>
+    <string name="chosen_city">Villes actuellement sélectionnée</string>
+    <string name="cities_activity_title">Villes disponibles</string>
+    <string name="settings_header_display">Affichage</string>
+    <string name="settings_header_information">Informations</string>
 </resources>

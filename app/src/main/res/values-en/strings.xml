@@ -54,4 +54,8 @@
     <string name="state">State</string>
     <string name="open">open</string>
     <string name="map_icon_size">Map icon size</string>
+    <string name="chosen_city">Currently selected city</string>
+    <string name="cities_activity_title">Available cities</string>
+    <string name="settings_header_display">Display</string>
+    <string name="settings_header_information">Information</string>
 </resources>
