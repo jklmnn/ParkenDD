@@ -1,26 +1,39 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ListPreference
-        android:key="sorting"
-        android:title="@string/setting_sorting"
-        android:defaultValue="@string/setting_sorting_default"/>
-    <CheckBoxPreference
-        android:key="hide_closed"
-        android:title="@string/setting_hide_closed"
-        android:defaultValue="true"/>
-    <CheckBoxPreference
-        android:key="hide_nodata"
-        android:title="@string/setting_hide_nodata"
-        android:defaultValue="false"/>
-    <CheckBoxPreference
-        android:key="hide_full"
-        android:title="@string/setting_hide_full"
-        android:defaultValue="true"/>
-    <CheckBoxPreference
-        android:key="active_support"
-        android:title="@string/active_support"
-        android:defaultValue="true" />
+    <PreferenceCategory android:title="@string/settings_header_display">
+        <ListPreference
+            android:key="sorting"
+            android:title="@string/setting_sorting"
+            android:defaultValue="@string/setting_sorting_default"/>
+        <CheckBoxPreference
+            android:key="hide_closed"
+            android:title="@string/setting_hide_closed"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="hide_nodata"
+            android:title="@string/setting_hide_nodata"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:key="hide_full"
+            android:title="@string/setting_hide_full"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="active_support"
+            android:title="@string/active_support"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
     <Preference
         android:key="reset"
         android:title="@string/setting_reset" />
+
+    <PreferenceCategory android:title="@string/settings_header_information">
+        <Preference
+            android:key="about"
+            android:title="@string/settings_about">
+            <intent
+                android:action=".Views.AboutActivity" />
+        </Preference>
+    </PreferenceCategory>
+
 </PreferenceScreen>

@@ -19,7 +19,9 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/menu_cities"
+        app:menu="@menu/menu_drawer"
+        app:theme="@style/ThemeOverlay.AppCompat.navTheme"
+        app:itemIconTint="@color/colorTextSecondary"
         />
 
 </android.support.v4.widget.DrawerLayout>

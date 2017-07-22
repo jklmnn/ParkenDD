@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.jkliemann.parkendd.Model.City;
+import de.jkliemann.parkendd.Utilities.Util;
+
 /**
  * Created by jkliemann on 10.08.15.
  */
@@ -98,7 +101,7 @@ public class ParkenDD extends Application {
         super.onCreate();
     }
 
-    synchronized Tracker getTracker(){
+    public synchronized Tracker getTracker(){
         if(piwik != null){
             return piwik;
         }
@@ -169,6 +172,11 @@ public class ParkenDD extends Application {
         }else{
             autoCity = false;
         }
+    }
+
+    public void setCurrentCity(City city) {
+        this.currentCity = this.getCityByName(city.name());
+        autoCity = false;
     }
 
     public City currentCity(){
