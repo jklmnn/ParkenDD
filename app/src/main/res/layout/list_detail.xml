@@ -50,7 +50,7 @@
             android:id="@+id/mapButton"
             android:layout_row="0"
             android:layout_column="9"
-            android:background="@drawable/ic_action_map"/>
+            android:background="@drawable/ic_map_black_48dp"/>
     </GridLayout>
 
 </RelativeLayout>

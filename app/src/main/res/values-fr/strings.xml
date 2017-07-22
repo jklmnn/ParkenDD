@@ -4,13 +4,13 @@
     <string name="action_settings">Réglages</string>
     <string name="action_forecast">Prévision</string>
     <string name="action_refresh">Rafraîchir</string>
-    <string name="action_about">À Propos</string>
+    <string name="settings_about">À Propos</string>
     <!--settings-->
     <string name="header_general">Général</string>
     <string name="header_network">Réseau</string>
     <string name="setting_server">Serveur</string>
     <string name="setting_city">Ville</string>
-    <string name="setting_sorting">Affichage</string>
+    <string name="setting_sorting">Tri des parkings</string>
     <string name="setting_sorting_default">Optimal</string>
     <string name="setting_sorting_name">Nom</string>
     <string name="setting_sorting_location">Emplacement</string>
@@ -68,4 +68,12 @@
     <string name="location_error">Impossible d\'accéder à l\'emplacement</string>
     <string name="network_error">Erreur lors de la réception des données</string>
     <string name="url_error">URL invalide</string>
+    <string name="action_cities">Villes</string>
+    <string name="action_search">Recherche</string>
+    <string name="action_spots">Parkings</string>
+    <string name="chosen_city">Villes actuellement sélectionnée</string>
+    <string name="cities_activity_title">Villes disponibles</string>
+    <string name="settings_header_display">Affichage</string>
+    <string name="settings_header_information">Informations</string>
+    <string name="settings_activity_title">Paramètres</string>
 </resources>

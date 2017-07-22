@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="action_about">"O aplikaci"</string>
+<string name="settings_about">"O aplikaci"</string>
 <string name="action_refresh">"Aktualizovat"</string>
 <string name="action_settings">"Nastavení"</string>
 <string name="alert_reset">"Obnovit výchozí nastavení?"</string>
