@@ -76,4 +76,5 @@
     <string name="settings_header_display">Affichage</string>
     <string name="settings_header_information">Informations</string>
     <string name="settings_activity_title">Paramètres</string>
+    <string name="free">%1$d%% libre</string>
 </resources>

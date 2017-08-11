@@ -91,6 +91,7 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View slotView = inflater.inflate(R.layout.slot_list_adapter, parent, false);
         TextView countView = (TextView)slotView.findViewById(R.id.countView);
+        TextView percentView = (TextView)slotView.findViewById(R.id.percentView);
         TextView nameView = (TextView)slotView.findViewById(R.id.nameView);
         TextView distanceView = (TextView)slotView.findViewById(R.id.distanceView);
         ParkingSpot spot = spots[position];
@@ -102,14 +103,16 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
             countView.setText(context.getString(R.string.nodata) + " (" + Integer.toString(spot.count()) + ")");
             slotView.setBackgroundColor(blue);
         }else{
-            countView.setText(Integer.toString(spot.free()) + " " + context.getString(R.string.of) + " " + Integer.toString(spot.count()));
-            double perc = (double)spot.free() / (double)spot.count();
-            if(perc < 0.05){
-                slotView.setBackgroundColor(red);
-            }else if(perc < 0.2){
-                slotView.setBackgroundColor(yellow);
+            countView.setText(Integer.toString(spot.free()));
+            double percentageFreePlaces = (double)spot.free() / (double)spot.count();
+            int percentageFreePlacesFormatted = (int) (percentageFreePlaces * 100);
+            percentView.setText(context.getResources().getString(R.string.free,percentageFreePlacesFormatted));
+            if(percentageFreePlaces < 0.05){
+                slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingFull));
+            }else if(percentageFreePlaces < 0.2){
+                slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingBusy));
             }else{
-                slotView.setBackgroundColor(green);
+                slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingFree));
             }
         }
         if(currentLocation != null && spot.location() != null){

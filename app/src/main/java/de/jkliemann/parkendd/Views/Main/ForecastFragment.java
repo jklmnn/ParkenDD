@@ -247,6 +247,7 @@ public class ForecastFragment extends Fragment implements LoaderInterface, DateP
 
     private void setList(ArrayList<ParkingSpot> spots){
         ExpandableListView spotView = (ExpandableListView)mView.findViewById(R.id.listView);
+        spotView.setGroupIndicator(null);
         String sortOptions[] = getResources().getStringArray(R.array.setting_sort_options);
         String sortPreference = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("sorting", sortOptions[0]);
         Boolean hide_closed = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hide_closed", true);
@@ -330,7 +331,6 @@ public class ForecastFragment extends Fragment implements LoaderInterface, DateP
         cal.set(Calendar.HOUR_OF_DAY, aDate.getHours());
         cal.set(Calendar.MINUTE, aDate.getMinutes());
         displayedTime.setText(formatTime(cal));
-
 
         updateList(cal.get(Calendar.HOUR_OF_DAY));
     }

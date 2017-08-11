@@ -9,4 +9,8 @@
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>
     <color name="colorSelectedItemBackground">#EEEEEE</color>
+
+    <color name="parkingFull">#F7977A</color>
+    <color name="parkingBusy">#FFF79A</color>
+    <color name="parkingFree">#82CA9D</color>
 </resources>

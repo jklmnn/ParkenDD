@@ -207,6 +207,7 @@ public class RemoteParkingSlotListFragment extends Fragment implements LoaderInt
 
     private void setList(City CITY){
         ExpandableListView spotView = (ExpandableListView)getView().findViewById(R.id.spotListView);
+        spotView.setGroupIndicator(null);
         String sortOptions[] = getResources().getStringArray(R.array.setting_sort_options);
         String sortPreference = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("sorting", sortOptions[0]);
         Boolean hide_closed = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hide_closed", true);
