@@ -1,7 +1,8 @@
 package de.jkliemann.parkendd.Views.Main;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -9,14 +10,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import org.json.JSONException;
@@ -52,15 +51,14 @@ import de.jkliemann.parkendd.Web.Parser;
  * Use the {@link ForecastFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ForecastFragment extends Fragment implements LoaderInterface, View.OnClickListener {
+public class ForecastFragment extends Fragment implements LoaderInterface, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+
+    private static final int DATE_OFFSET = 1900;
 
     private OnFragmentInteractionListener mListener;
-
-    private RelativeLayout relativeLayout;
-    private RelativeLayout datePickerLayout;
-    private TimePicker timePicker;
     private View mView;
-    private static final int dateOffset = 1900;
+    private TextView displayedDate;
+    private TextView displayedTime;
     private Map<ParkingSpot, Map<Date, Integer>> spotmap;
     private Date date;
     ProgressBar pg;
@@ -89,15 +87,10 @@ public class ForecastFragment extends Fragment implements LoaderInterface, View.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
-        relativeLayout = (RelativeLayout) view.findViewById(R.id.RelativeLayout);
-        datePickerLayout = (RelativeLayout) view.findViewById(R.id.datePickerLayout);
-        datePickerLayout.setVisibility(View.INVISIBLE);
-
         mView = view;
-
+        setupDateText();
+        setupHourText();
         setupProgressBar();
-        setupOkButton();
-        setupCancelButton();
         setupTimePicker();
         ((ParkenDD) getActivity().getApplication()).getTracker().trackScreenView("/forecast/" + city.id(), "Vorhersage-" + city.name());
         return view;
@@ -147,7 +140,7 @@ public class ForecastFragment extends Fragment implements LoaderInterface, View.
             spotmap.put(spotList[i], dateMap);
         }
 
-        updateList(timePicker.getCurrentHour());
+        updateTimeGUIElements(date);
         onProgressUpdated();
     }
 
@@ -163,33 +156,37 @@ public class ForecastFragment extends Fragment implements LoaderInterface, View.
         pg.setIndeterminate(true);
     }
 
-    private void setupOkButton() {
-        Button okButton = (Button)mView.findViewById(R.id.okbutton);
-        okButton.setOnClickListener(this);
-    }
-
-    private void setupCancelButton() {
-        Button cancelButton = (Button)mView.findViewById(R.id.cancelbutton);
-        cancelButton.setOnClickListener(this);
-    }
-
     private void setupTimePicker() {
 
         Calendar cal = Calendar.getInstance();
-        date = new Date(cal.get(Calendar.YEAR) - dateOffset, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        date = new Date(cal.get(Calendar.YEAR) - DATE_OFFSET, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
+                cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE));
         TimeZone tz = Calendar.getInstance().getTimeZone();
         dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
         dateFormat.setTimeZone(tz);
-        String locDate = dateFormat.format(date);
-        city = ((ParkenDD) getActivity().getApplication()).currentCity();
-        getActivity().setTitle(city.name() + " - " + locDate);
-        loadDate();
-        timePicker = (TimePicker)mView.findViewById(R.id.timePicker);
-        timePicker.setIs24HourView(true);
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+        updateDateGUIElements(date);
+        updateTimeGUIElements(date);
+    }
+
+    private void setupDateText() {
+        displayedDate = (TextView) mView.findViewById(R.id.dateText);
+
+        displayedDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                updateList(hourOfDay);
+            public void onClick(View view) {
+                openDatePicker();
+            }
+        });
+    }
+
+    private void setupHourText() {
+        displayedTime = (TextView) mView.findViewById(R.id.hourText);
+
+        displayedTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openTimePicker();
             }
         });
     }
@@ -316,45 +313,84 @@ public class ForecastFragment extends Fragment implements LoaderInterface, View.
         {
             menu.clear();
         }
-        inflater.inflate(R.menu.menu_forecast, menu);
         super.onCreateOptionsMenu(menu,inflater);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private void updateDateGUIElements(Date aDate) {
+        loadDate();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_datePicker) {
-            relativeLayout.setVisibility(View.INVISIBLE);
-            datePickerLayout.setVisibility(View.VISIBLE);
-            return true;
-        }
+        String locDate = dateFormat.format(aDate);
+        city = ((ParkenDD) getActivity().getApplication()).currentCity();
+        getActivity().setTitle(city.name() + " - " + locDate);
+        displayedDate.setText(locDate);
+    }
 
-        return super.onOptionsItemSelected(item);
+    private void updateTimeGUIElements(Date aDate) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, aDate.getHours());
+        cal.set(Calendar.MINUTE, aDate.getMinutes());
+        displayedTime.setText(formatTime(cal));
+
+
+        updateList(cal.get(Calendar.HOUR_OF_DAY));
+    }
+
+    private void openDatePicker() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        datePickerDialog.show();
+    }
+
+    private void openTimePicker() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),this,hourOfDay, minute, true);
+        timePickerDialog.show();
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.okbutton :
-                relativeLayout.setVisibility(View.VISIBLE);
-                datePickerLayout.setVisibility(View.INVISIBLE);
-                DatePicker datePicker = (DatePicker) datePickerLayout.findViewById(R.id.datePicker);
-                date = new Date(datePicker.getYear() - dateOffset, datePicker.getMonth(), datePicker.getDayOfMonth());
-                loadDate();
-                String locDate = dateFormat.format(date);
-                getActivity().setTitle(city.name() + " - " + locDate);
-                break;
+    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+        date = new Date(datePicker.getYear() - DATE_OFFSET, datePicker.getMonth(), datePicker.getDayOfMonth());
 
-            case R.id.cancelbutton:
-                relativeLayout.setVisibility(View.VISIBLE);
-                datePickerLayout.setVisibility(View.INVISIBLE);
-                break;
-        }
+        updateDateGUIElements(date);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+        cal.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+        date = new Date(cal.get(Calendar.YEAR) - DATE_OFFSET, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
+                cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE));
+
+        updateTimeGUIElements(date);
+    }
+
+    private String formatTime(Calendar cal) {
+        int hours = cal.get(Calendar.HOUR_OF_DAY);
+        String hoursText;
+        if(hours < 10)
+            hoursText = "0" + hours;
+        else
+            hoursText = hours + "";
+
+        int minutes = cal.get(Calendar.MINUTE);
+        String minutesText;
+        if(minutes < 10)
+            minutesText = "0" + minutes;
+        else
+            minutesText = minutes + "";
+
+        return hoursText + ":" + minutesText;
     }
 
     /**
