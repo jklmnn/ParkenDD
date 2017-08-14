@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/spotListView"
         android:layout_below="@+id/searchView"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:divider="@null"
+        android:groupIndicator="@null"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

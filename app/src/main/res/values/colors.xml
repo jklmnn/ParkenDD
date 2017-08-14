@@ -10,7 +10,7 @@
     <color name="colorDivider">#BDBDBD</color>
     <color name="colorSelectedItemBackground">#EEEEEE</color>
 
-    <color name="parkingFull">#F7977A</color>
-    <color name="parkingBusy">#FFF79A</color>
-    <color name="parkingFree">#82CA9D</color>
+    <color name="parkingFull">#FFE082</color>
+    <color name="parkingFree">#66BB6A</color>
+    <color name="parkingNoData">#CFD8DC</color>
 </resources>

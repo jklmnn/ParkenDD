@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listView"
-        android:layout_above="@+id/dateTimePicker"/>
+        android:layout_above="@+id/dateTimePicker"
+        android:groupIndicator="@null"/>
 
     <RelativeLayout
         android:id="@+id/dateTimePicker"
@@ -19,6 +20,7 @@
         android:layout_alignParentBottom="true"
 
         android:background="@android:color/white"
+        android:divider="@null"
         android:elevation="10dp">
 
         <ImageView

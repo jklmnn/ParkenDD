@@ -1,5 +1,6 @@
 package de.jkliemann.parkendd.Views;
 
+import android.animation.ArgbEvaluator;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -30,10 +31,6 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
     private final Context context;
     private final ParkingSpot[] spots;
     private final Location currentLocation;
-    private final int red = Color.argb(0xaa, 0xef, 0x53, 0x50);
-    private final int green = Color.argb(0xaa, 0x66, 0xbb, 0x6a);
-    private final int yellow = Color.argb(0xaa, 0xff, 0xee, 0x58);
-    private final int blue = Color.argb(0xaa, 0x42, 0xa5, 0xf5);
     private static final String CLOSED = "closed";
     private static final String NODATA = "nodata";
     private static final Map<String, Integer> typeMap;
@@ -98,22 +95,22 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
         nameView.setText(spot.name());
         if(spot.state().equals(CLOSED)) {
             countView.setText(context.getString(R.string.closed));
-            slotView.setBackgroundColor(red);
+            slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingNoData));
         }else if(spot.state().equals(NODATA)){
             countView.setText(context.getString(R.string.nodata) + " (" + Integer.toString(spot.count()) + ")");
-            slotView.setBackgroundColor(blue);
+            slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingNoData));
         }else{
             countView.setText(Integer.toString(spot.free()));
-            double percentageFreePlaces = (double)spot.free() / (double)spot.count();
+            float percentageFreePlaces = (float)spot.free() / (float)spot.count();
             int percentageFreePlacesFormatted = (int) (percentageFreePlaces * 100);
             percentView.setText(context.getResources().getString(R.string.free,percentageFreePlacesFormatted));
-            if(percentageFreePlaces < 0.05){
-                slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingFull));
-            }else if(percentageFreePlaces < 0.2){
-                slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingBusy));
-            }else{
-                slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingFree));
-            }
+
+
+            ArgbEvaluator colorEvaluator = new ArgbEvaluator();
+
+            slotView.setBackgroundColor((int)colorEvaluator.evaluate(percentageFreePlaces,
+                    context.getResources().getColor(R.color.parkingFull),
+                    context.getResources().getColor(R.color.parkingFree)));
         }
         if(currentLocation != null && spot.location() != null){
             distanceView.setText(Util.getViewDistance(Util.getDistance(currentLocation, spot.location())));
