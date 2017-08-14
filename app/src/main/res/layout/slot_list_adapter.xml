@@ -29,9 +29,7 @@
             android:textColor="@color/colorTextPrimary"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:fontFamily="sans-serif-thin"
-
-            android:text="Parking de l'Ortenbourg" />
+            android:fontFamily="sans-serif-thin" />
 
         <TextView
             android:id="@+id/distanceView"
@@ -43,9 +41,7 @@
             android:layout_alignLeft="@id/nameView"
 
             android:textColor="@color/colorTextPrimary"
-            android:textSize="16sp"
-
-            android:text="ca. 2,0km"/>
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/countView"
@@ -58,9 +54,7 @@
 
             android:textColor="@color/colorTextPrimary"
             android:textStyle="bold"
-            android:textSize="34sp"
-
-            android:text="150"/>
+            android:textSize="34sp"/>
 
         <TextView
             android:id="@+id/percentView"
@@ -72,9 +66,7 @@
             android:layout_alignRight="@id/countView"
 
             android:textColor="@color/colorTextPrimary"
-            android:textSize="16sp"
-
-            android:text="12% free"/>
+            android:textSize="16sp"/>
 
     </RelativeLayout>
 </RelativeLayout>
