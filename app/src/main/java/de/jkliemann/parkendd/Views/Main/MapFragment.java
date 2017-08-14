@@ -98,7 +98,7 @@ public class MapFragment extends Fragment {
     private void setUpMapView(View view) {
         final MapView map = (MapView) view.findViewById(R.id.osmap);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
-        map.setBuiltInZoomControls(true);
+        map.setBuiltInZoomControls(false);
         map.setMultiTouchControls(true);
         final IMapController mapctl = map.getController();
         mapctl.setZoom(15);
