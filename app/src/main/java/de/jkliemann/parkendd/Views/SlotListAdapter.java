@@ -1,11 +1,9 @@
 package de.jkliemann.parkendd.Views;
 
-import android.animation.ArgbEvaluator;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -22,6 +20,7 @@ import java.util.Map;
 import de.jkliemann.parkendd.Model.ParkingSpot;
 import de.jkliemann.parkendd.ParkenDD;
 import de.jkliemann.parkendd.R;
+import de.jkliemann.parkendd.Utilities.ColorUtilities;
 import de.jkliemann.parkendd.Utilities.Error;
 import de.jkliemann.parkendd.Utilities.Util;
 
@@ -91,24 +90,34 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
         TextView percentView = (TextView)slotView.findViewById(R.id.percentView);
         TextView nameView = (TextView)slotView.findViewById(R.id.nameView);
         TextView distanceView = (TextView)slotView.findViewById(R.id.distanceView);
+        TextView parkingTypeView = (TextView)slotView.findViewById(R.id.parkingTypeView);
+
         ParkingSpot spot = spots[position];
+
         nameView.setText(spot.name());
+
         if(spot.state().equals(CLOSED)) {
             countView.setText(context.getString(R.string.closed));
             slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingNoData));
-        }else if(spot.state().equals(NODATA)){
+        }
+        else if(spot.state().equals(NODATA)){
             countView.setText(context.getString(R.string.nodata) + " (" + Integer.toString(spot.count()) + ")");
             slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingNoData));
-        }else{
+        }
+        else{
+            // Count
             countView.setText(Integer.toString(spot.free()));
+
+            // Parking type
+            parkingTypeView.setText(context.getString(typeMap.get(spot.type())));
+
+            // Percentage of free places
             float percentageFreePlaces = (float)spot.free() / (float)spot.count();
             int percentageFreePlacesFormatted = (int) (percentageFreePlaces * 100);
             percentView.setText(context.getResources().getString(R.string.free,percentageFreePlacesFormatted));
 
-
-            ArgbEvaluator colorEvaluator = new ArgbEvaluator();
-
-            slotView.setBackgroundColor((int)colorEvaluator.evaluate(percentageFreePlaces,
+            // Background color
+            slotView.setBackgroundColor(ColorUtilities.mixBetweenColors(percentageFreePlaces,
                     context.getResources().getColor(R.color.parkingFull),
                     context.getResources().getColor(R.color.parkingFree)));
         }
@@ -124,34 +133,43 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupId, int childId, boolean isLastChild, View view, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         final View detailView = inflater.inflate(R.layout.list_detail, null);
-        final ParkingSpot child = spots[groupId];
-        TextView type = (TextView)detailView.findViewById(R.id.type);
-        try{
-            type.setText(context.getString(typeMap.get(child.type())));
-        }catch (NullPointerException e){
-            e.printStackTrace();
-            type.setText(child.type());
-        }
+        final ParkingSpot spot = spots[groupId];
+
         TextView address = (TextView)detailView.findViewById(R.id.address);
-        address.setText(child.address());
-        TextView region = (TextView)detailView.findViewById(R.id.region);
-        region.setText(child.category());
+        address.setText(spot.address());
+
         ImageButton mapButton = (ImageButton)detailView.findViewById(R.id.mapButton);
+
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri geouri = child.geoUri();
-                try{
-                    Intent map = new Intent(Intent.ACTION_VIEW, geouri);
-                    String city = ((ParkenDD) ((Activity)context).getApplication()).currentCity().name();
-                    ((ParkenDD) ((Activity) context).getApplication()).getTracker().trackEvent(city, child.name());
-                    context.startActivity(map);
-                }catch (ActivityNotFoundException e){
-                    e.printStackTrace();
-                    Error.showLongErrorToast(context, context.getString(R.string.intent_error));
+                openMap(spot);
                 }
-            }
         });
+
+        detailView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMap(spot);
+                }
+        });
+
+        // Background color
+        if(!spot.state().equals(CLOSED) && !spot.state().equals(NODATA))
+        {
+            float percentageFreePlaces = (float)spot.free() / (float)spot.count();
+            int parentColor = ColorUtilities.mixBetweenColors(percentageFreePlaces,
+                    context.getResources().getColor(R.color.parkingFull),
+                    context.getResources().getColor(R.color.parkingFree));
+
+            detailView.setBackgroundColor(ColorUtilities.darkenColor(parentColor, 5));
+        }
+        else
+        {
+            detailView.setBackgroundColor(ColorUtilities.darkenColor(context.getResources().getColor(R.color.parkingNoData), 5));
+        }
+
+
         return detailView;
     }
 
@@ -164,4 +182,18 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
     public void onGroupExpanded(int position){
         super.onGroupExpanded(position);
     }
+
+    private void openMap(ParkingSpot spot) {
+        Uri geouri = spot.geoUri();
+        try {
+            Intent map = new Intent(Intent.ACTION_VIEW, geouri);
+            String city = ((ParkenDD) ((Activity) context).getApplication()).currentCity().name();
+            ((ParkenDD) ((Activity) context).getApplication()).getTracker().trackEvent(city, spot.name());
+            context.startActivity(map);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            Error.showLongErrorToast(context, context.getString(R.string.intent_error));
+        }
+    }
+
 }

@@ -61,6 +61,8 @@ public class ForecastFragment extends Fragment implements LoaderInterface, DateP
     private TextView displayedTime;
     private Map<ParkingSpot, Map<Date, Integer>> spotmap;
     private Date date;
+    private int previousGroup = -1;
+
     ProgressBar pg;
     ParkingSpot[] spotList;
     Loader forecastLoader;
@@ -246,7 +248,15 @@ public class ForecastFragment extends Fragment implements LoaderInterface, DateP
     }
 
     private void setList(ArrayList<ParkingSpot> spots){
-        ExpandableListView spotView = (ExpandableListView)mView.findViewById(R.id.listView);
+        final ExpandableListView spotView = (ExpandableListView)getView().findViewById(R.id.listView);
+        spotView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if(groupPosition != previousGroup)
+                    spotView.collapseGroup(previousGroup);
+                previousGroup = groupPosition;
+            }
+        });
         String sortOptions[] = getResources().getStringArray(R.array.setting_sort_options);
         String sortPreference = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("sorting", sortOptions[0]);
         Boolean hide_closed = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hide_closed", true);
