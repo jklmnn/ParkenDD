@@ -109,7 +109,12 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
             countView.setText(Integer.toString(spot.free()));
 
             // Parking type
-            parkingTypeView.setText(context.getString(typeMap.get(spot.type())));
+            try {
+                parkingTypeView.setText(context.getString(typeMap.get(spot.type())));
+            }catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
 
             // Percentage of free places
             float percentageFreePlaces = (float)spot.free() / (float)spot.count();
