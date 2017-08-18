@@ -96,6 +96,7 @@
     <string name="cities_activity_title">Available cities</string>
     <string name="chosen_city">Currently selected city</string>
     <string name="free">%1$d\\%% free</string>
+    <string name="search_hint">Enter an address</string>
 
 
 </resources>

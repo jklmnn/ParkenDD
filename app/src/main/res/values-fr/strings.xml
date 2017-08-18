@@ -77,4 +77,5 @@
     <string name="settings_header_information">Informations</string>
     <string name="settings_activity_title">Paramètres</string>
     <string name="free">%1$d%% libre</string>
+    <string name="search_hint">Saisissez une adresse</string>
 </resources>

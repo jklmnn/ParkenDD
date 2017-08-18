@@ -159,14 +159,15 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
 
     private void setupSearchView(Menu menu) {
         final SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
+        search.setQueryHint(getResources().getString(R.string.search_hint));
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 setFragment(RemoteParkingSlotListFragment.newInstance(s));
-                search.setQuery("", false);
+                search.setQuery("",false);
                 search.clearFocus();
                 search.onActionViewCollapsed();
+                search.clearFocus();
                 return true;
             }
 
