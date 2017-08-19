@@ -1,0 +1,8 @@
+indep: 304 ; 140
+
+xxxhdpi: 1216; 560
+xxhdpi: 912; 420
+xhdpi: 608; 280
+hdpi: 456;210
+mdpi: 304;140
+ldpi: 228;	 105
