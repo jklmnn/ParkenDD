@@ -13,4 +13,6 @@
     <color name="parkingFull">#FFE082</color>
     <color name="parkingFree">#66BB6A</color>
     <color name="parkingNoData">#CFD8DC</color>
+
+    <color name="navHeaderTextBackground">#40000000</color>
 </resources>
