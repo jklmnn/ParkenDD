@@ -60,6 +60,8 @@ public class RemoteParkingSlotListFragment extends Fragment implements LoaderInt
 
     private OnFragmentInteractionListener mListener;
 
+    private int previousGroup = -1;
+
     public RemoteParkingSlotListFragment() {
         // Required empty public constructor
     }
@@ -206,7 +208,15 @@ public class RemoteParkingSlotListFragment extends Fragment implements LoaderInt
     }
 
     private void setList(City CITY){
-        ExpandableListView spotView = (ExpandableListView)getView().findViewById(R.id.spotListView);
+        final ExpandableListView spotView = (ExpandableListView)getView().findViewById(R.id.spotListView);
+        spotView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if(groupPosition != previousGroup)
+                    spotView.collapseGroup(previousGroup);
+                previousGroup = groupPosition;
+            }
+        });
         String sortOptions[] = getResources().getStringArray(R.array.setting_sort_options);
         String sortPreference = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("sorting", sortOptions[0]);
         Boolean hide_closed = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("hide_closed", true);

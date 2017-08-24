@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -64,8 +66,9 @@ public class MapFragment extends Fragment {
         }else{
             self = city.location();
         }
-
+        
         getActivity().setTitle(city.name());
+        setHasOptionsMenu(true);
 
     }
 
@@ -95,10 +98,19 @@ public class MapFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if(menu != null)
+        {
+            menu.clear();
+        }
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
     private void setUpMapView(View view) {
         final MapView map = (MapView) view.findViewById(R.id.osmap);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
-        map.setBuiltInZoomControls(true);
+        map.setBuiltInZoomControls(false);
         map.setMultiTouchControls(true);
         final IMapController mapctl = map.getController();
         mapctl.setZoom(15);

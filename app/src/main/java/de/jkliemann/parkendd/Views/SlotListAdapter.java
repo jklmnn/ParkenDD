@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -21,6 +20,7 @@ import java.util.Map;
 import de.jkliemann.parkendd.Model.ParkingSpot;
 import de.jkliemann.parkendd.ParkenDD;
 import de.jkliemann.parkendd.R;
+import de.jkliemann.parkendd.Utilities.ColorUtilities;
 import de.jkliemann.parkendd.Utilities.Error;
 import de.jkliemann.parkendd.Utilities.Util;
 
@@ -30,10 +30,6 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
     private final Context context;
     private final ParkingSpot[] spots;
     private final Location currentLocation;
-    private final int red = Color.argb(0xaa, 0xef, 0x53, 0x50);
-    private final int green = Color.argb(0xaa, 0x66, 0xbb, 0x6a);
-    private final int yellow = Color.argb(0xaa, 0xff, 0xee, 0x58);
-    private final int blue = Color.argb(0xaa, 0x42, 0xa5, 0xf5);
     private static final String CLOSED = "closed";
     private static final String NODATA = "nodata";
     private static final Map<String, Integer> typeMap;
@@ -91,26 +87,44 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View slotView = inflater.inflate(R.layout.slot_list_adapter, parent, false);
         TextView countView = (TextView)slotView.findViewById(R.id.countView);
+        TextView percentView = (TextView)slotView.findViewById(R.id.percentView);
         TextView nameView = (TextView)slotView.findViewById(R.id.nameView);
         TextView distanceView = (TextView)slotView.findViewById(R.id.distanceView);
+        TextView parkingTypeView = (TextView)slotView.findViewById(R.id.parkingTypeView);
+
         ParkingSpot spot = spots[position];
+
         nameView.setText(spot.name());
+
         if(spot.state().equals(CLOSED)) {
             countView.setText(context.getString(R.string.closed));
-            slotView.setBackgroundColor(red);
-        }else if(spot.state().equals(NODATA)){
+            slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingNoData));
+        }
+        else if(spot.state().equals(NODATA)){
             countView.setText(context.getString(R.string.nodata) + " (" + Integer.toString(spot.count()) + ")");
-            slotView.setBackgroundColor(blue);
-        }else{
-            countView.setText(Integer.toString(spot.free()) + " " + context.getString(R.string.of) + " " + Integer.toString(spot.count()));
-            double perc = (double)spot.free() / (double)spot.count();
-            if(perc < 0.05){
-                slotView.setBackgroundColor(red);
-            }else if(perc < 0.2){
-                slotView.setBackgroundColor(yellow);
-            }else{
-                slotView.setBackgroundColor(green);
+            slotView.setBackgroundColor(context.getResources().getColor(R.color.parkingNoData));
+        }
+        else{
+            // Count
+            countView.setText(Integer.toString(spot.free()));
+
+            // Parking type
+            try {
+                parkingTypeView.setText(context.getString(typeMap.get(spot.type())));
+            }catch (NullPointerException e) {
+                e.printStackTrace();
             }
+
+
+            // Percentage of free places
+            float percentageFreePlaces = (float)spot.free() / (float)spot.count();
+            int percentageFreePlacesFormatted = (int) (percentageFreePlaces * 100);
+            percentView.setText(context.getResources().getString(R.string.free,percentageFreePlacesFormatted));
+
+            // Background color
+            slotView.setBackgroundColor(ColorUtilities.mixBetweenColors(percentageFreePlaces,
+                    context.getResources().getColor(R.color.parkingFull),
+                    context.getResources().getColor(R.color.parkingFree)));
         }
         if(currentLocation != null && spot.location() != null){
             distanceView.setText(Util.getViewDistance(Util.getDistance(currentLocation, spot.location())));
@@ -124,34 +138,43 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupId, int childId, boolean isLastChild, View view, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         final View detailView = inflater.inflate(R.layout.list_detail, null);
-        final ParkingSpot child = spots[groupId];
-        TextView type = (TextView)detailView.findViewById(R.id.type);
-        try{
-            type.setText(context.getString(typeMap.get(child.type())));
-        }catch (NullPointerException e){
-            e.printStackTrace();
-            type.setText(child.type());
-        }
+        final ParkingSpot spot = spots[groupId];
+
         TextView address = (TextView)detailView.findViewById(R.id.address);
-        address.setText(child.address());
-        TextView region = (TextView)detailView.findViewById(R.id.region);
-        region.setText(child.category());
+        address.setText(spot.address());
+
         ImageButton mapButton = (ImageButton)detailView.findViewById(R.id.mapButton);
+
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri geouri = child.geoUri();
-                try{
-                    Intent map = new Intent(Intent.ACTION_VIEW, geouri);
-                    String city = ((ParkenDD) ((Activity)context).getApplication()).currentCity().name();
-                    ((ParkenDD) ((Activity) context).getApplication()).getTracker().trackEvent(city, child.name());
-                    context.startActivity(map);
-                }catch (ActivityNotFoundException e){
-                    e.printStackTrace();
-                    Error.showLongErrorToast(context, context.getString(R.string.intent_error));
+                openMap(spot);
                 }
-            }
         });
+
+        detailView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMap(spot);
+                }
+        });
+
+        // Background color
+        if(!spot.state().equals(CLOSED) && !spot.state().equals(NODATA))
+        {
+            float percentageFreePlaces = (float)spot.free() / (float)spot.count();
+            int parentColor = ColorUtilities.mixBetweenColors(percentageFreePlaces,
+                    context.getResources().getColor(R.color.parkingFull),
+                    context.getResources().getColor(R.color.parkingFree));
+
+            detailView.setBackgroundColor(ColorUtilities.darkenColor(parentColor, 5));
+        }
+        else
+        {
+            detailView.setBackgroundColor(ColorUtilities.darkenColor(context.getResources().getColor(R.color.parkingNoData), 5));
+        }
+
+
         return detailView;
     }
 
@@ -164,4 +187,18 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
     public void onGroupExpanded(int position){
         super.onGroupExpanded(position);
     }
+
+    private void openMap(ParkingSpot spot) {
+        Uri geouri = spot.geoUri();
+        try {
+            Intent map = new Intent(Intent.ACTION_VIEW, geouri);
+            String city = ((ParkenDD) ((Activity) context).getApplication()).currentCity().name();
+            ((ParkenDD) ((Activity) context).getApplication()).getTracker().trackEvent(city, spot.name());
+            context.startActivity(map);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            Error.showLongErrorToast(context, context.getString(R.string.intent_error));
+        }
+    }
+
 }

@@ -1,68 +1,75 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/RelativeLayout">
+        android:id="@+id/listView"
+        android:layout_above="@+id/dateTimePicker"
+        android:groupIndicator="@null"
 
-        <TimePicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/timePicker"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:timePickerMode="spinner"/>
-
-        <ExpandableListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/listView"
-            android:layout_below="@+id/timePicker"/>
-
-    </RelativeLayout>
+        android:divider="@null"/>
 
     <RelativeLayout
-        android:id="@+id/datePickerLayout"
-        android:layout_width="wrap_content"
+        android:id="@+id/dateTimePicker"
+
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center">
-        <!--android:background="@color/dim_foreground_disabled_material_dark">-->
+        android:minHeight="48dp"
 
-        <DatePicker
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:elevation="10dp">
+
+        <ImageView
+            android:id="@+id/timeIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+
+            android:background="@drawable/ic_schedule_black_24dp"
+            android:backgroundTint="@color/colorTextSecondary"/>
+
+        <TextView
+            android:id="@+id/dateText"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/datePicker"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:datePickerMode="calendar"
-            android:calendarViewShown="true"
-            android:spinnersShown="false"/>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/timeIcon"
+            android:layout_marginLeft="16dp"
+
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="20sp"
+            android:text="16/06/1995"/>
+
+
+
+        <TextView
+            android:id="@+id/hourText"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/negative"
-            android:id="@+id/cancelbutton"
-            android:layout_alignTop="@+id/okbutton"
-            android:layout_alignLeft="@+id/datePicker"
-            android:layout_alignStart="@+id/datePicker" />
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/positive"
-            android:id="@+id/okbutton"
-            android:layout_below="@+id/datePicker"
-            android:layout_alignRight="@+id/datePicker"
-            android:layout_alignEnd="@+id/datePicker" />
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/dateText"
+            android:layout_marginLeft="32dp"
+
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="20sp"
+            android:text="00:05" />
+
     </RelativeLayout>
-
-
 </RelativeLayout>

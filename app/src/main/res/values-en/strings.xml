@@ -59,4 +59,6 @@
     <string name="settings_header_display">Display</string>
     <string name="settings_header_information">Information</string>
     <string name="settings_activity_title">Settings</string>
+    <string name="free">%1$d%% free</string>
+    <string name="search_hint">Enter an address</string>
 </resources>
