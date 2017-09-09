@@ -51,5 +51,7 @@
 <string name="setting_city_auto">"automatycznie"</string>
 <string name="active_support">"Pokaż tylko wspierane miasta."</string>
 <string name="alert_active_support">"Możliwość wystąpienia błędów podczas użytkowania niewspieranych miast."</string>
+    <string name="settings_header_information"></string>
+    <string name="settings_activity_title">Ustawienia</string>
 </resources>
 

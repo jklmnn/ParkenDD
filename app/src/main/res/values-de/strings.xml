@@ -56,4 +56,13 @@
     <string name="open">geöffnet</string>
     <string name="map_icon_size">Kartensymbolgröße</string>
     <string name="free">%1$d%% frei</string>
+    <string name="action_cities">Städte</string>
+    <string name="action_search">Suche</string>
+    <string name="action_spots">Parkplätze</string>
+    <string name="chosen_city">Ausgewählte Stadt</string>
+    <string name="cities_activity_title">Verfügbare Städte</string>
+    <string name="search_hint">Adresse eingeben</string>
+    <string name="settings_activity_title">Einstellungen</string>
+    <string name="settings_header_display">Anzeige</string>
+    <string name="settings_header_information">Informationen</string>
 </resources>

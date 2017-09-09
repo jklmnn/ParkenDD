@@ -54,4 +54,5 @@
 <string name="state">"Stav"</string>
 <string name="open">"Otevřeno"</string>
 <string name="map_icon_size">"Velikost ikonek na mapě"</string>
+    <string name="settings_activity_title">Nastavení</string>
 </resources>
