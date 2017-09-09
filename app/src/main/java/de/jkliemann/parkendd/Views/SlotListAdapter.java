@@ -117,7 +117,7 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
 
 
             // Percentage of free places
-            float percentageFreePlaces = (float)spot.free() / (float)spot.count();
+            float percentageFreePlaces = (float)Math.min(spot.count(), spot.free()) / (float)spot.count();
             int percentageFreePlacesFormatted = (int) (percentageFreePlaces * 100);
             percentView.setText(context.getResources().getString(R.string.free,percentageFreePlacesFormatted));
 
