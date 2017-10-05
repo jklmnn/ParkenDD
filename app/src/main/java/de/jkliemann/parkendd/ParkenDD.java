@@ -9,10 +9,6 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
-import org.piwik.sdk.Piwik;
-import org.piwik.sdk.Tracker;
-
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +20,6 @@ import de.jkliemann.parkendd.Utilities.Util;
  * Created by jkliemann on 10.08.15.
  */
 public class ParkenDD extends Application {
-    Tracker piwik;
     private City currentCity;
     private Map<Integer, City> cmap;
     private LocationManager locationManager;
@@ -99,19 +94,6 @@ public class ParkenDD extends Application {
         setLocation(null);
         ParkenDD.context = getApplicationContext();
         super.onCreate();
-    }
-
-    public synchronized Tracker getTracker(){
-        if(piwik != null){
-            return piwik;
-        }
-        try{
-            piwik = Piwik.getInstance(this).newTracker("https://piwik.jkliemann.de", 3);
-        }catch (MalformedURLException e){
-            e.printStackTrace();
-            return null;
-        }
-        return piwik;
     }
 
     public void addCityPair(int id, City city){

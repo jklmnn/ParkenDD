@@ -193,7 +193,6 @@ public class SlotListAdapter extends BaseExpandableListAdapter {
         try {
             Intent map = new Intent(Intent.ACTION_VIEW, geouri);
             String city = ((ParkenDD) ((Activity) context).getApplication()).currentCity().name();
-            ((ParkenDD) ((Activity) context).getApplication()).getTracker().trackEvent(city, spot.name());
             context.startActivity(map);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();

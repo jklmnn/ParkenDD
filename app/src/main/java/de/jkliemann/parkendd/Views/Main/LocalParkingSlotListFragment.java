@@ -79,8 +79,6 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-
-        ((ParkenDD) getActivity().getApplication()).getTracker().trackAppDownload();
         reloadIndex();
     }
 
@@ -282,7 +280,6 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
                 try{
                     city = Parser.city(data[0], city);
                     setList(city);
-                    ((ParkenDD) getActivity().getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
                     TimeZone tz = Calendar.getInstance().getTimeZone();
                     DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(getActivity());
                     dateFormat.setTimeZone(tz);

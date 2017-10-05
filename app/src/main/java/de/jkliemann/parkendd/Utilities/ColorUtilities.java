@@ -1,7 +1,6 @@
 package de.jkliemann.parkendd.Utilities;
 
 import android.animation.ArgbEvaluator;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 
 /**

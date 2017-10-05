@@ -94,7 +94,6 @@ public class ForecastFragment extends Fragment implements LoaderInterface, DateP
         setupHourText();
         setupProgressBar();
         setupTimePicker();
-        ((ParkenDD) getActivity().getApplication()).getTracker().trackScreenView("/forecast/" + city.id(), "Vorhersage-" + city.name());
         return view;
     }
 

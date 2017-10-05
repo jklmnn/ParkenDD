@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ProgressBar;
 
 import org.json.JSONException;
 
@@ -171,7 +170,6 @@ public class RemoteParkingSlotListFragment extends Fragment implements LoaderInt
             try{
                 city = Parser.city(data[0], city);
                 setList(city);
-                ((ParkenDD) getActivity().getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
                 TimeZone tz = Calendar.getInstance().getTimeZone();
                 DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(getActivity());
                 dateFormat.setTimeZone(tz);
