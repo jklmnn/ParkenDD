@@ -154,7 +154,7 @@ public class RemoteParkingSlotListFragment extends Fragment implements LoaderInt
 
                 if(loc.length > 0) {
                     try {
-                        ((ParkenDD) getActivity().getApplication()).setLocation(addressMap.get(0));
+                        ((ParkenDD) getActivity().getApplication()).setLocation(addressMap.get(0), getActivity());
                         refresh();
                     }catch (NullPointerException e){
                         e.printStackTrace();

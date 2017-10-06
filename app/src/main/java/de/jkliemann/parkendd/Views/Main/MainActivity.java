@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 import java.io.FileNotFoundException;
 import java.net.UnknownHostException;
 
+import de.jkliemann.parkendd.ParkenDD;
 import de.jkliemann.parkendd.R;
 import de.jkliemann.parkendd.Utilities.Error;
 import de.jkliemann.parkendd.Views.Cities.CitiesActivity;
@@ -52,11 +53,10 @@ public class MainActivity extends AppCompatActivity implements LocalParkingSlotL
         setContentView(R.layout.activity_main);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        
         setUpNavigationDrawer();
         setupProgressBar();
         setFragment(LocalParkingSlotListFragment.newInstance());
-
     }
 
     private void setupProgressBar() {

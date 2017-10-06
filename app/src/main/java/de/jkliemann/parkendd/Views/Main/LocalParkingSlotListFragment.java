@@ -211,10 +211,10 @@ public class LocalParkingSlotListFragment extends Fragment implements LoaderInte
 
     private void refresh(){
         if(!((ParkenDD) getActivity().getApplication()).locationEnabled()){
-            ((ParkenDD) getActivity().getApplication()).initLocation();
+            ((ParkenDD) getActivity().getApplication()).initLocation(getActivity());
         }
 
-        ((ParkenDD) getActivity().getApplication()).setLocation(null);
+        ((ParkenDD) getActivity().getApplication()).setLocation(null, getActivity());
         URL[] cityurl = new URL[1];
         try{
             city = ((ParkenDD) getActivity().getApplication()).currentCity();
