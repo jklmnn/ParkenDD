@@ -11,76 +11,98 @@
     android:background="?attr/selectableItemBackground"
     android:drawSelectorOnTop="true">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="16dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="32dp"
-        android:layout_centerVertical="true">
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/nameView"
-
+        <RelativeLayout
+            android:id="@+id/desc_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="32dp"
+            android:layout_weight="6.5">
 
-            android:textColor="@color/colorTextPrimary"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-thin" />
+            <TextView
+                android:id="@+id/nameView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/distanceView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-thin"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-            android:layout_below="@id/nameView"
-            android:layout_alignLeft="@id/nameView"
+            <TextView
+                android:id="@+id/distanceView"
 
-            android:textColor="@color/colorTextPrimary"
-            android:textSize="16sp"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/parkingTypeView"
+                android:layout_alignLeft="@id/nameView"
+                android:layout_below="@id/nameView"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="16sp" />
 
-            android:layout_below="@id/distanceView"
-            android:layout_alignLeft="@id/nameView"
+            <TextView
+                android:id="@+id/parkingTypeView"
 
-            android:textColor="@color/colorTextPrimary"
-            android:textSize="16sp"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/countView"
+                android:layout_alignLeft="@id/nameView"
+                android:layout_below="@id/distanceView"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="16sp" />
 
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/data_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/desc_layout"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/nameView"
+            android:layout_weight="3.5">
 
-            android:textColor="@color/colorTextPrimary"
-            android:textStyle="bold"
-            android:textSize="34sp"/>
+            <TextView
+                android:id="@+id/countView"
 
-        <TextView
-            android:id="@+id/percentView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
 
-            android:layout_below="@id/countView"
-            android:layout_alignRight="@id/countView"
+                android:gravity="right"
+                android:textAlignment="gravity"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="34sp"
+                android:textStyle="bold" />
 
-            android:textColor="@color/colorTextPrimary"
-            android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/percentView"
 
-    </RelativeLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignRight="@id/countView"
+                android:layout_below="@id/countView"
+
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
 </RelativeLayout>
