@@ -1,17 +1,22 @@
 package de.jkliemann.parkendd;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.jar.Manifest;
 
 /**
  * Created by jkliemann on 10.08.15.
@@ -21,14 +26,14 @@ public class ParkenDD extends Application {
     private Map<Integer, City> cmap;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private Boolean locationEnabled;
+    private Boolean locationEnabled = false;
     private Location providedLocation;
     private Boolean autoCity;
     private int API_V_MAJOR;
     private int API_V_MINOR;
     private static Context context;
 
-    public Boolean initLocation(){
+    public Boolean initLocation(Activity c){
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -51,14 +56,17 @@ public class ParkenDD extends Application {
             }
         };
         try {
-            locationManager.requestLocationUpdates(getProvider(), (long) 60000, (float) 50, locationListener, Looper.getMainLooper());
-            locationEnabled = true;
-            return true;
-        }catch (IllegalArgumentException e){
+            if(ContextCompat.checkSelfPermission(c, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(c, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+            }else {
+                locationManager.requestLocationUpdates(getProvider(), (long) 60000, (float) 50, locationListener, Looper.getMainLooper());
+                locationEnabled = true;
+            }
+        }catch (IllegalArgumentException e) {
             e.printStackTrace();
             locationEnabled = false;
-            return false;
         }
+        return locationEnabled;
     }
 
     private String getProvider(){
@@ -71,10 +79,14 @@ public class ParkenDD extends Application {
         return null;
     }
 
-    public void setLocation(Location loc){
+    public void setLocation(Location loc, Activity c){
         if(loc == null){
             try {
-                providedLocation = locationManager.getLastKnownLocation(getProvider());
+                if(ContextCompat.checkSelfPermission(c, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    providedLocation = locationManager.getLastKnownLocation(getProvider());
+                }else{
+                    providedLocation = null;
+                }
             }catch (IllegalArgumentException e){
                 e.printStackTrace();
                 providedLocation = null;
