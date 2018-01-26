@@ -16,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.jar.Manifest;
 
 /**
  * Created by jkliemann on 10.08.15.

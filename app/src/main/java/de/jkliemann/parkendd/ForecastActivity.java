@@ -1,8 +1,8 @@
 package de.jkliemann.parkendd;
 
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 
-public class ForecastActivity extends ActionBarActivity implements LoaderInterface{
+public class ForecastActivity extends AppCompatActivity implements LoaderInterface{
 
     private final ForecastActivity _this = this;
     private static final int dateOffset = 1900;
