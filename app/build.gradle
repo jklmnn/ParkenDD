@@ -28,6 +28,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.0.0-beta1'
     compile 'com.android.support:support-v4:26.0.0-beta1'
     compile 'com.android.support:design:26.0.0-beta1'
-    compile 'org.piwik.sdk:piwik-sdk:3.0.0'
     compile 'org.osmdroid:osmdroid-android:5.6.5@aar'
 }

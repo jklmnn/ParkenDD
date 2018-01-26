@@ -92,7 +92,6 @@ public class ForecastActivity extends ActionBarActivity implements LoaderInterfa
                 updateList(hourOfDay);
             }
         });
-        ((ParkenDD) getApplication()).getTracker().trackScreenView("/forecast/" + city.id(), "Vorhersage-" + city.name());
     }
 
     private void loadDate(){

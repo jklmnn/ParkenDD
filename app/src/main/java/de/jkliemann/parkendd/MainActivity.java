@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((ParkenDD) getApplication()).getTracker().trackAppDownload();
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -144,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
             try{
                 city = Parser.city(data[0], city);
                 setList(city);
-                ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
                 TimeZone tz = Calendar.getInstance().getTimeZone();
                 DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
                 dateFormat.setTimeZone(tz);
@@ -363,11 +361,5 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    protected void onStop(){
-        super.onStop();
-        ((ParkenDD) getApplication()).getTracker().dispatch();
     }
 }

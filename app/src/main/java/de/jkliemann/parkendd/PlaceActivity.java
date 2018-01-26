@@ -133,7 +133,6 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
             try{
                 city = Parser.city(data[0], city);
                 setList(city);
-                ((ParkenDD) getApplication()).getTracker().trackScreenView("/" + city.id(), city.name());
                 TimeZone tz = Calendar.getInstance().getTimeZone();
                 DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
                 dateFormat.setTimeZone(tz);
