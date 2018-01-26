@@ -1,8 +1,12 @@
 package de.jkliemann.parkendd;
 
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -13,7 +17,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
 
-public class MapActivity extends ActionBarActivity {
+public class MapActivity extends AppCompatActivity {
 
     private ItemizedIconOverlay<OverlayItem> popupOverlay;
 
@@ -29,6 +33,9 @@ public class MapActivity extends ActionBarActivity {
             self = city.location();
         }
         setTitle(city.name());
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
         final MapView map = (MapView)findViewById(R.id.osmap);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
         map.setBuiltInZoomControls(true);
@@ -150,6 +157,20 @@ public class MapActivity extends ActionBarActivity {
             map.getOverlays().remove(popupOverlay);
             popupOverlay = null;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            if(requestCode == 0){
+                for(int i = 0; i < permissions.length; i++){
+                    Log.d("TEST", "onRequestPermissionsResult: " + i + permissions[i] + " " + grantResults[i]);
+                    if(permissions[i].equals(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            && grantResults[i] == PackageManager.PERMISSION_GRANTED){
+                        recreate();
+                    }
+                }
+            }
     }
 
 }
