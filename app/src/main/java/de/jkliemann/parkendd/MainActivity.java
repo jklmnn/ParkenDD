@@ -177,9 +177,9 @@ public class MainActivity extends AppCompatActivity implements LoaderInterface, 
 
     private void refresh(){
         if(!((ParkenDD)getApplication()).locationEnabled()){
-            ((ParkenDD)getApplication()).initLocation();
+            ((ParkenDD)getApplication()).initLocation(this);
         }
-        ((ParkenDD)getApplication()).setLocation(null);
+        ((ParkenDD)getApplication()).setLocation(null, this);
         URL[] cityurl = new URL[1];
         try{
             city = ((ParkenDD)getApplication()).currentCity();

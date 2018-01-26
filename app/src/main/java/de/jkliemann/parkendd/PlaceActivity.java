@@ -116,7 +116,7 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
                 }
                 if(loc.length > 0) {
                     try {
-                        ((ParkenDD) getApplication()).setLocation(addressMap.get(0));
+                        ((ParkenDD) getApplication()).setLocation(addressMap.get(0), this);
                         ((TextView) findViewById(R.id.comment)).setText(addressMap.get(0).getExtras().getString("detail"));
                         refresh();
                     }catch (NullPointerException e){
@@ -295,7 +295,7 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
         int id = item.getItemId();
 
         try {
-            ((ParkenDD) getApplication()).setLocation(addressMap.get(id));
+            ((ParkenDD) getApplication()).setLocation(addressMap.get(id), this);
             ((TextView) findViewById(R.id.comment)).setText(addressMap.get(id).getExtras().getString("detail"));
             refresh();
         }catch (NullPointerException e){

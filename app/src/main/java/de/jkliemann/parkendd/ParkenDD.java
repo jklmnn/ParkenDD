@@ -99,8 +99,6 @@ public class ParkenDD extends Application {
     @Override
     public void onCreate(){
         cmap = new HashMap<>();
-        initLocation();
-        setLocation(null);
         ParkenDD.context = getApplicationContext();
         super.onCreate();
     }
