@@ -77,7 +77,9 @@ public class PlaceActivity extends AppCompatActivity implements LoaderInterface,
             }
         }
         TextView tv = (TextView) findViewById(R.id.comment);
-        tv.setText("");
+        if (tv != null) {
+            tv.setText("");
+        }
         if (intent.ACTION_VIEW.equals(intent.getAction())) {
             data = intent.getData();
         }

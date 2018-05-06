@@ -3,14 +3,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "de.jkliemann.parkendd"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 29
-        versionName "1.2.4"
+        versionCode 30
+        versionName "1.2.5"
     }
     buildTypes {
         release {
