@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".ParkenDD"
@@ -48,10 +47,6 @@
         <activity
             android:name=".ForecastActivity"
             android:label="@string/title_activity_forecast" >
-        </activity>
-        <activity
-            android:name=".MapActivity"
-            android:label="@string/title_activity_map" >
         </activity>
     </application>
 
