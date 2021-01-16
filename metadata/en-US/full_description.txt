@@ -1,0 +1,3 @@
+ParkenDD shows you the current parking situation of various European cities, including Basel, Dresden, Ingolstadt and Zurich.
+Depending on the available data, you can see the current number of available public parking spots as well as their distance from your current location.
+The map button in the lot details shares the lot location with any app that provides maps or navigation.
